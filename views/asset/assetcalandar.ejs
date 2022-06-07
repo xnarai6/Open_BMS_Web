@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+        
+        <link href="/assets/libs/@fullcalendar/core/main.min.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/libs/@fullcalendar/daygrid/main.min.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/libs/@fullcalendar/bootstrap/main.min.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/libs/@fullcalendar/timegrid/main.min.css" rel="stylesheet" type="text/css" />
+
+    </head>
+
+    <body onload="init();">
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">점검이력관리(<%=loc_nm%>)</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript:location.href='/asset/assethistory';">자산관리</a></li>
+                                            <li class="breadcrumb-item active">이력관리</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-12">
+                               
+                                        <div class="row">
+                                            <div class="col-lg-3">
+                                                <div class="card">
+                                                    <div class="card-body d-grid">
+                                                        <div class="row justify-content-center mt-5">
+                                                                    <img src="/assets/images/coming-soon-img.png" alt="" class="img-fluid d-block">
+                                                        </div>
+                                                        <div id="external-events" class="m-t-20">
+                                                            <br>
+                                                            <p class="text-muted">Drag and drop your event or click in the calendar</p>
+                                                            
+                                                            <div class="external-event fc-event bg-danger" data-class="bg-danger">
+                                                                <i class="mdi mdi-checkbox-blank-circle font-size-11 me-2"></i>서비스중지
+                                                            </div>
+                                                            <div class="external-event fc-event bg-success" data-class="bg-success">
+                                                                <i class="mdi mdi-checkbox-blank-circle font-size-11 me-2"></i>정기점검
+                                                            </div>
+                                                            <div class="external-event fc-event bg-primary" data-class="bg-primary">
+                                                                <i class="mdi mdi-checkbox-blank-circle font-size-11 me-2"></i>회의
+                                                            </div>
+                                                        </div>
+
+                                                        <ol class="activity-feed mb-0 ps-2 mt-4 ms-1" >
+                                                            <li class="feed-item">
+                                                                    <p class="mt-0 mb-0">서비스중지 : 서비스중지예정이거나 서비스중지가 된 경우</p>
+                                                            </li>
+                                                            <li class="feed-item">
+                                                                <p class="mt-0 mb-0">정기점검 : 정기점검이 계획되어 있거나 정기점검을 실시한 경우</p>
+                                                            </li>
+                                                            <li class="feed-item">
+                                                                <p class="mt-0 mb-0">회의 : BMS 관련 내부, 외부회의를 한 경우</p>
+                                                            </li>
+                                                        </ol>
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end col-->
+
+                                            <div class="col-lg-9">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div id="calendar"></div>
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end col -->
+
+                                        </div> 
+    
+                                        <div style='clear:both'></div>
+                                        
+
+
+
+
+                                    
+                                <!-- Add New Event MODAL -->
+                                <div class="modal fade" id="event-modal" tabindex="-1">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header py-3 px-4 border-bottom-0">
+                                                <h5 class="modal-title" id="modal-title">Event</h5>
+
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-hidden="true"></button>
+
+                                            </div>
+                                            <div class="modal-body p-4">
+                                                <form class="needs-validation" name="event-form" id="form-event" novalidate>
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Event Name</label>
+                                                                <input class="form-control" placeholder="Insert Event Name"
+                                                                    type="text" name="title" id="event-title" required value="" />
+                                                                <div class="invalid-feedback">Please provide a valid event name</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Category</label>
+                                                                <select class="form-control form-select" name="category"
+                                                                    id="event-category" required>
+                                                                    <option value="bg-danger" selected>서비스중지</option>
+                                                                    <option value="bg-success">정기점검</option>
+                                                                    <option value="bg-primary">회의</option>
+                                                                </select>
+                                                                <div class="invalid-feedback">카테고리를 선택하세요.</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">시간</label>
+                                                                <div class="row">
+                                                                    <div class="col-6">
+                                                                        <select class="form-control form-select" name="hour"
+                                                                        id="event-hour" required>
+                                                                        <% for(var i = 0; i < 24; i++ ){%>
+                                                                        <option value="<%= i + 1 %>"><%=i + 1%>시</option>
+                                                                        <%}%>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <select class="form-control form-select" name="minute"
+                                                                        id="event-minute" required>
+                                                                        <option value="00">00분</option>
+                                                                        <option value="30">30분</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                    
+                                                                <div class="invalid-feedback">시간을 선택하세요.</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">배터리</label>
+                                                                <select class="form-control form-select" name="btry"
+                                                                    id="event-btry" required>
+                                                                    <% for(var i in btryList){%>
+                                                                    <option value="<%=btryList[i].btry_seq%>"><%=btryList[i].btry_nm%></option>
+                                                                    <%}%>
+                                                                </select>
+                                                                <div class="invalid-feedback">배터리를 선택하세요.</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">결과</label>
+                                                                <input class="form-control" placeholder="" autocomplete="off"
+                                                                    type="text" name="result" id="event-result" required value="" />
+                                                                <div class="invalid-feedback">내용을 입력하세요.</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-6">
+                                                            <button type="button" class="btn btn-danger" id="btn-delete-event">Delete</button>
+                                                        </div>
+                                                        <div class="col-6 text-end">
+                                                            <button type="button" class="btn btn-light me-1" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-success" id="btn-save-event">Save</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div> <!-- end modal-content-->
+                                    </div> <!-- end modal dialog-->
+                                </div>
+                                <!-- end modal-->
+                            </div>
+                        </div>
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+                
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+        </div>
+        <!-- END layout-wrapper -->
+
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+
+        <!-- JAVASCRIPT -->
+        <script src="/assets/libs/jquery/jquery.min.js"></script>
+        <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="/assets/libs/metismenu/metisMenu.min.js"></script>
+        <script src="/assets/libs/simplebar/simplebar.min.js"></script>
+        <script src="/assets/libs/node-waves/waves.min.js"></script>
+        <script src="/assets/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+        <script src="/assets/libs/jquery.counterup/jquery.counterup.min.js"></script>
+
+        <!-- plugin js -->
+        <script src="/assets/libs/moment/min/moment.min.js"></script>
+        <script src="/assets/libs/jquery-ui-dist/jquery-ui.min.js"></script>
+        <script src="/assets/libs/@fullcalendar/core/main.min.js"></script>
+        <script src="/assets/libs/@fullcalendar/bootstrap/main.min.js"></script>
+        <script src="/assets/libs/@fullcalendar/daygrid/main.min.js"></script>
+        <script src="/assets/libs/@fullcalendar/timegrid/main.min.js"></script>
+        <script src="/assets/libs/@fullcalendar/interaction/main.min.js"></script>
+
+    </body>
+
+    <script>
+
+        window.onload = function(){
+            init();
+        }
+
+        var eventList = [];
+        var year = new Date().getFullYear();
+        var month = new Date().getMonth();
+
+        function init(){
+            document.getElementById('btn-delete-event').className += "btn btn-primary waves-effect waves-light";
+            getMonthData(year, month);
+        }
+        
+        //다음 버튼, 이전 버튼 누를 때 데이터 새로 받아오기
+        $(document).on('click', '.fc-prev-button', function(){
+            if(month == 1){
+                month = 12;
+                year -= 1;
+            } else {
+                month -= 1;
+            }
+            getMonthData(year, month)
+        });
+
+        $(document).on('click', '.fc-next-button', function(){
+            if(month == 12){
+                month = 1;
+                year += 1;
+            } else {
+                month += 1;
+            }
+            getMonthData(year, month)
+        });
+
+        $(document).on('click', '.fc-today-button', function(){
+            year = new Date().getFullYear();
+            month = new Date().getMonth();
+            getMonthData(year, month)
+        });
+        
+
+        //데이터받아서 띄우기
+        function getMonthData(year, month){
+            // ajax 통신
+                let postData = {
+                    //loc_seq 전 페이지에서 방기
+                    loc_seq: "<%=loc_seq%>",
+                    month: month,
+                    year: year
+                } 
+
+                //post 통신
+                let result = syncAjax("POST", "/asset/assetcalandar/event", postData);
+
+                var events = result.eventList;
+
+                m.removeAllEvents();
+
+                for(var i in events){
+
+                    var title = "";
+                    var className = "";
+                    if(events[i].inspec_type == 1){
+                        title = "정기점검";
+                        className = "bg-success";
+                    } else if (events[i].inspec_type == 2){
+                        title = "회의";
+                        className = "bg-primary";
+                    } else {
+                        title = "서비스중지";
+                        className = "bg-danger";
+                    }
+
+
+                    //이벤트 데이터 생성
+                    var date = new Date(events[i].inspec_date);
+
+                    var event = {
+                    title: title,
+                    start: new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours()),
+                    className: className,
+                    result: events[i].inspec_rslt,
+                    hour: parseInt(events[i].inspec_time.substring(0,2)),
+                    minute: events[i].inspec_time.substring(2, 4),
+                    btry: events[i].inspec_btry,
+                    seq: events[i].inspec_seq
+                    }
+
+                    m.addEvent(event);
+                }
+
+
+                var x = m.getEvents();
+        }
+
+        //데이터 등록
+        function registInspecHstry(type, btry, date, result, seq, time, minute){
+            //db regist
+            var typeNum = "";
+            if(type == "bg-success"){
+                typeNum = "1";
+            } else if (type == "bg-danger"){
+                typeNum = "3";
+            } else {
+                typeNum = "2";
+            }
+
+
+            var timeDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            timeDate.setHours(time, minute, 0);
+
+            let postData = {
+                type: typeNum, 
+                btry: btry,
+                date: timeDate,
+                result: result,
+                seq: seq
+            }
+
+            let postResult = syncAjax("POST", "/asset/assetcalendar/regist", postData);
+
+        }
+
+        //데이터 삭제
+        function deleteInspecHstry(seq){
+            //db delete
+            let postData = {
+                seq: seq
+            }
+
+            let postResult = syncAjax("POST", "/asset/assetcalendar/delete", postData);
+        }
+
+    </script>
+
+    
+    <script src="/attach/js/common.js"></script>
+
+    <!-- Calendar init -->
+    <script src="/attach/js/calendar.init.js"></script>
+    <script src="/assets/js/app.js"></script>
+
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+    </head>
+
+    <body>
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+          
+
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <%- include('../common/dash.ejs') %>
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">알람설정</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <!-- <button class="btn btn-primary" type="button" onclick="location.href='/setting/mgtalarm/reg'">New</button> -->
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div>
+                                   
+                                </div>
+                                <div class="table-responsive mb-4">
+                                    <table id = "myTable" class="table table-centered datatable dt-responsive nowrap table-card-list" style="border-collapse: collapse; border-spacing: 0 12px; width: 100%;">
+                                        <thead>
+                                            <tr class="bg-transparent">                                                
+                                                <th>알람ID</th>
+                                                <th>배터리</th>
+                                                <th>알람설정</th> 
+                                                <th>전원차단여부</th>                                                                                            
+                                                <th>등록자</th>  
+                                                <th>등록일</th> 
+                                                <th>설정</th>                                                                                  
+                                            </tr>
+                                        </thead>
+                                        <tbody >
+                                            <% for(var i in ALM_LIST) { %>
+                                            <tr>
+                                                <td><%=ALM_LIST[i].alm_seq%></td>
+                                                <td><%=ALM_LIST[i].btry_nm%></td>
+                                                <%
+                                                    switch (ALM_LIST[i].alm_sms) {
+                                                        case '1': %><td>발송</td><%;break;
+                                                        case '0': %><td>발송안함</td><%;break;
+                                                        default: %><td>알수없는 값</td><%break;
+                                                    }
+                                                %>
+                                                <%
+                                                    switch (ALM_LIST[i].stop_pwr) {
+                                                        case '0': %><td>전원공급</td><%;break;
+                                                        case '1': %><td>전원차단</td><%;break;
+                                                        default: %><td>알수없는 값</td><%break;
+                                                    }
+                                                %>
+                                                <td><%=ALM_LIST[i].ins_nm%></td>
+                                                <td><%=ALM_LIST[i].ins_dttm%></td>
+                                                <td>
+                                                    <ul class="list-inline mb-0">
+                                                        <li class="list-inline-item">
+                                                            <a href="/setting/mgtalarm/mod?alm_seq=<%=ALM_LIST[i].alm_seq%>" class="px-2 text-primary"><i class="uil uil-pen font-size-18"></i></a>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                            <%}%>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end table -->
+                                <!-- 페이지네이션 -->
+                                <div class="row mt-4">
+                                    <div class="col-sm-6">
+                                        <div>
+                                            <p class="mb-sm-0">Page <%=pages.currentPage%> of <%=pages.pageCount%></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="float-sm-end">
+                                            <ul class="pagination pagination-rounded mb-sm-0">
+                                                <!-- 이전페이지 -->
+                                                <li class="page-item">
+                                                    <a class="page-link" href="/setting/mgtalarm?page=<%=pages.previousPage%>">
+                                                        <i class="mdi mdi-chevron-left"></i>
+                                                    </a>
+                                                </li>
+
+                                                <% for(index in liRow) { %>
+                                                    <% if(liRow[index] == pages.currentPage) { %>
+                                                        <li class="page-item active"><a class="page-link"><%= liRow[index] %></a></li>
+                                                    <% } else { %>
+                                                        <li class="page-item"><a class="page-link" href="/setting/mgtalarm?page=<%=liRow[index]%>"><%= liRow[index] %></a></li>
+                                                    <% } %>
+                                                <% } %>
+
+                                                <!-- 다음페이지 -->
+                                                <li class="page-item">
+                                                    <a class="page-link" href="/setting/mgtalarm?page=<%=pages.nextPage%>">
+                                                        <i class="mdi mdi-chevron-right"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!-- 페이지네이션 -->
+                            </div>
+                        </div>
+                        <!-- end row -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+
+        <script src="/attach/js/common.js"></script>
+
+        <script>
+            function deleteMgtBattery(btry_seq){
+
+                swalWithBootstrapButtons.fire({
+                title: '삭제하시겠습니까?',
+                //text: "You won't be able to revert this!",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Delete!',
+                confirmButtonClass: "btn btn-success mx-1",
+                cancelButtonText: 'Cancel',
+                cancelButtonClass: "btn btn-danger mx-1",
+                reverseButtons: true
+                }).then((chooseResult) => {
+                    if (chooseResult.isConfirmed) {
+
+                        let postData = {
+                            btry_seq : btry_seq
+                        }
+
+                        let result = syncAjax("POST", "/setting/mgtbattery/delete/complete", postData);
+
+                        if(result.status == 'FAIL') {
+                            swalWithBootstrapButtons.fire(makeAlertObj("error",result.msg)).then((errorResult) => {
+                                var url = result.url;
+                                $(location).attr('href',url);
+                            });
+                            
+                        }else{
+                            swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                                var url = result.url;
+                                $(location).attr('href',url);
+                            });
+                        }
+
+                    }else{
+                        return false;
+                    }
+                });
+
+            }
+        </script>
+
+    </body>
+
+ 
+     
+</html>

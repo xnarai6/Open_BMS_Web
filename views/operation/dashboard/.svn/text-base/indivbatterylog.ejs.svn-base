@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+        <style>
+            .graphic-container {
+                min-height: 380px;
+                max-height: 100%;
+                overflow-y: hidden;
+                overflow-x: auto;
+            }
+        </style>
+        <link href="/assets/css/app-dark.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    </head>
+
+    <body  onload="init();">
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <%- include('../common/dash.ejs') %>
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h1 class="mb-0"><%=btry_info[0].full_btry_nm%></h1>
+
+                                    <!-- <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);"></a></li>
+                                            <li class="breadcrumb-item active"></li>
+                                        </ol>
+                                    </div> -->
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title mb-4">온도,시간</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="graphic-container" id="charge_temp_time_container">
+                                            <div id="charge_temp_time_chart_dashed" class="apex-charts" dir="ltr"></div> 
+                                            <div id="charge_temp_time_chart_dashed2" class="apex-charts" dir="ltr"></div> 
+                                        </div>
+                                    </div>
+                                </div><!--end card-->
+                            </div> <!-- end col -->
+                        </div>
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title mb-4">전압</h4>
+    
+                                            <div id="volt_line_chart_dashed" class="apex-charts" dir="ltr"></div>                      
+                                        </div>
+                                    </div>
+                                </div> <!-- end col -->
+                                <div class="col-xl-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title mb-4">전류</h4>
+                                            
+                                            <div id="curr_line_chart_dashed" class="apex-charts" dir="ltr"></div>        
+                                        </div>
+                                    </div>
+                                </div> <!-- end col -->
+                            </div>
+                        
+
+                        <div class="row">
+                            
+                            
+        
+                            <!-- <div class="col-xl-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-4">SOH</h4>
+
+                                        <div id="spline_area" class="apex-charts" dir="ltr"></div>                      
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div> <!-- end row -->
+        
+ 
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-4">배터리 정보</h4>
+                                        <!--                                        <div class="page-title-right">
+                                            <ol class="breadcrumb m-0">
+                                                <button class="btn btn-primary" type="button" onclick="redirectPage()">Detail</button>
+                                            </ol>
+                                        </div>
+                                        -->
+
+                                        <div class="table-responsive">
+                                            <table class="table table-centered table-nowrap mb-0">
+                                                <thead class="table-light">                                                
+                                                    <tr class="bg-transparent">                                               
+                                                        <th>BMS ID</th>
+                                                        <th>타입</th>
+                                                        <th>제조사</th>
+                                                        <th>정격전력</th>
+                                                        <th>모듈</th>
+                                                        <th>모듈 제조사</th>
+                                                        <th>상태</th>
+                                                        <th>충전 회수</th>                                              
+                                                    </tr>                                               
+                                                </thead>
+                                                <tbody id = "myTable">
+                                                 
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- 페이지네이션 -->
+                                        <div class="row mt-4">
+                                            <div class="col-sm-6">
+                                                <div>
+                                                    <p class="mb-sm-0" id="bms-page-string"></p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="float-sm-end">
+                                                    <ul class="pagination pagination-rounded mb-sm-0" id="bms-pagination">
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end table-responsive -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+
+
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+      
+        <!-- apexcharts -->
+        <script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+
+        <!-- 그래프 -->
+        <script src="/attach/js/live-graphs/curr-line-chart.js"></script>
+        <script src="/attach/js/live-graphs/volt-line-chart.js"></script>
+        <script src="/attach/js/live-graphs/curr-volt-line-chart.js"></script>
+        <script src="/attach/js/live-graphs/charge-temp-time-chart.js"></script>
+
+
+        <!-- flot plugins -->
+        <script src="/assets/libs/flot-charts/jquery.flot.js"></script>
+        <script src="/assets/libs/flot-charts/jquery.flot.time.js"></script>
+        <script src="/assets/libs/jquery.flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+        <script src="/assets/libs/flot-charts/jquery.flot.resize.js"></script>
+        <script src="/assets/libs/flot-charts/jquery.flot.pie.js"></script>
+        <script src="/assets/libs/flot-charts/jquery.flot.selection.js"></script>
+        <script src="/assets/libs/flot-charts/jquery.flot.stack.js"></script>
+        <script src="/assets/libs/flot.curvedlines/curvedLines.js"></script>
+        <script src="/assets/libs/flot-charts/jquery.flot.crosshair.js"></script>
+        <script src="/assets/libs/chart.js/Chart.bundle.min.js"></script>
+       
+    </body>
+    <script>
+
+        var globalLocSeq = "";
+        var globalBmsSeq = "<%=btry_seq%>";
+
+        window.onload = function() {
+            init();
+            document.getElementById("charge_temp_time_container").scrollTo(9999,0);
+        }
+
+        function changeDateFormat(date){
+            let year = date.getFullYear();
+            let month = date.getMonth() + 1;
+            month = month >= 10 ? month : '0' + month;
+            let day = date.getDate();
+            day = day >= 10 ? day : '0' + day;
+            let hour = date.getHours();
+            hour = hour >= 10 ? hour : '0' + hour;
+            let min = date.getMinutes();
+            let sec = date.getSeconds();
+            sec = sec >= 10 ? sec : '0' + sec;
+            
+            let purchaseDay = year + '/' + month + '/' + day + ' ' + hour + ':00:00';
+
+            return purchaseDay;
+        }
+
+        function init(){
+            // getLOCList();
+            // globalLocSeq = $("#select_loc option:eq(0)").val();
+            // getBatteryList();
+            getAjaxDataGraph();
+            getBmsList();
+        }
+        
+        function getLOCList(){
+            // ajax 통신
+
+            let postData = {
+
+            }
+
+            let data = syncAjax("POST", "/common/postIDtoLocationlist",postData);
+
+            var jsonArray 	= new Array();
+            var jsonObj		= new Object();
+
+            jsonArray = JSON.stringify(data);
+            var objPerson = JSON.parse(jsonArray);
+            jsonObj = objPerson[0];
+
+            var html = '';
+            if(objPerson.length !=0 && objPerson != null){
+                for (var i in objPerson) {
+                html += "<option value=" + "'" + objPerson[i].loc_seq + "'>" + objPerson[i].loc_nm + "</option>";
+                }
+                globalLocSeq = objPerson[0].loc_seq;
+                getBatteryList();
+            }else{
+                html += "<option value=''>설치장소 없음</option>";
+            }
+
+            //getAjaxData(null);
+            
+            $("select[id='select_loc']").html(html);
+        }
+
+        function getBatteryList(){
+
+            let postData = {
+                loc_seq : globalLocSeq
+            }
+
+            let result = syncAjax("POST", "/common/postLOCtoBtrylist", postData);
+
+            // var jsonArray 	= new Array();
+            // var jsonObj		= new Object();
+
+            // jsonArray = JSON.stringify(data);
+            // var objPerson = JSON.parse(jsonArray);
+            // jsonObj = objPerson[0];
+
+            var objPerson = result.data;
+
+
+            var html = '';
+            if(objPerson.length !=0 && objPerson != null){
+            html += "";
+                for (var i in objPerson) {
+                    html += "<option value=" + "'" + objPerson[i].btry_seq + "'>" + objPerson[i].btry_nm + "</option>";
+                }
+            }else{
+                html += "<option value=''>BMS 없음<option>";
+            }
+
+            //getAjaxData(null);
+                
+            $("select[id='select_bms']").html(html);
+        
+        }
+
+        $("select[id='select_loc']").on("change", function(){
+            globalLocSeq = $("#select_loc option:selected").val();
+            getBatteryList();
+            globalBmsSeq = $("#select_bms option:eq(0)").val();
+            getAjaxDataGraph();
+        })
+
+        $("select[id='select_bms']").on("change", function(){
+            globalBmsSeq = $("#select_bms option:selected").val();
+            getAjaxDataGraph();
+                 
+        })
+
+        function getBmsList(pages){
+
+            postData = {
+                loc_seq : globalLocSeq,
+                bms_seq : globalBmsSeq,
+                page : pages
+            }
+
+            let result = syncAjax("POST", "/dashboard/postindivbatteryinfo", postData);
+
+            var list = result.list;
+            var pages = result.pages;
+            var liRow = result.liRow;
+
+            var html = '';
+            if(list == null || list.length == 0){
+                html += "<tr style='text-align: center;'><td colspan='8'>배터리가 없습니다.</td></tr>";
+            }else{
+                for (var i in list) {
+                html += "<tr><td>" + list[i].btry_nm + "</td>";
+                html += "<td>" + list[i].btry_ty + "</td>";    
+                html += "<td>" + list[i].btry_mfctor_nm + "</td>";  
+                html += "<td>" + list[i].btry_max_pwr + "W</td>";
+                html += "<td>" + list[i].mdl_no + "</td>";
+                html += "<td>" + list[i].mdl_mftr + "</td>";
+                html += "<td>" + list[i].chrg_stat + "</td>";
+                html += "<td>" + list[i].total_chrg_cnt + "</td></tr>";
+                
+                }
+            }     
+            $("#myTable").html(html);
+
+            //bms 테이블 페이징
+            var pageHtml = '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getBmsList('+ pages.previousPage +')"><i class="mdi mdi-chevron-left"></i></a></li>';
+
+                for(index in liRow){
+                    if(liRow[index] == pages.currentPage){
+                        pageHtml += '<li class="page-item active"><a class="page-link">'+ liRow[index] +'</a></li>';
+                    } else {
+                        pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getBmsList('+ liRow[index] +')">'+ liRow[index] +'</a></li>';
+                    }
+                }
+
+            pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getBmsList('+ pages.nextPage +')"><i class="mdi mdi-chevron-right"></i></a></li>';
+
+            //$("#bms-pagination").html(pageHtml);
+        }
+
+        function getAjaxDataGraph(){
+
+            let postData = {
+                loc_seq : globalLocSeq,
+                bms_seq: globalBmsSeq
+            }
+
+            //post 통신
+            //let result = syncAjax("POST", "/report/daily/history", postData);
+
+            getBmsList();
+
+            //post 통신
+            let result2 = syncAjax("POST", "/log/firstLiveDataForMore", postData);
+
+            let result3 = syncAjax("POST", "/log/postChargeByTempAndTime", postData);
+
+            var currData = result2.currData;
+            var voltData = result2.voltData;
+            var btryInfo = result2.btry_info;
+            var xData = result2.xData;
+            var socData = result2.socData;
+            var sohData = result2.sohData;
+
+            var xData2 = new Array();
+            var tempMaxArray = new Array();
+            var tempMinArray = new Array();
+            var chargeArray = new Array();
+            var disChargeArray = new Array();
+            var tempMaxData = result3.tempMaxData;
+            var tempMinData = result3.tempMinData;
+            var chargeData = result3.chargeData;
+            var disChargeData = result3.disChargeData;
+            var btryInfo2 = result3.btry_info;
+
+            var now = new Date();
+            var weekAgo = new Date(Date.parse(now) - 7 * 1000 * 60 * 60 * 24);
+            
+            for(var i = 0; i< 168; i++){
+
+                var checkNum1 = 0;
+                var checkNum2 = 0;
+                var checkNum3 = 0;
+                var checkNum4 = 0;
+
+                var weekAgo = new Date(Date.parse(weekAgo) + 1000 * 60 * 60 + (i * 60));
+                var time = changeDateFormat(weekAgo);
+                xData2.push(time);
+                for(var j = 0; j < tempMaxData.length; j++){
+                    if(tempMaxData[j].time == time){
+                        tempMaxArray.push(tempMaxData[j].max_tp);
+                        checkNum1++;
+                    }
+                }
+                for(var j = 0; j < tempMinData.length; j++){
+                    if(tempMinData[j].time == time){
+                        tempMinArray.push(tempMinData[j].min_tp);
+                        checkNum2++;
+                    }
+                }
+                for(var j = 0; j < chargeData.length; j++){
+                    if(chargeData[j].time == time){
+                        chargeArray.push(chargeData[j].avg_chrg_time);
+                        checkNum3++;
+                    }
+                }
+                for(var j = 0; j < disChargeData.length; j++){
+                    if(disChargeData[j].time == time){
+                        disChargeArray.push(disChargeData[j].avg_dischrg_time);
+                        checkNum4++;
+                    }
+                }
+
+                if(checkNum1 == 0){
+                    tempMaxArray.push(null);
+                }
+                if(checkNum2 == 0){
+                    tempMinArray.push(null);
+                }
+                if(checkNum3 == 0){
+                    chargeArray.push(null);
+                }
+                if(checkNum4 == 0){
+                    disChargeArray.push(null);
+                }
+            }
+
+            //그래프 출력
+            currGraphInit(currData, xData, btryInfo);
+            voltGraphInit(voltData, xData, btryInfo);
+            chargeTempTimeGraphInit(tempMaxArray, tempMinArray, chargeArray, disChargeArray, xData2);
+            chargeTempTimeGraphInit2(tempMaxArray, tempMinArray, chargeArray, disChargeArray, xData2);
+
+        }
+                
+        function redirectPage(){
+            var btry_seq = $("#select_bms option:selected").val();                
+            location.href='/log/getRealtimedataList?btry_seq='+ btry_seq;
+        }
+
+        function convertWeek(daynum){
+            if(daynum == "1"){
+                return "MON";
+            }else  if(daynum == "2"){
+                return "TUE";
+            }else  if(daynum == "3"){
+                return "WED";
+            }else  if(daynum == "4"){
+                return "THU";
+            }else  if(daynum == "5"){
+                return "FRI";
+            }else  if(daynum == "6"){
+                return "SAT";
+            }else  if(daynum == "7"){
+                return "SUN";
+            }
+        }
+            
+    </script>
+
+<script src="/attach/js/common.js"></script>
+     
+</html>

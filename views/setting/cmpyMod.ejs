@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link href="/attach/css/multi-select.css" media="screen" rel="stylesheet" type="text/css">
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+    </head>
+
+    <body >
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+          
+
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">                      
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">회사 수정</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <button class="btn btn-primary" type="submit"  onclick="location.href='/setting/cmpy'">List</button>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>                       
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div class="card-body">                                            
+                                        <form class="custom-validation">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">회사명</label>
+                                                        <div>
+                                                            <input type="hidden" id="cmpy_seq" value="<%=cmpyInfo[0].cmpy_seq%>">
+                                                            <input type="text" class="form-control" placeholder="" id="cmpy_nm" value="<%=cmpyInfo[0].cmpy_nm%>"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">사업 업종</label>
+                                                        <select class="form-control form-select" id="cmpy_biz_type" name="cmpy_biz_type">
+                                                            <option value="-1">선택</option>
+                                                                <%
+                                                                    for(var i in cmpy_biz_type_list){
+                                                                        if(cmpyInfo[0].cmpy_biz_type == cmpy_biz_type_list[i].cd){
+                                                                            %><option value="<%=cmpy_biz_type_list[i].cd%>" selected="selected"><%=cmpy_biz_type_list[i].cd_desc%></option><%
+                                                                            continue;
+                                                                        }
+                                                                        %><option value="<%=cmpy_biz_type_list[i].cd%>"><%=cmpy_biz_type_list[i].cd_desc%></option><%
+                                                                    }
+                                                                %>                                                                                                                              
+                                                        </select>        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">회사 유형</label>
+                                                        <select class="form-control form-select" id="cmpy_ty_cd" name="cmpy_ty_cd">
+                                                            <option value="-1">선택</option>
+                                                                <%
+                                                                    for(var i in cmpy_ty_list){
+                                                                        if(cmpyInfo[0].cmpy_ty_cd == cmpy_ty_list[i].cd){
+                                                                            %><option value="<%=cmpy_ty_list[i].cd%>" selected="selected"><%=cmpy_ty_list[i].cd_desc%></option><%
+                                                                            continue;
+                                                                        }
+                                                                        %><option value="<%=cmpy_ty_list[i].cd%>"><%=cmpy_ty_list[i].cd_desc%></option><%
+                                                                    }
+                                                                %>                                                                                                                             
+                                                        </select>        
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">회사 구분</label>
+                                                        <select class="form-control form-select" id="cmpy_div_cd" name="cmpy_div_cd">
+                                                            <option value="-1">선택</option>
+                                                                <%
+                                                                    for(var i in cmpy_div_list){
+                                                                        if(cmpyInfo[0].cmpy_div_cd == cmpy_div_list[i].cd){
+                                                                            %><option value="<%=cmpy_div_list[i].cd%>" selected="selected"><%=cmpy_div_list[i].cd_desc%></option><%
+                                                                            continue;
+                                                                        }
+                                                                        %><option value="<%=cmpy_div_list[i].cd%>"><%=cmpy_div_list[i].cd_desc%></option><%
+                                                                    }
+                                                                %>                                                                                                                             
+                                                        </select>        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">회사 사업자 번호</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="cmpy_biz_num" maxlength="10" value="<%=cmpyInfo[0].cmpy_biz_num%>"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">주소</label>
+                                                    <div class="input-group" id="input-group1">
+                                                            <input type="text" class="form-control" id="cmpy_addr1" maxlength="99" readonly="readonly" value="<%=cmpyInfo[0].cmpy_addr1%>">
+        
+                                                            <span class="input-group-button">
+                                                                <button type="button" id="searchAddr" class="btn btn-secondary btn-md waves-effect waves-light me-1" onclick="javascript:goPopup();">
+                                                                    주소검색
+                                                                </button>
+                                                            </span>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">상세주소</label>
+                                                    <div>
+                                                        <input type="text" class="form-control" placeholder="" id="cmpy_addr2" maxlength="99" readonly="readonly" value="<%=cmpyInfo[0].cmpy_addr2%>"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">회사 담당자명</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="cmpy_chrg_nm" maxlength="19" value="<%=cmpyInfo[0].cmpy_chrg_nm%>"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">회사 담당자 이메일</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="cmpy_chrg_mail" maxlength="99" value="<%=cmpyInfo[0].cmpy_chrg_mail%>"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">회사 담당자 전화번호</label>
+                                                        <div>
+                                                            <input type="tel" class="form-control tel" placeholder="" id="cmpy_chrg_tel" maxlength="13" onkeydown="this.value=this.value.replace(/[^0-9,-]/g,'');" value="<%=cmpyInfo[0].cmpy_chrg_tel%>"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                <label class="form-label">회원 목록</label>
+                                                    <select class="form-control form-select" id="acnt_seq_arr" name="acnt_seq_arr" multiple="multiple" style="height: 200px;" disabled="disabled">
+                                                            <%
+                                                                for(var i in cmpy_acnt_list){
+                                                                    %><option value="<%=cmpy_acnt_list[i].acnt_seq%>"><%=cmpy_acnt_list[i].acnt_id%></option><%
+                                                                }
+                                                            %>                                                                                                                        
+                                                    </select>        
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                            <div>
+                                                <div class="mb-3">
+                                                <label class="form-label">배터리 목록</label>
+                                                    <select class="form-control form-select" id="btry_seq_arr" name="btry_seq_arr" multiple="multiple" style="height: 200px;" disabled="disabled">
+                                                            <%
+                                                                for(var i in cmpy_btry_list){
+                                                                    %><option value="<%=cmpy_btry_list[i].btry_seq%>"><%=cmpy_btry_list[i].btry_nm%></option><%
+                                                                }
+                                                            %>                                                                                                                            
+                                                    </select>        
+                                                </div>
+                                            </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                <label class="form-label">위치 목록</label>
+                                                    <select class="form-control form-select" id="loc_seq_arr" name="loc_seq_arr" multiple="multiple" style="height: 200px;" disabled="disabled">
+                                                            <%
+                                                                for(var i in cmpy_loc_list){
+                                                                    %><option value="<%=cmpy_loc_list[i].loc_seq%>"><%=cmpy_loc_list[i].loc_nm%></option><%
+                                                                }
+                                                            %>                                                                                                                
+                                                    </select>        
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">등록자</label>
+                                                    <div>
+                                                        <input type="text" class="form-control" placeholder="" id="ins_nm" value="<%=cmpyInfo[0].ins_nm%>" readonly="readonly"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">등록일시</label>
+                                                    <div>
+                                                        <input type="text" class="form-control" placeholder="" id="ins_dttm" value="<%=cmpyInfo[0].ins_dttm%>" readonly="readonly"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">변경자</label>
+                                                    <div>
+                                                        <input type="text" class="form-control" placeholder="" id="upd_nm" value="<%=cmpyInfo[0].upd_nm%>" readonly="readonly"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">변경일시</label>
+                                                    <div>
+                                                        <input type="text" class="form-control" placeholder="" id="upd_dttm" value="<%=cmpyInfo[0].upd_dttm%>" readonly="readonly"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            <div>
+                                                <div>
+                                                    <button type="button" id="cmpyModBtn" class="btn btn-primary waves-effect waves-light me-1">
+                                                        Submit
+                                                    </button>
+                                                    <button type="reset" class="btn btn-secondary waves-effect">
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </div> 
+                                        </form>                                  
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+
+        <script src="/attach/js/common.js"></script>
+        <script src="/attach/js/jquery.multi-select.js"></script>
+
+        <script>
+
+            function goPopup(){
+                var pop = window.open("/setting/jusoPopup","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
+            }
+
+            // $('#acnt_seq_arr').multiSelect({
+            //     selectableHeader: "<div class='custom-header'>선택가능한 회원 ID</div>",
+            //     selectionHeader: "<div class='custom-header'>등록된 회원</div>"
+            // });
+
+            // $('#btry_seq_arr').multiSelect({
+            //     selectableHeader: "<div class='custom-header'>선택가능한 배터리</div>",
+            //     selectionHeader: "<div class='custom-header'>등록된 배터리</div>"
+            // });
+
+            // $('#loc_seq_arr').multiSelect({
+            //     selectableHeader: "<div class='custom-header'>선택가능한 설치장소</div>",
+            //     selectionHeader: "<div class='custom-header'>등록된 설치장소</div>"
+            // });
+
+            $("#cmpyModBtn").on("click", function() {
+
+                if(!valCheck("is", $("#cmpy_biz_type").val()) || $("#cmpy_biz_type").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","사업 업종을 선택해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#cmpy_ty_cd").val()) || $("#cmpy_ty_cd").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","회사 유형을 선택해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#cmpy_div_cd").val()) || $("#cmpy_div_cd").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","회사 구분을 선택해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#cmpy_nm").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","회사명을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#cmpy_biz_num").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","회사 사업자 번호를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#cmpy_addr1").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","주소를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#cmpy_chrg_nm").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","회사 담당자명을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#cmpy_chrg_mail").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","회사 담당자 이메일을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("email", $("#cmpy_chrg_mail").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","회사 담당자 이메일 형식이 올바르지 않습니다"));
+                    return false;
+                }
+                if(!valCheck("is", $("#cmpy_chrg_tel").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","회사 담당자 전화번호를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("tel", $("#cmpy_chrg_tel").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","회사 담당자 전화번호 형식이 올바르지 않습니다"));
+                    return false;
+                }
+
+                // var acnt_seq_arr = $("#acnt_seq_arr").val();
+                // var post_acnt_seq_arr = JSON.stringify(acnt_seq_arr);
+
+                // var btry_seq_arr = $("#btry_seq_arr").val();
+                // var post_btry_seq_arr = JSON.stringify(btry_seq_arr);
+
+                // var loc_seq_arr = $("#loc_seq_arr").val();
+                // var post_loc_seq_arr = JSON.stringify(loc_seq_arr);
+
+                let postData = {
+                    cmpy_seq: $("#cmpy_seq").val(),
+                    cmpy_nm: $("#cmpy_nm").val(),
+                    cmpy_biz_type: $("#cmpy_biz_type").val(),
+                    cmpy_ty_cd: $("#cmpy_ty_cd").val(),
+                    cmpy_div_cd: $("#cmpy_div_cd").val(),
+                    cmpy_biz_num: $("#cmpy_biz_num").val(),
+                    cmpy_addr1: $("#cmpy_addr1").val(),
+                    cmpy_addr2: $("#cmpy_addr2").val(),
+                    cmpy_chrg_nm: $("#cmpy_chrg_nm").val(),
+                    cmpy_chrg_mail: $("#cmpy_chrg_mail").val(),
+                    cmpy_chrg_tel: $("#cmpy_chrg_tel").val()
+                    // post_acnt_seq_arr : post_acnt_seq_arr,
+                    // post_btry_seq_arr : post_btry_seq_arr,
+                    // post_loc_seq_arr : post_loc_seq_arr
+                }
+                    
+                let result = syncAjax("POST", "/setting/cmpy/mod/complete", postData);
+
+                if(result.status == 'FAIL') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("error",result.msg)).then((errorResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                    });
+                }else{
+                    swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                    });
+                }
+
+            });
+
+            function jusoCallBack(roadAddr1,roadAddr2,entX,entY){
+
+                $("#cmpy_addr1").val(roadAddr1);
+                $("#cmpy_addr2").val(roadAddr2);
+
+            }
+
+        </script>
+
+    </body>
+
+ 
+     
+</html>

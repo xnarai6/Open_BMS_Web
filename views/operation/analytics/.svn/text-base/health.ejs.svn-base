@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+    </head>
+
+    <body>
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <%- include('../common/dash.ejs') %>
+                                               
+
+                        <div class="row">
+                            <div class="row mb-4">
+
+    
+                                <div class="col-xl-8">
+                                    <div class="card mb-0">
+                                        <!-- Nav tabs -->
+                                        <!-- Tab content -->
+                                        <div class="tab-content p-4">
+                                            <div class="tab-pane active" id="about" role="tabpanel">
+                                                <div>
+    
+                                                    <div>
+                                                        <h5 class="font-size-16 mb-4">1. Location</h5>    
+                                                        <div class="table-responsive">
+                                                            <table class="table table-nowrap table-hover mb-0">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col">#</th>
+                                                                        <th scope="col">설치장소</th>
+                                                                        <th scope="col">설치일</th>
+                                                                        <th scope="col">정격전력</th>                                                                        
+                                                                    </tr>
+                                                                </thead>
+                                                               
+                                                                <tbody id="loc-table">
+                                                                    <% for(var i in locList) { %>
+                                                                        <tr>
+                                                                            <th id="<%=locList[i].loc_seq%>" scope="row"><%= parseInt(i) + 1 %></th>
+                                                                            <td><%= locList[i].loc_nm %></td>
+                                                                            <td id="dttm_<%=i%>"><%= locList[i].ins_dttm %></td>
+                                                                            <td><%= locList[i].btry_max_pwr %></td>
+                                                                                                                                                        
+                                                                        </tr>
+                                                                    <% } %>
+                                                                </tbody>
+                                                               
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card mb-0">
+                                        <!-- Nav tabs -->
+                                        <!-- Tab content -->
+                                        <div class="tab-content p-4">
+                                            <div class="tab-pane active" id="about" role="tabpanel">
+                                                <div>
+                                                    <div>
+                                                        <h5 class="font-size-16 mb-4"  id="bms-table-title">2. BMS List</h5>    
+                                                        <div class="table-responsive">
+                                                            <table class="table table-nowrap table-hover mb-0">
+                                                                <thead>
+                                                                    <tr> 
+                                                                        <th scope="col">BMS ID</th>                                                                      
+                                                                        <th scope="col">Name</th>
+                                                                        <th scope="col">정격전력</th>
+                                                                        <th scope="col">평균충전시간</th>
+                                                                        <th scope="col">충전횟수</th>
+                                                                        <th scope="col">SOH</th>                                                                       
+                                                                        <th scope="col">마지막 데이터수신시간</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="bms-table">
+                                                                    <tr>
+                                                                        <th scope="col">&nbsp; </th>
+                                                                        <th scope="col">&nbsp; </th>
+                                                                        <th scope="col">&nbsp; </th>
+                                                                        <th scope="col">&nbsp; </th>
+                                                                        <th scope="col">&nbsp; </th>
+                                                                        <th scope="col">&nbsp; </th>
+                                                                        <th scope="col">&nbsp; </th>                                                                      
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="col">&nbsp; </th>
+                                                                        <th scope="col">&nbsp; </th>
+                                                                        <th scope="col">&nbsp; </th>
+                                                                        <th scope="col">&nbsp; </th>
+                                                                        <th scope="col">&nbsp; </th>
+                                                                        <th scope="col">&nbsp; </th>
+                                                                        <th scope="col">&nbsp; </th>                                                                      
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="col">&nbsp; </th>
+                                                                        <th scope="col">&nbsp; </th>
+                                                                        <th scope="col">&nbsp; </th>
+                                                                        <th scope="col">&nbsp; </th>
+                                                                        <th scope="col">&nbsp; </th>
+                                                                        <th scope="col">&nbsp; </th>
+                                                                        <th scope="col">&nbsp; </th>                                                                      
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <div class="text-center">                                               
+                                                <div class="clearfix"></div>
+                                                <div class="float-end mt-2">
+                                                    <div id="orders-chart"> </div>
+                                                </div>
+                                                <div>
+                                                    <p class="text-muted mb-0">SOH</p>
+                                                    <h1 id="bms_soh" class="display-1"><span data-plugin="counterup">?</span>%</h1>                                                     
+                                                </div>
+                                            </div>
+                                            <hr class="my-4">   
+                                            <div class="text-muted">
+                                                <h5 class="font-size-16">명칭(제조사)</h5>
+                                                <p id="bms_name">&nbsp</p>                                   
+                                                <h5 class="font-size-16">정격:</h5>
+                                                <p id="bms_btry_max_pwr">&nbsp</p>
+                                                <h5 class="font-size-16">설치일:</h5>
+                                                <p id="ins_dttm">&nbsp</p>
+                                                <h5 class="font-size-16">충전회수:</h5>
+                                                <p id="bms_charge_cnt">&nbsp</p>
+                                                <h5 class="font-size-16">일 평균 충전시간:</h5>
+                                                <p id="avg_chrg_time">&nbsp</p>
+                                                <!-- 
+                                                <h5 class="font-size-16">일 평균 사용시간:</h5>
+                                                <p id="bms_discharge_hour">&nbsp</p>
+                                                -->
+                                                <h5 class="font-size-16">마지막통신시간:</h5>
+                                                <p id="last_dttm">&nbsp</p>
+                                                
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- end row -->
+
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <script>
+            var globalLocId = "";
+            var globalLocNm = "";
+            var globalBMSId = "";
+            var globalBMSNm = "";
+            //설치장소 클릭 -> BMS List 갱신
+            $('#loc-table').on("click", "tr", function(){
+
+                //설치장소 seq값 저장 loc_seq
+                var loc_nm = $(this).find("td:eq(0)").text();
+                var id = $(this).find("th:eq(0)").attr("id");
+                
+
+                //BMS List 제목 변경
+                $("#bms-table-title").html("2. BMS List (" + $(this).find("td:eq(0)").text() + ")");
+
+                console.log(id);
+
+                globalLocId = id;
+                globalLocNm = loc_nm;
+
+                getAjaxBMSDetailList(null);
+                
+            });
+
+            
+
+            //배터리 선택
+            $('#bms-table').on("click", "tr", function(){
+
+                //설치장소 seq값 저장 
+                var btry_nm = $(this).find("td:eq(0)").text();
+              //  var id = $(this).find("th:eq(0)").attr("id");
+                var id = $(this).find("td:eq(0)").attr("id");
+
+                console.log(id);
+
+                globalBMSId = id;
+                globalBMSNm = btry_nm;
+
+                getAjaxBMSDetail(null);
+
+            });
+
+            //bmslist 받기
+            function getAjaxBMSDetailList(page){
+                let postData = {
+                    loc_seq: globalLocId,
+                    page: page
+                }
+                
+                //post 통신
+                let result = syncAjax("POST", "/operation/analytics/btryDetailList", postData);
+
+                var trList = "";
+                var BtryDetailList = result.BtryDetailList;
+                var pages = result.pages;
+                var liRow = result.liRow;
+
+                console.log(result);
+                console.log(postData);
+                $("#bms-page-string").html("Page " + pages.currentPage + " of " + pages.pageCount);
+
+                //데이터 테이블 형태로 넣기
+                if(BtryDetailList == null || BtryDetailList.length == 0){
+                    var tr = '<tr><td colspan="7" style="text-align:center;">BMS List가 없습니다.</td></tr>';
+                }else{
+                    for(var i in BtryDetailList){
+                        var tr = '<tr> ';     
+                        tr += '<td id='+BtryDetailList[i].btry_seq+'> '+ BtryDetailList[i].btry_seq + ' </td>';              
+                        tr += '<td> '+ BtryDetailList[i].btry_nm + ' </td>';
+                        tr += '<td>'+BtryDetailList[i].btry_max_pwr + '</td>';
+                        tr += '<td>'+BtryDetailList[i].avg_chrg_time + '</td>';
+                        tr += '<td>'+BtryDetailList[i].chrg_cnt + '</td>';                    
+                        tr += '<td>'+BtryDetailList[i].end_soh + '</td>';                   
+                        tr += '<td>'+BtryDetailList[i].last_dttm + '</td>';                  
+                        tr += '</tr>';
+
+                        trList += tr;
+                    }
+                }
+
+                $("#bms-table").html(trList);
+
+                //bms 테이블 페이징
+              
+            }
+
+            //점검이력 리스트 받기
+            function getAjaxBMSDetail(page){
+               
+                let postData = {
+                    btry_seq: globalBMSId                   
+                }
+                //post 통신
+               let result = syncAjax("POST", "/operation/analytics/btryDetail", postData);
+
+                var trList = "";
+                var BMSInfo = result.BMSInfo;
+
+                
+                $("#bms_soh").html(BMSInfo[0].end_soh +"%");
+                $("#bms_name").html(BMSInfo[0].btry_nm +"(" + BMSInfo[0].btry_mfctor_nm+ ")");                
+                $("#bms_btry_max_pwr").html(BMSInfo[0].btry_max_pwr+"");
+                $("#ins_dttm").html(BMSInfo[0].ins_dttm +"("+BMSInfo[0].diff+")");
+                $("#bms_charge_cnt").html(BMSInfo[0].avg_chrg_time);
+                $("#avg_chrg_time").html(BMSInfo[0].avg_chrg_time + "Hour");
+                
+                $("#last_dttm").html(BMSInfo[0].last_dttm);
+                
+                
+            }
+        </script>
+
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+       
+        <script src="/attach/js/common.js"></script>    
+                     
+    </body>
+</html>

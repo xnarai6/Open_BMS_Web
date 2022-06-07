@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+
+        <!-- ION Slider -->
+        <link href="/assets/libs/ion-rangeslider/css/ion.rangeSlider.min.css" rel="stylesheet" type="text/css"/>
+
+        <!-- Bootstrap Css -->
+        <link href="/assets/css/bootstrap-dark.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+        <!-- Icons Css -->
+        <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <!-- App Css-->
+        <link href="/assets/css/app-dark.min.css" id="app-style" rel="stylesheet" type="text/css" />
+
+    </head>
+
+    
+    <body>
+
+    <!-- <body data-layout="horizontal" data-topbar="colored"> -->
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <form class="custom-validation">
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">알람설정</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">알람설정</a></li>                                          
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                        
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+        
+                                        <h4 class="card-title">배터리 알람설정</h4>
+                                        <p class="card-title-desc">최소값, 최대값을 설정하세요</p>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">배터리</label>
+                                                    <div>
+                                                        <input type="hidden" id="alm_seq" value="<%=ALM_INFO[0].alm_seq%>">
+                                                        <input type="text" class="form-control" placeholder="" id="btry_seq" value="<%=ALM_INFO[0].btry_nm%>" data-seq="<%=ALM_INFO[0].btry_seq%>" readonly="readonly"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                
+                                            </div>
+                                        </div>
+                                    
+        
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="p-3">
+                                                    <h5 class="font-size-14 mb-3 mt-0">전압</h5>
+                                                    <input type="text" id="range_050" value="0.9;1.0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="p-3">
+                                                    <h5 class="font-size-14 mb-3 mt-0">전류</h5>
+                                                    <input type="text" id="range_051">
+                                                </div>
+                                            </div>  
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="p-3">
+                                                    <h5 class="font-size-14 mb-3 mt-0">온도</h5>
+                                                    <input type="text" id="range_052">
+                                                </div>
+                                            </div>  
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="p-3">
+                                                    <h5 class="font-size-14 mb-3 mt-0">파형왜형률</h5>
+                                                    <input type="text" id="range_053">
+                                                </div>
+                                            </div>  
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                <label class="form-label">SMS 발송여부</label>
+                                                    <select class="form-control form-select" id="alm_sms" name="alm_sms" value="<%=ALM_INFO[0].alm_sms%>">
+                                                        <option value="-1">선택</option>
+                                                        <option value="1">발송</option>
+                                                        <option value="0">발송안함</option>                                                                                                                            
+                                                    </select>        
+                                                </div>
+                                            </div>
+                                            </div>
+                                            <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                <label class="form-label">전원차단여부</label>
+                                                    <select class="form-control form-select" id="stop_pwr" name="stop_pwr" value="<%=ALM_INFO[0].stop_pwr%>">
+                                                        <option value="-1">선택</option>
+                                                        <option value="1">전원차단</option>
+                                                        <option value="0">전원공급</option>                                                                                                                             
+                                                    </select>        
+                                                </div>
+                                             </div>
+                                        </div>
+                                        <div>
+                                            <div>
+                                                <button type="button" id="mgtalarmModBtn" class="btn btn-primary waves-effect waves-light me-1">
+                                                    Submit
+                                                </button>
+                                                <button type="button" onclick="javascript:location.reload();" class="btn btn-secondary waves-effect">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div> 
+                                    </form>       
+
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <!-- Right Sidebar -->
+        <div class="right-bar">
+            <div data-simplebar class="h-100">
+
+                <div class="rightbar-title d-flex align-items-center px-3 py-4">
+            
+                    <h5 class="m-0 me-2">Settings</h5>
+
+                    <a href="javascript:void(0);" class="right-bar-toggle ms-auto">
+                        <i class="mdi mdi-close noti-icon"></i>
+                    </a>
+                </div>
+
+
+
+                <!-- Settings -->
+                <hr class="mt-0" />
+                <h6 class="text-center mb-0">Choose Layouts</h6>
+
+                <div class="p-4">
+                    <div class="mb-2">
+                        <img src="/assets/images/layouts/layout-1.jpg" class="img-fluid img-thumbnail" alt="">
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <input type="checkbox" class="form-check-input theme-choice" id="light-mode-switch" checked />
+                        <label class="form-check-label" for="light-mode-switch">Light Mode</label>
+                    </div>
+    
+                    <div class="mb-2">
+                        <img src="/assets/images/layouts/layout-2.jpg" class="img-fluid img-thumbnail" alt="">
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <input type="checkbox" class="form-check-input theme-choice" id="dark-mode-switch" data-bsStyle="/assets/css/bootstrap-dark.min.css" data-appStyle="/assets/css/app-dark.min.css" />
+                        <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
+                    </div>
+    
+                    <div class="mb-2">
+                        <img src="/assets/images/layouts/layout-3.jpg" class="img-fluid img-thumbnail" alt="">
+                    </div>
+                    <div class="form-check form-switch mb-5">
+                        <input type="checkbox" class="form-check-input theme-choice" id="rtl-mode-switch" data-appStyle="/assets/css/app-rtl.min.css" />
+                        <label class="form-check-label" for="rtl-mode-switch">RTL Mode</label>
+                    </div>
+
+            
+                </div>
+
+            </div> <!-- end slimscroll-menu-->
+        </div>
+        <!-- /Right-bar -->
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <%- include('../common/sidebarRight.ejs') %>
+        <%- include('../common/scripts.ejs') %>
+
+        <!-- Ion Range Slider-->
+        <script src="/assets/libs/ion-rangeslider/js/ion.rangeSlider.min.js"></script>
+ 
+        <script src="/attach/js/common.js"></script>
+
+        <script>
+
+            $("#range_050").ionRangeSlider({skin:"round",type:"double",grid:!0,min:0,max:1.6,from:"<%=ALM_INFO[0].alm_min_volt%>",to:"<%=ALM_INFO[0].alm_max_volt%>",step:0.1});
+            $("#range_051").ionRangeSlider({skin:"round",type:"double",grid:!0,min:0,max:10,from:"<%=ALM_INFO[0].alm_min_curr%>",to:"<%=ALM_INFO[0].alm_max_curr%>",step:1});
+            $("#range_052").ionRangeSlider({skin:"round",type:"double",grid:!0,min:-20,max:80,from:"<%=ALM_INFO[0].alm_min_tp%>",to:"<%=ALM_INFO[0].alm_max_tp%>",step:5});
+            $("#range_053").ionRangeSlider({skin:"round",type:"double",grid:!0,min:0,max:100,from:0,to:"<%=ALM_INFO[0].alm_min_harmony%>",step:5});
+
+            $(document).ready(function(){
+
+                var alm_sms_value = "<%=ALM_INFO[0].alm_sms%>";
+                var stop_pwr_value = "<%=ALM_INFO[0].stop_pwr%>";
+
+                $("#alm_sms > option[value="+alm_sms_value+"]").attr("selected","true");
+                $("#stop_pwr > option[value="+stop_pwr_value+"]").attr("selected","true");
+
+            });
+
+            $("#mgtalarmModBtn").on("click", function() {
+
+                var range_050_val = $("#range_050").val();
+                var range_051_val = $("#range_051").val();
+                var range_052_val = $("#range_052").val();
+                var range_053_val = $("#range_053").val();
+                var arange_050_val = range_050_val.split(';');
+                var arange_051_val = range_051_val.split(';');
+                var arange_052_val = range_052_val.split(';');
+                var arange_053_val = range_053_val.split(';');
+                
+                var alm_min_volt = arange_050_val[0]; 
+                var alm_max_volt = arange_050_val[1];
+                var alm_min_curr = arange_051_val[0];
+                var alm_max_curr = arange_051_val[1];
+                var alm_min_tp = arange_052_val[0];
+                var alm_max_tp = arange_052_val[1];
+                var alm_min_harmony = arange_053_val[1];
+
+                let postData = {
+                    alm_seq: $("#alm_seq").val(),
+                    btry_seq: $("#btry_seq").data("seq"),
+                    alm_min_volt: alm_min_volt,
+                    alm_max_volt: alm_max_volt,
+                    alm_min_curr: alm_min_curr,
+                    alm_max_curr: alm_max_curr,
+                    alm_min_tp: alm_min_tp,
+                    alm_max_tp: alm_max_tp,
+                    alm_min_harmony: alm_min_harmony,
+                    alm_sms: $("#alm_sms").val(),
+                    stop_pwr: $("#stop_pwr").val()
+                }
+
+                let result = syncAjax("POST", "/setting/mgtalarm/mod/complete", postData);
+
+                if(result.status == 'FAIL') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("error",result.msg)).then((errorResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                    });
+                }else{
+                    swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                    });
+                }
+
+            });
+
+        </script>
+
+    </body>
+</html>

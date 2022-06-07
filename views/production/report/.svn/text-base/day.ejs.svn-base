@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../../layout/meta.ejs') %>
+        <%- include('../../layout/title.ejs') %>
+        <%- include('../../layout/css.ejs') %>
+        <style>
+            #chartCard::-webkit-scrollbar {
+              width: 100%;
+            }
+            #chartCard::-webkit-scrollbar-thumb {
+              background-color: #2f3542;
+              border-radius: 10px;
+              background-clip: padding-box;
+              border: 2px solid transparent;
+            }
+            #chartCard::-webkit-scrollbar-track {
+              background-color: #9295a4;
+              border-radius: 10px;
+              box-shadow: inset 0px 0px 5px white;
+            }
+          </style>
+    </head>
+
+    <body onload="init();">
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+            <%- include('../../layout/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <%- include('../../layout/dashForProduction.ejs') %>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between"><h4 class="mb-0">날짜별 보고서</h4></div>
+                            </div>
+                        </div>
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-lg">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">수요업체</label>
+                                                        <select class="form-control form-select" id="search_cmpy_seq">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">설치장소</label>
+                                                        <select class="form-control form-select" id="search_loc_seq">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리</label>
+                                                        <select class="form-control form-select" id="search_btry_seq">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">검색 종류</label>
+                                                        <select class="form-control form-select" id="search_sort_by">
+                                                            <option value="sort_day">일별</option>
+                                                            <option value="sort_month">월별</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">기간</label>
+                                                        <div class="input-daterange input-group" id="datepicker6" data-date-format="yyyymmdd" data-date-autoclose="true" data-provide="datepicker" data-date-container="#datepicker6">
+                                                            <input type="text" class="form-control" name="start" id="startDate" placeholder="Start Date">
+                                                            <input type="text" class="form-control" name="end" id="endDate" placeholder="End Date">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg">
+                                                    <div class="d-flex flex-row-reverse align-items-center mt-4" style="width: 100%;">
+                                                        <button type="button" id="searchBtn" class="btn btn-lg btn-primary waves-effect waves-light me-1">
+                                                            검색
+                                                        </button>
+                                                    </div> 
+                                                </div>
+                                            </div>   
+                                        </form>        
+                                    </div>
+                                </div>
+                                <!-- end form-select -->
+                            </div>
+                        </div>
+
+                        <!-- 검색한 기간동안의 데이터 -->
+                        <div class="row">
+                            <div class="col-md-3 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body" style="height: 104px;">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4 class="mb-1 mt-1"><span data-plugin="counterup" id="inspecCount1"></span>회/<span data-plugin="counterup">0</span>회</h4>
+                                            <p class="text-muted mb-0">점검회수/이벤트 회수</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- end col-->
+                            <div class="col-md-3 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-start">
+                                            <div class="avatar-sm me-4">
+                                                <span class="avatar-title bg-soft-secondary text-secondary font-size-16 rounded-circle">
+                                                    전압
+                                                </span>
+                                            </div>
+                                            <div class="flex-1 align-self-center">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="mt-3">
+                                                            <p class="text-muted mb-2">최고 전압</p>
+                                                            <h5 class="font-size-16 mb-0" id="max_volt">0.00</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="mt-3">
+                                                            <p class="text-muted mb-2">최저 전압</p>
+                                                            <h5 class="font-size-16 mb-0" id="min_volt">0.00</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div> <!-- end col-->
+                            <div class="col-md-3 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-start">
+                                            <div class="avatar-sm me-4">
+                                                <span class="avatar-title bg-soft-warning text-warning font-size-16 rounded-circle">
+                                                    전류
+                                                </span>
+                                            </div>
+                                            <div class="flex-1 align-self-center">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="mt-3">
+                                                            <p class="text-muted mb-2">최고 전류</p>
+                                                            <h5 class="font-size-16 mb-0" id="max_curr">0.00</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="mt-3">
+                                                            <p class="text-muted mb-2">최저 전류</p>
+                                                            <h5 class="font-size-16 mb-0" id="min_curr">0.00</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div> <!-- end col-->
+                            <div class="col-md-3 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-start">
+                                            <div class="avatar-sm me-4">
+                                                <span class="avatar-title bg-soft-danger text-danger font-size-16 rounded-circle">
+                                                    온도
+                                                </span>
+                                            </div>
+                                            <div class="flex-1 align-self-center">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="mt-3">
+                                                            <p class="text-muted mb-2">최고 온도</p>
+                                                            <h5 class="font-size-16 mb-0" id="max_tp">0.00</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="mt-3">
+                                                            <p class="text-muted mb-2">최저 온도</p>
+                                                            <h5 class="font-size-16 mb-0" id="min_tp">0.00</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div> <!-- end col-->
+                        </div>
+                        <!-- end page title -->
+
+                        <!-- apex chart -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body" id="chartCard" style="overflow-x: scroll; overflow-y: hidden;">
+                                        <h4 class="card-title">충전/방전/SOC
+                                            <!-- <div style="float: right;">
+                                                <select class="form-control form-select" id="sort_by">
+                                                    <option value="sort_day">일별</option>
+                                                    <option value="sort_week">주별</option>
+                                                    <option value="sort_month">월별</option>
+                                                </select>
+                                            </div> -->
+                                        </h4>
+                                            <div id="vcChart" class="apex-charts" dir="ltr"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table id = "myTable" class="table table-centered table-nowrap table-hover mb-0">
+                                        <thead class="table-light">
+                                            <tr class="bg-transparent">
+                                                <th>Date</th>
+                                                <th>방전시간</th>                                                
+                                                <th>대기시간</th>
+                                                <th>평균 SOC(%)</th>
+                                                <!-- <th>평균 SOH(%)</th> -->
+                                                <th>충전시간</th>
+                                                <th>충전횟수</th>
+                                                <th>비고</th>                                                                                           
+                                            </tr>
+                                        </thead>
+                                        <tbody id="dailyReportBody">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end table -->
+                                <!-- 페이지네이션 -->
+                                <div class="row mt-4">
+                                    <div class="col-sm-6">
+                                        <div>
+                                            <p class="mb-sm-0" id="bms-page-string"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="float-sm-end">
+                                            <ul class="pagination pagination-rounded mb-sm-0" id="bms-pagination">
+                                                
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+                <%- include('../../layout/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+        </div>
+        <!-- END layout-wrapper -->
+        <%- include('../../layout/scripts.ejs') %>
+
+    </body>
+
+    <script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+    <script>
+        window.onload = function() {
+            getCmpyList();
+            getAjaxData(1);
+        }
+
+        // 현재 일 + 시 출력
+        function getNowDth(date) {
+            let result = '';
+                result += date.getFullYear();
+                result += ('0' + (1 + date.getMonth())).slice(-2);
+                result += ('0' + date.getDate()).slice(-2);
+                result += ('0' + date.getHours()).slice(-2);
+
+            return  result;
+        }
+
+        var globalSortBy = "sort_day";
+        var globalCmpySeq = "";
+        var globalLocSeq = "";
+        var globalBtrySeq = "";
+        var globalStartDate = "00000000";
+        var globalEndDate = "99999999";
+
+        $("#searchBtn").on("click", function(){
+            getAjaxData(1);
+        });
+
+        $("#search_cmpy_seq").on("change", function(){
+            globalCmpySeq = $("#search_cmpy_seq option:selected").val();
+            getLocList();
+        });
+
+        $("#search_loc_seq").on("change", function(){
+            globalLocSeq = $("#search_loc_seq option:selected").val();
+            getBatteryList();
+        });
+
+        $("#search_sort_by").on("change", function(){
+            globalSortBy = $("#search_sort_by option:selected").val();
+        });
+
+        function getCmpyList(){
+            // ajax 통신
+            let postData = {
+                //postData 없음
+            }
+
+            let result = syncAjax("default","POST", "/production/report/day/postOperCmpyList",postData);
+            var cmpy_list = result.cmpy_list;
+            var html = '';
+            if(cmpy_list != null && cmpy_list.length !=0){
+                for (var i in cmpy_list) {
+                html += "<option value=" + "'" + cmpy_list[i].cmpy_seq + "'>" + cmpy_list[i].cmpy_nm + "</option>";
+                }
+                globalCmpySeq = cmpy_list[0].cmpy_seq;
+            }else{
+                html += "<option value=''>수요업체 없음</option>";
+                globalCmpySeq = "-1";
+            }
+            $("select[id='search_cmpy_seq']").html(html);
+            getLocList();
+        }
+
+        function getLocList(){
+            // ajax 통신
+            let postData = {
+                cmpy_seq : globalCmpySeq
+            }
+
+            let result = syncAjax("default","POST", "/production/report/day/postLocListByCmpy",postData);
+            var loc_list = result.loc_list;
+            var html = '';
+            if(loc_list != null && loc_list.length !=0){
+                for (var i in loc_list) {
+                html += "<option value=" + "'" + loc_list[i].loc_seq + "'>" + loc_list[i].loc_nm + "</option>";
+                }
+                globalLocSeq = loc_list[0].loc_seq;
+            }else{
+                html += "<option value=''>설치장소 없음</option>";
+                globalLocSeq = "-1";
+            }
+            $("select[id='search_loc_seq']").html(html);
+            getBatteryList();
+        }
+
+        function getBatteryList(){
+            // ajax 통신
+            let postData = {
+                loc_seq : globalLocSeq
+            }
+
+            let result = syncAjax("default", "POST", "/production/report/day/postBtryListByLoc",postData);
+            var btry_list = result.btry_list;
+            var html = '';
+            if(btry_list != null && btry_list.length !=0){
+                for (var i in btry_list) {
+                html += "<option value=" + "'" + btry_list[i].btry_seq + "'>" + btry_list[i].btry_nm + "</option>";
+                }
+                globalBtrySeq = btry_list[0].btry_seq;
+            }else{
+                html += "<option value=''>배터리 없음</option>";
+                globalBtrySeq = "-1";
+            }
+            $("select[id='search_btry_seq']").html(html);
+        }
+
+        function makeVCChart(target, dataSet) {
+
+            var chartWidth = 1250;
+            if(dataSet.xRow.length * 50> 1250){
+                chartWidth = dataSet.xRow.length * 50;
+            }
+
+            let chartOption = {
+                series: [{
+                    name:'충전시간(분)',
+                    type: 'column',
+                    data: dataSet.chrgTimeRow
+                },{
+                    name:'방전시간(분)',
+                    type: 'column',
+                    data: dataSet.disChrgTimeRow
+                },{
+                    name:'SOC',
+                    type: 'line',
+                    data: dataSet.socRow
+                }],
+                chart: { type: 'line', height: 500, width: chartWidth, toolbar: { show: false }, zoom: { enabled: false } },
+                sparkline: { enabled: true },
+                colors: ['#1DDB16', '#FF0000', '#FFB44C'],
+                stroke: { width: [2, 2, 2, 2] },
+                legend: { show: true, labels: { useSeriesColors: true } },
+                yaxis: [
+                    {seriesName: '충전시간(분)', show : true, opposite: true, title: { text: '충전시간(분)', style: { color: '#5b73e8', } } },
+                    {seriesName: '방전시간(분)', show : false, opposite: true, title: { text: '방전시간(분)', style: { color: '#5b73e8', } } },
+                    {seriesName: 'SOC', title: { text: 'SOC',style: { color: '#f1734f', } }}
+                ], 
+                xaxis: { categories: dataSet.xRow }
+            }
+
+            var timeChart;
+
+            (timeChart = new ApexCharts(document.querySelector("#vcChart"), chartOption)).render();
+
+            timeChart.updateOptions({});
+        }
+
+        function makeGraph(){
+
+            globalSortBy = $("#search_sort_by option:selected").val();
+            globalCmpySeq = $("#search_cmpy_seq option:selected").val();
+            globalLocSeq = $("#search_loc_seq option:selected").val();
+            globalBtrySeq = $("#search_btry_seq option:selected").val();
+
+            if(globalCmpySeq == null || globalLocSeq == null || globalBtrySeq == null ||
+                globalCmpySeq == "" || globalLocSeq == ""  || globalBtrySeq == "" ||
+                globalCmpySeq == "-1" || globalLocSeq == "-1"  || globalBtrySeq == "-1" ){
+                swalWithBootstrapButtons.fire(makeAlertObj("warning","검색조건이 올바르지 않습니다."));
+                return false;
+            }
+
+            if(globalStartDate == null || globalStartDate == ''){
+                globalStartDate = "00000000";
+            }
+            if(globalEndDate == null || globalEndDate == ''){
+                globalEndDate = "99999999";
+            }
+
+            let postData = {
+                cmpy_seq: globalCmpySeq,
+                loc_seq: globalLocSeq,
+                btry_seq: globalBtrySeq,
+                startDate : globalStartDate,
+                endDate : globalEndDate,
+                sort_by : globalSortBy
+            }
+
+            //post 통신
+            let result = syncAjax("default", "POST", "/production/report/day/historyForGraph", postData);
+
+            // 충전 시간, 방전 시간, SOC 그래프 생성
+            makeVCChart($('#vcChart'), {
+                xRow : result.xRow,
+                chrgTimeRow : result.chrgTimeRow,
+                disChrgTimeRow : result.disChrgTimeRow,
+                socRow : result.socRow
+            });
+
+            document.getElementById("chartCard").scrollTo(9999,0);
+
+        }
+
+        function getAjaxData(page){
+
+            globalSortBy = $("#search_sort_by option:selected").val();
+            globalCmpySeq = $("#search_cmpy_seq option:selected").val();
+            globalLocSeq = $("#search_loc_seq option:selected").val();
+            globalBtrySeq = $("#search_btry_seq option:selected").val();
+            globalStartDate = $("#startDate").val();
+            globalEndDate = $("#endDate").val();
+
+            if(globalCmpySeq == null || globalLocSeq == null || globalBtrySeq == null ||
+                globalCmpySeq == "" || globalLocSeq == ""  || globalBtrySeq == "" ||
+                globalCmpySeq == "-1" || globalLocSeq == "-1"  || globalBtrySeq == "-1" ){
+                swalWithBootstrapButtons.fire(makeAlertObj("warning","검색조건이 올바르지 않습니다."));
+                return false;
+            }
+
+            if(globalStartDate == null || globalStartDate == ''){
+                globalStartDate = "00000000";
+            }
+            if(globalEndDate == null || globalEndDate == ''){
+                globalEndDate = "99999999";
+            }
+
+            $("#dailyReportBody").empty();
+            
+            let postData = {
+                sort_by : globalSortBy,
+                cmpy_seq: globalCmpySeq,
+                loc_seq: globalLocSeq,
+                btry_seq: globalBtrySeq,
+                startDate : globalStartDate,
+                endDate : globalEndDate,
+                page: page
+            }
+
+            makeGraph();
+
+            //post 통신
+            let result = syncAjax("default", "POST", "/production/report/day/history", postData);
+
+            if(result.msg != null && result.msg != ''){
+                alert(result.msg);
+            }
+
+            var objPerson = result.data;
+            var pages = result.pages;
+            var liRow = result.liRow;
+            var inspecData = result.inspecData;
+            var maxminData = result.maxminData;
+
+            $("#inspecCount1").html(0);
+            $("#inspecCount2").html(0);
+
+            for(var i in inspecData){
+                if(inspecData[i].inspec_type == '1'){
+                    $("#inspecCount1").html(inspecData[i].count);
+                }else if(inspecData[i].inspec_type == '2'){
+                    $("#inspecCount2").html(inspecData[i].count);
+                }
+            }
+
+            $("#max_volt").html(maxminData[0].max_volt);
+            $("#min_volt").html(maxminData[0].min_volt);
+            $("#max_curr").html(maxminData[0].max_curr);
+            $("#min_curr").html(maxminData[0].min_curr);
+            $("#max_tp").html(maxminData[0].max_tp);
+            $("#min_tp").html(maxminData[0].min_tp);
+
+            var html = '';
+            if(objPerson == null || objPerson.length == 0){
+                html += "<tr style='text-align: center;'><td colspan='7'>등록된 일별 보고서가 없습니다.</td></tr>";
+            }else{
+
+                for (var i in objPerson) {
+                html += "<tr>";
+                html += "<td>" + objPerson[i].sttc_date + "</td>";
+                html += "<td>" + objPerson[i].avg_dischrg_time + "</td>";
+                html += "<td>" + objPerson[i].avg_standby_time + "</td>";
+                html += "<td>" + objPerson[i].avg_soc + "</td>";
+                // html += "<td>" + objPerson[i].avg_soh + "</td>";
+                html += "<td>" + objPerson[i].avg_chrg_time + "</td>";
+                html += "<td>" + objPerson[i].chrg_cnt + "</td>";
+                html += "<td>" + objPerson[i].comment + "</td>";
+                html +=" </tr>";
+                }
+            }
+            $("#dailyReportBody").append(html);
+
+
+            //bms 테이블 페이징
+            var pageHtml = '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ pages.previousPage +')"><i class="mdi mdi-chevron-left"></i></a></li>';
+
+            for(index in liRow){
+                if(liRow[index] == pages.currentPage){
+                    pageHtml += '<li class="page-item active"><a class="page-link">'+ liRow[index] +'</a></li>';
+                } else {
+                    pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ liRow[index] +')">'+ liRow[index] +'</a></li>';
+                }
+            }
+
+            pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ pages.nextPage +')"><i class="mdi mdi-chevron-right"></i></a></li>';
+
+            $("#bms-pagination").html(pageHtml);
+                    
+        }
+                
+    </script>
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../../layout/meta.ejs') %>
+        <%- include('../../layout/title.ejs') %>
+        <%- include('../../layout/css.ejs') %>
+    </head>
+
+    <body onload="init()">
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+            <%- include('../../layout/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <%- include('../../layout/dashForProduction.ejs') %>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between"><h4 class="mb-0">월간 보고서</h4></div>
+                            </div>
+                        </div>
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">                            
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-lg-3">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">설치장소</label>
+                                                        <select class="form-control form-select" id="search_loc_seq">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리</label>
+                                                        <select class="form-control form-select" id="search_btry_seq">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">기간</label>
+                                                        <div class="input-daterange input-group" id="datepicker6" data-date-format="yyyymm" data-date-autoclose="true" data-provide="datepicker" data-date-container="#datepicker6" data-date-min-view-mode="1">
+                                                            <input type="text" class="form-control" name="start" id="startMonth" placeholder="Start Month">
+                                                            <input type="text" class="form-control" name="end" id="endMonth" placeholder="End Month">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="d-flex flex-row-reverse align-items-center mt-4" style="width: 100%;">
+                                                        <button type="button" id="searchBtn" class="btn btn-lg btn-primary waves-effect waves-light me-1">
+                                                            검색
+                                                        </button>
+                                                    </div> 
+                                                </div>
+                                            </div>          
+                                        </form>        
+                                    </div>
+                                </div>
+                                <!-- end form-select -->
+                            </div>
+                        </div>
+
+                        <!-- 검색한 기간동안의 데이터 -->
+                        <div class="row">
+                            <div class="col-md-3 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body" style="height: 104px;">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4 class="mb-1 mt-1"><span data-plugin="counterup" id="inspecCount1"></span>회/<span data-plugin="counterup">0</span>회</h4>
+                                            <p class="text-muted mb-0">점검회수/이벤트 회수</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- end col-->
+                            <div class="col-md-3 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-start">
+                                            <div class="avatar-sm me-4">
+                                                <span class="avatar-title bg-soft-primary text-primary font-size-16 rounded-circle">
+                                                    전압
+                                                </span>
+                                            </div>
+                                            <div class="flex-1 align-self-center">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="mt-3">
+                                                            <p class="text-muted mb-2">최고 전압</p>
+                                                            <h5 class="font-size-16 mb-0" id="max_volt"></h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="mt-3">
+                                                            <p class="text-muted mb-2">최저 전압</p>
+                                                            <h5 class="font-size-16 mb-0" id="min_volt"></h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div> <!-- end col-->
+                            <div class="col-md-3 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-start">
+                                            <div class="avatar-sm me-4">
+                                                <span class="avatar-title bg-soft-primary text-primary font-size-16 rounded-circle">
+                                                    전류
+                                                </span>
+                                            </div>
+                                            <div class="flex-1 align-self-center">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="mt-3">
+                                                            <p class="text-muted mb-2">최고 전류</p>
+                                                            <h5 class="font-size-16 mb-0" id="max_curr"></h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="mt-3">
+                                                            <p class="text-muted mb-2">최저 전류</p>
+                                                            <h5 class="font-size-16 mb-0" id="min_curr"></h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div> <!-- end col-->
+                            <div class="col-md-3 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-start">
+                                            <div class="avatar-sm me-4">
+                                                <span class="avatar-title bg-soft-primary text-primary font-size-16 rounded-circle">
+                                                    온도
+                                                </span>
+                                            </div>
+                                            <div class="flex-1 align-self-center">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="mt-3">
+                                                            <p class="text-muted mb-2">최고 온도</p>
+                                                            <h5 class="font-size-16 mb-0" id="max_tp"></h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="mt-3">
+                                                            <p class="text-muted mb-2">최저 온도</p>
+                                                            <h5 class="font-size-16 mb-0" id="min_tp"></h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div> <!-- end col-->
+                        </div>
+                        <!-- end page title -->
+
+                        
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div>
+                                     <!--       
+                                    <div class="float-end">
+                                        <form class="d-inline-flex mb-3">
+                                            <label class="form-check-label my-2 me-2" for="order-selectinput">Orders</label>
+                                            <select class="form-select" id="order-selectinput">
+                                                <option selected>All</option>
+                                                <option value="1">Active</option>
+                                                <option value="2">Unpaid</option>
+                                            </select>
+                                        </form>
+                                        
+                                    </div>
+                                    <button type="button" class="btn btn-success waves-effect waves-light mb-3">
+                                        <i class="mdi mdi-plus me-1"></i> Add New Order
+                                    </button>
+                                -->
+                                </div>
+                                <div class="table-responsive mb-4">
+                                    <table id="myTable" class="table table-centered datatable dt-responsive nowrap table-card-list" style="border-collapse: collapse; border-spacing: 0 12px; width: 100%;">
+                                        <thead class="table-light">
+                                            <tr class="bg-transparent">
+                                                <th>Month</th>
+                                                <th>충전시간</th>
+                                                <th>방전시간</th>                                                
+                                                <th>대기시간</th>
+                                                <th>평균 SOC(%)</th>
+                                                <th>평균 SOH(%)</th>
+                                                <th>충전횟수</th>
+                                                <th>비고</th>    
+                                            </tr>
+                                        </thead>
+                                        <tbody id="monthlyReportBody">
+
+                                            
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end table -->
+                                <!-- 페이지네이션 -->
+                                <div class="row mt-4">
+                                    <div class="col-sm-6">
+                                        <div>
+                                            <p class="mb-sm-0" id="bms-page-string"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="float-sm-end">
+                                            <ul class="pagination pagination-rounded mb-sm-0" id="bms-pagination">
+                                                
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <%- include('../../layout/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../../layout/scripts.ejs') %>
+
+    </body>
+
+    <script>
+        window.onload = function() {
+            getLocList();
+            getAjaxData(1);
+        }
+
+        var globalLocSeq = "";
+        var globalBmsSeq = "";
+        var globalStartMonth = "000000";
+        var globalEndMonth = "999999";
+
+        $("#searchBtn").on("click", function(){
+            getAjaxData(1);
+        });
+
+        $("#search_loc_seq").on("change", function(){
+            getBatteryList();
+        });
+
+        function getLocList(){
+            // ajax 통신
+            let postData = {
+                //postData 없음
+            }
+
+            let result = syncAjax("default","POST", "/production/report/day/postLocListByCmpy",postData);
+            var loc_list = result.loc_list;
+            var html = '';
+            if(loc_list != null && loc_list.length !=0){
+                for (var i in loc_list) {
+                html += "<option value=" + "'" + loc_list[i].loc_seq + "'>" + loc_list[i].loc_nm + "</option>";
+                }
+                globalLocSeq = loc_list[0].loc_seq;
+            }else{
+                html += "<option value=''>설치장소 없음</option>";
+            }
+            $("select[id='search_loc_seq']").html(html);
+            getBatteryList();
+        }
+
+        function getBatteryList(){
+            // ajax 통신
+            let postData = {
+                loc_seq : globalLocSeq
+            }
+
+            let result = syncAjax("default", "POST", "/production/report/day/postBtryListByLoc",postData);
+            var btry_list = result.btry_list;
+            var html = '';
+            if(btry_list != null && btry_list.length !=0){
+                for (var i in btry_list) {
+                html += "<option value=" + "'" + btry_list[i].btry_seq + "'>" + btry_list[i].btry_nm + "</option>";
+                }
+                globalBtrySeq = btry_list[0].btry_seq;
+            }else{
+                html += "<option value=''>배터리 없음</option>";
+            }
+            $("select[id='search_btry_seq']").html(html);
+        }
+     
+
+        function getAjaxData(page){
+
+                globalLocSeq = $("#search_loc_seq option:selected").val();
+                globalBtrySeq = $("#search_btry_seq option:selected").val();
+                globalStartMonth = $("#startMonth").val();
+                globalEndMonth = $("#endMonth").val();
+
+                if(globalLocSeq == null || globalBtrySeq == null){
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","검색조건이 올바르지 않습니다."));
+                    return false;
+                }
+
+                if(globalStartMonth == null || globalStartMonth == ''){
+                    globalStartMonth = "000000";
+                }
+                if(globalEndMonth == null || globalEndMonth == ''){
+                    globalEndMonth = "999999";
+                }
+
+                $("#monthlyReportBody").empty();
+                
+                let postData = {
+                    btry_seq: globalBtrySeq,
+                    loc_seq: globalLocSeq,
+                    startMonth : globalStartMonth,
+                    endMonth : globalEndMonth,
+                    page: page
+                }
+
+                //post 통신
+                let result = syncAjax("default", "POST", "/production/report/month/history", postData);
+
+                if(result.msg != null && result.msg != ''){
+                    alert(result.msg);
+                }
+
+                var objPerson = result.data;
+                var pages = result.pages;
+                var liRow = result.liRow;
+                var inspecData = result.inspecData;
+                var maxminData = result.maxminData;
+
+                $("#inspecCount1").html(0);
+                $("#inspecCount2").html(0);
+
+                for(var i in inspecData){
+                    if(inspecData[i].inspec_type == '1'){
+                        $("#inspecCount1").html(inspecData[i].count);
+                    }else if(inspecData[i].inspec_type == '2'){
+                        $("#inspecCount2").html(inspecData[i].count);
+                    }
+                }
+
+                $("#max_volt").html(maxminData[0].max_volt);
+                $("#min_volt").html(maxminData[0].min_volt);
+                $("#max_curr").html(maxminData[0].max_curr);
+                $("#min_curr").html(maxminData[0].min_curr);
+                $("#max_tp").html(maxminData[0].max_tp);
+                $("#min_tp").html(maxminData[0].min_tp);
+
+                var html = '';
+                if(objPerson == null || objPerson.length == 0){
+                    html += "<tr style='text-align: center;'><td colspan='9'>등록된 월별 보고서가 없습니다.</td></tr>";
+                }else{
+                    for (var i in objPerson) {
+                    html += "<tr>";
+                    html += "<td>" + objPerson[i].sttc_month + "</td>";
+                    html += "<td>" + objPerson[i].avg_chrg_time + "</td>";
+                    html += "<td>" + objPerson[i].avg_dischrg_time + "</td>";
+                    html += "<td>" + objPerson[i].avg_standby_time + "</td>";
+                    html += "<td>" + objPerson[i].avg_soc + "</td>";
+                    html += "<td>" + objPerson[i].avg_soh + "</td>";
+                    html += "<td>" + objPerson[i].chrg_cnt + "</td>";
+                    html += "<td>" + objPerson[i].comment + "</td>";
+                    html +=" </tr>";
+                }
+                }
+                $("#monthlyReportBody").append(html);  
+
+
+                //bms 테이블 페이징
+                var pageHtml = '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ pages.previousPage +')"><i class="mdi mdi-chevron-left"></i></a></li>';
+
+                for(index in liRow){
+                    if(liRow[index] == pages.currentPage){
+                        pageHtml += '<li class="page-item active"><a class="page-link">'+ liRow[index] +'</a></li>';
+                    } else {
+                        pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ liRow[index] +')">'+ liRow[index] +'</a></li>';
+                    }
+                }
+
+                pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ pages.nextPage +')"><i class="mdi mdi-chevron-right"></i></a></li>';
+
+                $("#bms-pagination").html(pageHtml);
+                       
+            }
+    </script>
+     
+</html>

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+    </head>
+
+    <body >
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+          
+
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">                      
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">배터리 수정</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <button class="btn btn-primary" type="submit"  onclick="location.href='/system/setting/mgtbattery'">List</button>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>                       
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div class="card-body">                                            
+                                        <form class="custom-validation">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 명</label>
+                                                        <div>
+                                                            <input type="hidden" class="form-control" placeholder="" id="btry_seq" maxlength="19" value="<%=btryInfo[0].btry_seq%>"/>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_nm" maxlength="19" value="<%=btryInfo[0].btry_nm%>"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                    <label class="form-label">배터리 제조사</label>
+                                                        <select class="form-control form-select" id="btry_mfctor_nm" name="btry_mfctor_nm">
+                                                            <option value="-1">선택</option>
+                                                                <%
+                                                                    for(var i in cmpy_list){
+                                                                        if(btryInfo[0].btry_mfctor_nm == cmpy_list[i].cmpy_nm){
+                                                                            %><option value="<%=cmpy_list[i].cmpy_nm%>" data-seq="<%=cmpy_list[i].cmpy_seq%>" selected="selected"><%=cmpy_list[i].cmpy_nm%></option><%
+                                                                            continue;
+                                                                        }
+                                                                        %><option value="<%=cmpy_list[i].cmpy_nm%>" data-seq="<%=cmpy_list[i].cmpy_seq%>"><%=cmpy_list[i].cmpy_nm%></option><%
+                                                                    }
+                                                                %>                                                                                                                               
+                                                        </select>        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 최소 전압</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_min_volt" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" value="<%=btryInfo[0].btry_min_volt%>" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 최대 전압</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_max_volt" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" value="<%=btryInfo[0].btry_max_volt%>" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 최소 전류</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_min_curr" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" value="<%=btryInfo[0].btry_min_curr%>" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 최대 전류</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_max_curr" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" value="<%=btryInfo[0].btry_max_curr%>" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 최소 온도</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_min_tp" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" value="<%=btryInfo[0].btry_min_tp%>" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 최대 온도</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_max_tp" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" value="<%=btryInfo[0].btry_max_tp%>" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 정격전력</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_max_pwr" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" value="<%=btryInfo[0].btry_max_pwr%>" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                    <label class="form-label">모듈 모델</label>
+                                                        <select class="form-control form-select" id="mdl_seq" name="mdl_seq">
+                                                            <option value="-1">선택</option>
+                                                                <%
+                                                                    for(var i in mdl_list){
+                                                                        if(btryInfo[0].mdl_seq == mdl_list[i].mdl_seq){
+                                                                            %><option value="<%=mdl_list[i].mdl_seq%>" selected="selected"><%=mdl_list[i].mdl_no%></option><%
+                                                                            continue;
+                                                                        }
+                                                                        %><option value="<%=mdl_list[i].mdl_seq%>"><%=mdl_list[i].mdl_no%></option><%
+                                                                    }
+                                                                %>                                                                                                                               
+                                                        </select>        
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">모듈 제조사</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_mdl_ty" value="<%=btryInfo[0].btry_mdl_ty%>" data-cd="<%=btryInfo[0].btry_mdl_ty_cd%>" readonly="readonly" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                    <label class="form-label">관리 상태</label>
+                                                        <select class="form-control form-select" id="btry_mng_stat" name="btry_mng_stat">
+                                                            <option value="-1">선택</option>
+                                                                <%
+                                                                    for(var i in btry_mng_stat_list){
+                                                                        if(btryInfo[0].btry_mng_stat == btry_mng_stat_list[i].cd){
+                                                                            %><option value="<%=btry_mng_stat_list[i].cd%>" selected="selected"><%=btry_mng_stat_list[i].cd_desc%></option><%
+                                                                            continue;
+                                                                        }
+                                                                        %><option value="<%=btry_mng_stat_list[i].cd%>"><%=btry_mng_stat_list[i].cd_desc%></option><%
+                                                                    }
+                                                                %>                                                                                                                               
+                                                        </select>        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                    <label class="form-label">설치장소</label>
+                                                        <select class="form-control form-select" id="loc_seq" name="loc_seq">
+                                                            <option value="-1">선택</option>
+                                                                <%
+                                                                    for(var i in loc_list){
+                                                                        if(btryInfo[0].loc_seq == loc_list[i].loc_seq){
+                                                                            %><option value="<%=loc_list[i].loc_seq%>" data-seq="<%=loc_list[i].cmpy_seq%>" selected="selected"><%=loc_list[i].loc_nm%></option><%
+                                                                            continue;
+                                                                        }
+                                                                        %><option value="<%=loc_list[i].loc_seq%>" data-seq="<%=loc_list[i].cmpy_seq%>"><%=loc_list[i].loc_nm%></option><%
+                                                                    }
+                                                                %>                                                                                                                               
+                                                        </select>        
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">설치장소 회사</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="cmpy_nm" value="<%=btryInfo[0].cmpy_nm%>" data-cd="<%=btryInfo[0].cmpy_seq%>" readonly="readonly" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">등록자</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="ins_nm" value="<%=btryInfo[0].ins_nm%>" readonly="readonly" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">등록일시</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="ins_dttm" value="<%=btryInfo[0].ins_dttm%>" readonly="readonly" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">변경자</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="upd_nm" value="<%=btryInfo[0].upd_nm%>" readonly="readonly" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">변경일시</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="upd_dttm" value="<%=btryInfo[0].upd_dttm%>" readonly="readonly" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div>
+                                                    <button type="button" id="mgtbatteryModBtn" class="btn btn-primary waves-effect waves-light me-1">
+                                                        Submit
+                                                    </button>
+                                                    <button type="reset" class="btn btn-secondary waves-effect" onclick="location.reload();">
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </div> 
+                                        </form>                                  
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+
+        <script src="/attach/js/common.js"></script>
+
+        <script>
+
+            $("#mdl_seq").on("change", function() {
+
+                let postData = {
+                    mdl_seq : $(this).val()
+                }
+
+                let result = syncAjax("POST", "/system/setting/mgtbattery/postMdlMftrByMdlSeq", postData);
+
+                $("#btry_mdl_ty").val(result.mdlInfo[0].btry_mdl_ty);
+                $("#btry_mdl_ty").data("cd",result.mdlInfo[0].btry_mdl_ty_cd);
+
+            });
+
+            $("#loc_seq").on("change", function() {
+
+                let postData = {
+                    loc_seq : $(this).val()
+                }
+
+                let result = syncAjax("POST", "/system/setting/mgtbattery/postCmpyNmByLocSeq", postData);
+
+                if(result.cmpyInfo[0] == null  || result.cmpyInfo[0].length ==0){
+                    $("#cmpy_nm").val("등록된 회사가 없습니다.");
+                    $("#cmpy_nm").data("cd","");
+                }else{
+                    $("#cmpy_nm").val(result.cmpyInfo[0].cmpy_nm);
+                    $("#cmpy_nm").data("cd",result.cmpyInfo[0].cmpy_seq);
+                }
+
+            });
+
+            $("#mgtbatteryModBtn").on("click", function() {
+
+                if(!valCheck("is", $("#btry_nm").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리명을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_ty_cd").val()) || $("#btry_ty_cd").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 타입을 선택해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_min_volt").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 최소 전압을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_max_volt").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 최대 전압을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_min_curr").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 최소 전류를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_max_curr").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 최대 전류를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_min_tp").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 최소 온도를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_max_tp").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 최대 온도를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_max_pwr").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 정격전력을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#mdl_seq").val()) || $("#mdl_seq").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 모듈 모델을 선택해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_mfctor_nm").val()) || $("#btry_mfctor_nm").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 제조사를 선택해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_mng_stat").val()) || $("#btry_mng_stat").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 관리 상태를 선택해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#loc_seq").val()) || $("#loc_seq").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","설치장소를 선택해주십시오"));
+                    return false;
+                }
+
+
+                let postData = {
+                    btry_seq: $("#btry_seq").val(),
+                    btry_nm: $("#btry_nm").val(),
+                    btry_ty_cd: $("#btry_ty_cd").val(),
+                    btry_mdl_ty_cd: $("#btry_mdl_ty").data("cd"),
+                    btry_min_volt: $("#btry_min_volt").val(),
+                    btry_max_volt: $("#btry_max_volt").val(),
+                    btry_min_curr: $("#btry_min_curr").val(),
+                    btry_max_curr: $("#btry_max_curr").val(),
+                    btry_min_tp: $("#btry_min_tp").val(),
+                    btry_max_tp: $("#btry_max_tp").val(),
+                    btry_max_pwr: $("#btry_max_pwr").val(),
+                    btry_mng_stat: $("#btry_mng_stat").val(),
+                    mdl_seq: $("#mdl_seq").val(),
+                    btry_mfctor_nm: $("#btry_mfctor_nm").val(),
+                    cmpy_seq: $("#loc_seq").find("option:selected").data("seq"),
+                    loc_seq: $("#loc_seq").val()
+                }
+                    
+                let result = syncAjax("POST", "/system/setting/mgtbattery/mod/complete", postData);
+
+                if(result.status == 'FAIL') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("error",result.msg)).then((errorResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                    });
+                }else{
+                    swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                    });
+                }
+
+            });
+
+        </script>
+
+    </body>
+
+ 
+     
+</html>

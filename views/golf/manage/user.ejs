@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('../../layout/meta.ejs') %>
+        <%- include('../../layout/title.ejs') %>
+        <%- include('../../layout/css.ejs') %>
+    </head>
+
+    <body>
+        <div id="layout-wrapper">
+            <%- include('../../layout/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <%- include('../common/topcard.ejs') %>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">사용자 관리</h4>
+                                    <a class="btn btn-primary" href="/golf/manage/user/reg">등록</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive mb-2">
+                                    <table class="table table-centered content-short">
+                                        <thead>
+                                            <tr>
+                                                <th>상세</th>
+                                                <th>권한</th>
+                                                <th>아이디</th>
+                                                <th>이름</th>
+                                                <th>이메일</th>
+                                                <th>전화번호</th>
+                                                <th>상태</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="userList"></tbody>
+                                    </table>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6"><div><p class="mb-sm-0"></p></div></div>
+                                    <div class="col-6"><div class="float-end"><ul class="pagination pagination-rounded mb-sm-0" id="userListPaging"></ul></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <%- include('../../layout/footer.ejs') %>
+            </div>
+        </div>
+
+        <%- include('../../layout/scripts.ejs') %>
+        <script>
+            $(async function() {
+                // user List 생성
+                getUserList(1);
+            });
+
+            async function getUserList(page) {
+                let postData = { page: page }
+
+                let result = await syncAjax("default", "POST", "/golf/manage/user/list", postData);
+
+                // 2. 결과 fail 체크
+                let resultChk = syncAjaxFailChk(result);
+                if (!resultChk) return false;
+
+                let userData = result.data;
+
+                // make list / paging
+                makeUserList($("#userList"), userData.rows);
+                makeUserListPaging($("#userListPaging"), userData.paging);
+            }
+
+            function makeUserList(target, list) {
+                $(target).html(formatUserList(list, 6));
+            }
+
+            function formatUserList(list, count) {
+                if (!list) return '<tr class="text-center"><td colspan="' + count + '">데이터가 없습니다</td></tr>';
+
+                let result = '';
+                    for (let el of list) {
+                        result += '<tr>';
+                        result += '    <td><a href="/golf/manage/user/detail/' + el.seq + '" class="px-2 text-primary"><i class="uil uil-location-arrow font-size-18"></i></a></td>';
+                        result += '    <td>' + el.role + '</td>';
+                        result += '    <td>' + el.id + '</td>';
+                        result += '    <td>' + el.nm + '</td>';
+                        result += '    <td>' + el.email + '</td>';
+                        result += '    <td>' + el.tel + '</td>';
+                        result += '    <td>' + el.stat + '</td>';
+                        result += '</tr>';
+                    }
+                return result;
+            }
+
+            function makeUserListPaging(target, paging) {
+                $(target).html(formatUserListPaging(paging));
+            }
+
+            function formatUserListPaging(paging) {
+                if (!paging) return '';
+
+                let result = '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getUserList(' + paging.previousPage + ')"><i class="mdi mdi-chevron-left"></i></a></li>';
+                for (let page of paging.pages[paging.page - 1]) {
+                    if(page == paging.currentPage) result += '<li class="page-item active"><a class="page-link">' + page + '</a></li>';
+                    else result += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getUserList('+ page +')">' + page + '</a></li>';
+                }
+                result += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getUserList(' + paging.nextPage + ')"><i class="mdi mdi-chevron-right"></i></a></li>';
+
+                return result;
+            }
+        </script>
+    </body>
+</html>

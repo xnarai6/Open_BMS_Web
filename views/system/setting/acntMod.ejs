@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+    </head>
+
+    <body >
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+          
+
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">                      
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">사용자 수정</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <button class="btn btn-primary" type="submit"  onclick="location.href='/system/setting/acnt'">List</button>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>                       
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <div class="card">
+                                    <div class="card-body">                                            
+                                        <form class="custom-validation">    
+                                            <div class="mb-3">
+                                                <label class="form-label">id</label>
+                                                <div>
+                                                    <input type="hidden" class="form-control" placeholder="" id="acnt_seq" value="<%=acntInfo[0].acnt_seq%>" readonly="readonly"/>
+                                                    <input type="text" class="form-control" placeholder="" id="acnt_id" value="<%=acntInfo[0].acnt_id%>" readonly="readonly"/>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">이름</label>
+                                                <div>
+                                                    <input type="text" class="form-control" placeholder="" id="acnt_nm" value="<%=acntInfo[0].acnt_nm%>" maxlength="19"/>
+                                                </div>
+                                            </div>  
+                                            <div class="mb-3">
+                                                <label class="form-label">회사 유형</label>
+                                                <select class="form-control form-select" id="cmpy_ty_cd" name="cmpy_ty_cd">
+                                                    <option value="-1">선택</option>
+                                                        <%
+                                                            for(var i in cmpyTyList){
+                                                                if(cmpyTyList[i].cd == acntInfo[0].cmpy_ty_cd){
+                                                                    %><option value="<%=cmpyTyList[i].cd%>" selected="selected"><%=cmpyTyList[i].cd_desc%></option><%
+                                                                    continue;
+                                                                }
+                                                                %><option value="<%=cmpyTyList[i].cd%>"><%=cmpyTyList[i].cd_desc%></option><%
+                                                            }
+                                                        %>                                                                                                                               
+                                                </select>        
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">회원 권한</label>
+                                                <select class="form-control form-select" id="acnt_role" name="acnt_role">
+                                                    <option value="-1">선택</option>                                                   
+                                                    <%
+                                                            for(var i in roleList){
+                                                                if(roleList[i].cd == acntInfo[0].acnt_role){
+                                                                    %><option value="<%=roleList[i].cd%>" selected="selected"><%=roleList[i].cd_desc%></option><%
+                                                                    continue;
+                                                                }
+                                                                %><option value="<%=roleList[i].cd%>"><%=roleList[i].cd_desc%></option><%
+                                                            }
+                                                        %>                                                                                                  
+                                                </select>        
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">회사명</label>
+                                                <select class="form-control form-select" id="cmpy_seq" name="cmpy_seq">
+                                                    <option value="-1">선택</option>                                                   
+                                                    <%
+                                                            for(var i in cmpyList){
+                                                                if(cmpyList[i].cmpy_nm == acntInfo[0].cmpy_nm){
+                                                                    %><option value="<%=cmpyList[i].cmpy_seq%>" selected="selected"><%=cmpyList[i].cmpy_nm%></option><%
+                                                                    continue;
+                                                                }
+                                                                %><option value="<%=cmpyList[i].cmpy_seq%>"><%=cmpyList[i].cmpy_nm%></option><%
+                                                            }
+                                                        %>                                                                                                  
+                                                </select>        
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">승인 여부</label>
+                                                <div class="square-switch">
+                                                <input type="checkbox" id="acnt_stat_cd" switch="none" checked="" value="<%=acntInfo[0].acnt_stat_cd%>">
+                                                <label for="acnt_stat_cd" data-on-label="Yes" data-off-label="No"></label>
+                                            </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">등록자</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="ins_nm" value="<%=acntInfo[0].ins_nm%>" readonly="readonly"/>
+                                                        </div>
+                                                    </div> 
+                                                    <div class="mb-3">
+                                                        <label class="form-label">등록일시</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="ins_dttm" value="<%=acntInfo[0].ins_dttm%>" readonly="readonly"/>
+                                                        </div>
+                                                    </div> 
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">변경자</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="upd_nm" value="<%=acntInfo[0].upd_nm%>" readonly="readonly"/>
+                                                        </div>
+                                                    </div> 
+                                                    <div class="mb-3">
+                                                        <label class="form-label">변경일시</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="upd_dttm" value="<%=acntInfo[0].upd_dttm%>" readonly="readonly"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div>
+                                                    <button type="button" id="acntModBtn" class="btn btn-primary waves-effect waves-light me-1">
+                                                        Submit
+                                                    </button>
+                                                    <button type="button" class="btn btn-secondary waves-effect" onclick="location.reload();">
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </div> 
+                                        </form>                                  
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+
+        <script src="/attach/js/common.js"></script>
+
+        <script>
+
+            var acnt_stat_cd = "<%=acntInfo[0].acnt_stat_cd%>";
+        
+            if(acnt_stat_cd == 'Y'){
+                $("#acnt_stat_cd").prop('checked', true);
+            }else{
+                $("#acnt_stat_cd").prop('checked', false);
+            }
+
+            //회사 유형 셀렉트 박스 변경 시
+            $("#cmpy_ty_cd").on('change', function() {
+
+                let postData = {
+                    cmpy_ty_cd: $("#cmpy_ty_cd").val()
+                }
+                        
+                let result = syncAjax("POST", "/system/setting/acnt/reg/acntRoleListByCmpy", postData);
+
+                var acntRoleListStr = "";
+
+                let acntRoleList = result.postAcntRoleList;
+
+                acntRoleListStr += '<option value="">선택</option>';
+
+                for(var i in acntRoleList){
+                    acntRoleListStr += "<option value=" + acntRoleList[i].cd + ">" + acntRoleList[i].cd_desc + "</option>";
+                }
+
+                $("#acnt_role").html(acntRoleListStr);
+                
+            });
+
+            //스위치 클릭시 값 변경
+            $("#acnt_stat_cd").on('change', function() {
+
+                if ($(this).is(':checked')) {
+                    $(this).attr('value', 'Y');
+                }
+                else {
+                $(this).attr('value', 'N');
+                }
+            });
+
+            $("#acntModBtn").on("click", function() {
+
+                if(!valCheck("is", $("#acnt_nm").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","이름을 입력해주십시오"));
+                    return false;
+                }
+                if((!valCheck("is", $("#cmpy_ty_cd").val())) || ($("#cmpy_ty_cd").val() == '-1')) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","회사 유형을 선택해주십시오"));
+                    return false;
+                }
+                if((!valCheck("is", $("#acnt_role").val())) || ($("#acnt_role").val() == '-1')) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","회원 권한 선택해주십시오"));
+                    return false;
+                }
+                if((!valCheck("is", $("#cmpy_seq").val())) || $("#cmpy_seq").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","회사명 선택해주십시오"));
+                    return false;
+                }
+
+                let postData = {
+                    acnt_seq: $("#acnt_seq").val(),
+                    acnt_nm: $("#acnt_nm").val(),
+                    cmpy_ty_cd: $("#cmpy_ty_cd").val(),
+                    acnt_role: $("#acnt_role").val(),
+                    cmpy_seq: $("#cmpy_seq").val(),
+                    acnt_stat_cd: $("#acnt_stat_cd").val()
+                }
+                    
+                let result = syncAjax("POST", "/system/setting/acnt/mod/complete", postData);
+                
+                if(result.status == 'FAIL') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("error",result.msg)).then((errorResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                    });
+                }else{
+                    swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                    });
+                }
+
+            });
+        </script>
+
+    </body>
+
+ 
+     
+</html>

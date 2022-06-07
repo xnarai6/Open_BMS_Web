@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+        <link href="/assets/css/app-dark.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    </head>
+
+    <body  onload="init();">
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <%- include('../common/dash.ejs') %>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+        
+                                        <h4 class="card-title">BMS 선택</h4>
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">설치장소</label>
+                                                        <select class="form-control form-select" id="select_loc">
+                                                            <option>Select</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3 mt-3 mt-lg-0">
+                                                        <label class="form-label">BMS</label>
+                                                        <select class="form-control form-select" id="select_bms">
+                                                            <option>Select</option>                                                        
+                                                        </select>                                                        
+                                                    </div>
+                                                </div>
+                                            </div>        
+                                        </form>        
+                                    </div>
+                                </div>
+                                <!-- end form-select -->
+                            </div>
+                        </div>                  
+
+   
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-4">전류 & 전압</h4>
+                                        
+                                        <div id="curr_and_volt_line_chart_dashed" class="apex-charts" dir="ltr"></div>        
+                                    </div>
+                                </div><!--end card-->
+                            </div> <!-- end col -->
+                            <div class="col-xl-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-4">SOC & SOH</h4>
+                                        
+                                        <div id="soc_and_soh_spline_area" class="apex-charts" dir="ltr"></div>        
+                                    </div>
+                                </div><!--end card-->
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+                        <div class="row">
+                        </div> <!-- end row -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-4">BMS Event</h4>
+                                        <div class="table-responsive">
+                                            <table class="table table-centered table-nowrap mb-0">
+                                                <thead class="table-light">                                                
+                                                    <tr class="bg-transparent">                                               
+                                                        <th>BMS ID</th>
+                                                        <th>Date</th>
+                                                        <th>요일</th>
+                                                        <th>충전시간</th>
+                                                        <th>방전시간</th>
+                                                        <th>대기시간</th>
+                                                        <th>Description</th>                                                             
+                                                    </tr>                                               
+                                                </thead>
+                                                <tbody id = "myTable">
+                                                 
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- 페이지네이션 -->
+                                        <div class="row mt-4">
+                                            <div class="col-sm-6">
+                                                <div>
+                                                    <p class="mb-sm-0" id="bms-page-string"></p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="float-sm-end">
+                                                    <ul class="pagination pagination-rounded mb-sm-0" id="bms-pagination">
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end table-responsive -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+
+
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+      
+        <!-- apexcharts -->
+        <script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+        
+        <script src="/assets/js/pages/apexcharts.init.js"></script>
+
+        <!-- 그래프 -->
+        <script src="/attach/js/live-graphs/curr-line-chart.js"></script>
+        <script src="/attach/js/live-graphs/volt-line-chart.js"></script>
+        <script src="/attach/js/live-graphs/soc-area-chart.js"></script>
+        <script src="/attach/js/live-graphs/curr-volt-line-chart.js"></script>
+        <script src="/attach/js/live-graphs/soc-soh-area-chart.js"></script>
+
+        <!-- flot plugins -->
+        <script src="/assets/libs/flot-charts/jquery.flot.js"></script>
+        <script src="/assets/libs/flot-charts/jquery.flot.time.js"></script>
+        <script src="/assets/libs/jquery.flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+        <script src="/assets/libs/flot-charts/jquery.flot.resize.js"></script>
+        <script src="/assets/libs/flot-charts/jquery.flot.pie.js"></script>
+        <script src="/assets/libs/flot-charts/jquery.flot.selection.js"></script>
+        <script src="/assets/libs/flot-charts/jquery.flot.stack.js"></script>
+        <script src="/assets/libs/flot.curvedlines/curvedLines.js"></script>
+        <script src="/assets/libs/flot-charts/jquery.flot.crosshair.js"></script>
+       
+    </body>
+    <script>
+        window.onload = function() {
+            init();
+        }
+
+        var globalLocSeq = "";
+        var globalBmsSeq = "";
+
+        function init(){
+            getLOCList();
+            globalLocSeq = $("#select_loc option:eq(0)").val();
+            getBatteryList();
+            globalBmsSeq = $("#select_bms option:eq(0)").val();
+            getAjaxDataGraph();
+        }
+        
+        function getLOCList(){
+            // ajax 통신
+
+            let postData = {
+
+            }
+
+            let data = syncAjax("POST", "/common/postIDtoLocationlist",postData);
+
+            var jsonArray 	= new Array();
+            var jsonObj		= new Object();
+
+            jsonArray = JSON.stringify(data);
+            var objPerson = JSON.parse(jsonArray);
+            jsonObj = objPerson[0];
+
+            var html = '';
+            if(objPerson.length !=0 && objPerson != null){
+                for (var i in objPerson) {
+                html += "<option value=" + "'" + objPerson[i].loc_seq + "'>" + objPerson[i].loc_nm + "</option>";
+                }
+                globalLocSeq = objPerson[0].loc_seq;
+                getBatteryList();
+            }else{
+                html += "<option value=''>설치장소 없음</option>";
+            }
+
+            //getAjaxData(null);
+            
+            $("select[id='select_loc']").html(html);
+        }
+
+        function getBatteryList(){
+
+            let postData = {
+                loc_seq : globalLocSeq
+            }
+
+            let result = syncAjax("POST", "/common/postLOCtoBtrylist", postData);
+
+            // var jsonArray 	= new Array();
+            // var jsonObj		= new Object();
+
+            // jsonArray = JSON.stringify(data);
+            // var objPerson = JSON.parse(jsonArray);
+            // jsonObj = objPerson[0];
+
+            var objPerson = result.data;
+
+
+            var html = '';
+            if(objPerson.length !=0 && objPerson != null){
+            html += "";
+                for (var i in objPerson) {
+                    html += "<option value=" + "'" + objPerson[i].btry_seq + "'>" + objPerson[i].btry_nm + "</option>";
+                }
+            }else{
+                html += "<option value=''>BMS 없음<option>";
+            }
+
+            //getAjaxData(null);
+                
+            $("select[id='select_bms']").html(html);
+        
+        }
+
+        $("select[id='select_loc']").on("change", function(){
+            globalLocSeq = $("#select_loc option:selected").val();
+            getBatteryList();
+            globalBmsSeq = $("#select_bms option:eq(0)").val();
+            getAjaxDataGraph();
+        })
+
+        $("select[id='select_bms']").on("change", function(){
+            globalBmsSeq = $("#select_bms option:selected").val();
+            getAjaxDataGraph();
+                 
+        })
+
+        function getBmsEventList(pages){
+
+            postData = {
+                loc_seq : globalLocSeq,
+                bms_seq : globalBmsSeq,
+                page : pages
+            }
+
+            let result = syncAjax("POST", "/system/report/daily/history", postData);
+
+            var list = result.data;
+            var pages = result.pages;
+            var liRow = result.liRow;
+
+            var html = '';
+            if(list == null || list.length == 0){
+                html += "<tr style='text-align: center;'><td colspan='7'>BMS Event가 없습니다.</td></tr>";
+            }else{
+                for (var i in list) {
+                html += "<tr><td>" + list[i].btry_nm + "</td>";
+                html += "<td>" + list[i].sttc_dt + "</td>";    
+                html += "<td>" + convertWeek(list[i].sttc_dayweek) + "</td>";  
+                html += "<td>" + list[i].avg_chrg_time + "</td>";
+                html += "<td>" + list[i].avg_dischrg_time + "</td>";
+                html += "<td>" + list[i].avg_standby_time + "</td>";
+                html += "<td>" + list[i].comment + "</td></tr>";
+                
+                }
+            }     
+            $("#myTable").html(html);
+
+            //bms 테이블 페이징
+            var pageHtml = '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getBmsEventList('+ pages.previousPage +')"><i class="mdi mdi-chevron-left"></i></a></li>';
+
+                for(index in liRow){
+                    if(liRow[index] == pages.currentPage){
+                        pageHtml += '<li class="page-item active"><a class="page-link">'+ liRow[index] +'</a></li>';
+                    } else {
+                        pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getBmsEventList('+ liRow[index] +')">'+ liRow[index] +'</a></li>';
+                    }
+                }
+
+            pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getBmsEventList('+ pages.nextPage +')"><i class="mdi mdi-chevron-right"></i></a></li>';
+
+            $("#bms-pagination").html(pageHtml);
+        }
+
+        function getAjaxDataGraph(){
+
+            let postData = {
+                loc_seq : globalLocSeq,
+                bms_seq: globalBmsSeq
+            }
+
+            //post 통신
+            let result = syncAjax("POST", "/system/report/daily/history", postData);
+
+            getBmsEventList();
+
+                        
+            //post 통신
+            let result2 = syncAjax("POST", "/system/log/firstLiveData", postData);
+
+            var currData = result2.currData;
+            var voltData = result2.voltData;
+            var btryInfo = result2.btry_info;
+            var xData = result2.xData;
+            var socData = result2.socData;
+            var sohData = result2.sohData;
+            var lastKey = result2.lastKey;
+            var cmpySeq = result2.cmpySeq;
+
+            //데이터 정리
+            //for(var i = 0; i < 10; i++){
+            //    var date = new Date(xData[i]);
+            //    xData[i] = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+
+            //}
+            
+            //그래프 첫 10개 데이터 (curr/volt 따로)
+            // currGraphInit(currData, xData, btryInfo);
+            
+            // voltGraphInit(voltData, xData, btryInfo);
+
+
+            currAndVoltGraphInit(currData, voltData, xData, lastKey, globalBmsSeq, cmpySeq);
+            socAndSohGraphInit(socData, sohData, xData, lastKey, globalBmsSeq, cmpySeq);
+        }
+                
+        function redirectPage(){
+            var btry_seq = $("#select_bms option:selected").val();                
+            location.href='/system/log/getRealtimedataList?btry_seq='+ btry_seq;
+        }
+
+        function convertWeek(daynum){
+            if(daynum == "1"){
+                return "MON";
+            }else  if(daynum == "2"){
+                return "TUE";
+            }else  if(daynum == "3"){
+                return "WED";
+            }else  if(daynum == "4"){
+                return "THU";
+            }else  if(daynum == "5"){
+                return "FRI";
+            }else  if(daynum == "6"){
+                return "SAT";
+            }else  if(daynum == "7"){
+                return "SUN";
+            }
+        }
+            
+    </script>
+
+<script src="/attach/js/common.js"></script>
+     
+</html>

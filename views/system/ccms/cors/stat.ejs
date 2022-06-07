@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../../common/meta.ejs') %>
+        <%- include('../../common/title.ejs') %>
+        <%- include('../../common/css.ejs') %>
+        <link href="/assets/css/app-dark.min.css" id="app-style" rel="stylesheet" type="text/css" />
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script type="text/javascript" src="/attach/js/jquery.subwayMap-0.5.3.js"></script>
+
+        <style type="text/css">
+            body
+            {
+                font-family: Verdana;
+                font-size: 8pt;
+            }
+        
+            /* The main DIV for the map */
+            .subway-map
+            {
+                margin: 0;
+                width: 550px;
+                height: 750px;
+                background-color: rgba(255, 255, 255, 0);
+            }
+        
+            /* Text labels */
+            .text
+            {
+                text-decoration: none;
+                color: #ffffff;
+            }
+        
+            #legend
+            {
+                float: left;
+                width: 250px;
+                height:400px;
+            }
+        
+            #legend div
+            {
+                height: 25px;
+            }
+        
+            #legend span
+            {
+                margin: 5px 5px 5px 0;
+            }
+            .subway-map span
+            {
+                margin: 5px 5px 5px 0;
+            }
+            .collapse{ -ms-overflow-style: none; } 
+            .collapse::-webkit-scrollbar{ display:none; }
+            </style>
+    </head>
+
+    <body>
+        
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../../common/topbar.ejs') %>
+            <%- include('../../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+                <div class="page-content">
+                   
+
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">골프코스</h4>
+                                    
+                                    <!-- Nav tabs -->
+                                    
+                                    <!-- Tab panes -->
+                                    <div class="tab-content p-3 text-muted">
+                                        <% for(var i in corsGroupList) {
+                                            
+                                            if(i == 0){ %>
+                                            <div class="tab-pane active" id="<%=corsGroupList[i].cors_group_nm%>" role="tabpanel">
+                                            <%}else{%>
+                                            <div class="tab-pane active" id="<%=corsGroupList[i].cors_group_nm%>"  role="tabpanel">
+                                            <%}%>   
+
+                                                <%for(var j in corsGroupList[i].cors_array){%>
+                                                    <div class="col-6 mt-0 mb-1">
+                                                        <h5 class="text-uppercase"><%=corsGroupList[i].cors_array[j].cors_nm%>(<%=corsGroupList[i].cors_array[j].cors_type%>hole)</h4>
+                                                    </div>
+                                                        
+                                                    <!--   <div width="200px" height="100px" class="subway-map" data-columns="8" data-rows="6" data-cellSize="100" data-legendId="legend" data-textClass="text" data-gridNumbers="false" data-grid="false" data-lineWidth="8" scrollHeight="200px"> -->
+                                                    
+                                                      
+                                                    <div style="border: 0px solid gold; padding: 5px; height: 300px;" width="200px"  class="subway-map" data-columns="8" data-rows="6" data-cellSize="100" data-legendId="legend" data-textClass="text" data-gridNumbers="false" data-grid="false" data-lineWidth="8" scrollHeight="200px"> 
+                                                        
+                                                        <ul data-color="#a6b0cf" data-label="jQuery Widgets">  
+                                                            <%
+                                                                let cartLoc = [];
+                                                                let cartName = [];
+                                                                let cartNum = [];
+                
+                                                                //화면에 찍을 카트 목록 만들기
+                                                                for(var k in cartList){
+                                                                    if(cartList[k].cart_loc_cors == corsGroupList[i].cors_array[j].cors_nm && cartList[k].cc_seq == corsGroupList[i].cors_array[j].cc_seq){
+                                                                        
+                                                                        if (cartLoc.indexOf(cartList[k].cart_loc_hole) == -1){
+                                                                            cartLoc.push(cartList[k].cart_loc_hole);
+                                                                            cartName.push(cartList[k].cart_nm);
+                                                                            cartNum.push(1);
+                                                                        } else if (cartNum[cartLoc.indexOf(cartList[k].cart_loc_hole)] == 1){
+                                                                            cartNum[cartLoc.indexOf(cartList[k].cart_loc_hole)] += 1;
+                                                                            cartName[cartLoc.indexOf(cartList[k].cart_loc_hole)] = cartName[cartLoc.indexOf(cartList[k].cart_loc_hole)] + ", " + cartList[k].cart_nm;
+                                                                        } else {
+                                                                            cartNum[cartLoc.indexOf(cartList[k].cart_loc_hole)] += 1;
+                                                                            cartName[cartLoc.indexOf(cartList[k].cart_loc_hole)] = cartName[cartLoc.indexOf(cartList[k].cart_loc_hole)] + "<br> ...";
+                                                                        }
+                                                                    }
+                                                                }
+                                                                
+                                                                //9홀짜리, 18홀짜리 그래프 노드 위치
+                                                                let hole9 = ["1,0.4", "2.5,0.4", "4,0.4", "5.5,0.4", "6.5,1.4", "5.5,2.4", "4,2.4", "2.5,2.4", "1,2.4"];
+
+                                                                let hole9_2 = ["2,0.4", "3.5,0.4", "5,0.4", "6.5,0.4", "7.5,1.4", "6.5,2.4", "5,2.4", "3.5,2.4", "2,2.4"];
+                                                                
+                                                                let coords = [];                    
+                                                                coords = hole9.slice();
+                                                    
+                                                                //그래프 그리기
+                                                                for(var l = 1; l <= corsGroupList[i].cors_array[j].cors_type; l++) {
+                                                                    
+                                                                    switch(l){
+                                                                        //꺾이는 라인(9홀)
+                                                                        case 5: %>
+                                                                            <li data-coords="<%=coords[l-1]%>" data-dir="E" data-labelpos="SE"><%=l%></li>
+                                                                        <%  
+                                                                            break;
+                                                                        case 6: %>
+                                                                            <li data-coords="<%=coords[l-1]%>" data-dir="S"><%=l%></li>
+                                                                        <%
+                                                                            break;
+                                                                        default: %>
+                                                                            <li data-coords="<%=coords[l-1]%>"><%=l%></li>
+                                                                        <%
+                                                                    }
+                                                                    
+                                                                    
+                                                                    //카트 마크 표시
+                                                                    if(cartLoc.includes(l)){
+                                                                        %>
+                                                                        <!-- <li data-coords='<%=coords[l-1]%>' data-labelpos="N"><a><%=cartName[cartLoc.indexOf(l)]%></a></li>-->
+                                                                        <%
+                                                                    }//if%>
+                                                                    <li id='<%=coords[l-1]%>'  data-coords='<%=coords[l-1]%>' data-labelpos="N"><a><%=cartName[cartLoc.indexOf(l)]%></a></li>
+                                                                        
+                                                                    <li data-coords='<%=coords[l-1]%>' data-marker="interchange" data-color="#ff0000"><a> </a></li> 
+                                                                        
+                                                                    <%
+                                                                }//for
+                                                            %>
+                                                                
+                                                        </ul>
+                                                    </div><!--style -->
+                                                <%}%>
+                                                </div> <!-- Tab panes -->  
+                                        <%}%>
+                                            </div> <!-- Tab content -->                                               
+                                        </div> <!-- card-body -->                                                    
+                                </div>  <!-- card -->
+                            </div> <!-- col-md-9 -->
+
+
+
+
+
+                            <div class="col-lg-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <div id="cart-accordion" class="custom-accordion mt-5 mt-xl-0">
+                                                <% //carList for문
+                                                for(var i in cartList2){
+
+                                                    var cors_group_nm = cartList2[i].cors_group_nm;
+
+                                                    if(cors_group_nm == null || cors_group_nm == 'club_house'){
+                                                        cors_group_nm = '클럽하우스';
+                                                    }
+
+                                                %>
+                                                    <div class="card border shadow-none">
+                                                        <a href="#collapseContent<%=cors_group_nm%>" class="<%if(i==0){%>text-dark<%}else{%>text-dark collapsed<%}%>" data-bs-toggle="collapse" aria-haspopup="true" aria-expanded="<%if(i==0){%>true<%}else{%>false<%}%>" aria-controls="collapseContent<%=cors_group_nm%>">
+                                                            <div class="bg-light p-3">
+                                                                
+                                                                <div class="d-flex align-items-center">
+                                                                    <div class="me-3">
+                                                                        <div class="avatar-xs">
+                                                                            <div class="avatar-title rounded-circle font-size-15">
+                                                                                <i class="mdi mdi-golf"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="flex-1 overflow-hidden">
+                                                                        <h5><%=cors_group_nm%></h5>
+                                                                        <p class="text-muted text-truncate mb-0"></p>
+                                                                    </div>
+                                                                    <i class="mdi mdi-chevron-up accor-down-icon font-size-16"></i>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        </a>
+                
+                                                        <div id="collapseContent<%=cors_group_nm%>" class="<%if(i==0){%>collapse show<%}else{%>collapse<%}%>" data-bs-parent="#cart-accordion">
+                                                            <div class="p-4">
+                                                                <% //carList[i].cart_array for문
+                                                        
+                                                                for(var j in cartList2[i].cart_array){
+
+                                                                %>
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div>
+                                                                            <div class="d-flex align-items-start">
+                                                                                    <div class="avatar-sm me-4">
+                                                                                        <%
+                                                                                        if(cartList2[i].cart_array[j].btry_rmn_amt <= 65){
+                                                                                            %><span class="avatar-title bg-soft-warning text-danger font-size-14 rounded-circle"><%=cartList2[i].cart_array[j].cart_loc_hole%>hole</span><%
+                                                                                        }else{
+                                                                                            %><span class="avatar-title bg-soft-primary text-primary font-size-14 rounded-circle"><%=cartList2[i].cart_array[j].cart_loc_hole%>hole</span><%
+                                                                                        }
+                                                                                        %>
+                                                                                    </div>
+                                                                                    <div class="flex-1 align-self-center">
+                                                                                        <div class="row">
+                                                                                            <div class="col-6">
+                                                                                                <div class="mt-3">
+                                                                                                    <p class="text-muted mb-2">카트</p>
+                                                                                                    <p class="text-muted mb-2"><%=cartList2[i].cart_array[j].cart_nm%></p>                                                    
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                                <div class="mt-3">
+                                                                                                    <p class="text-muted mb-2">배터리상태</p>
+                                                                                                    <h5 class="font-size-16 mb-0" id="min_curr"><%=cartList2[i].cart_array[j].btry_rmn_amt%>%</h5>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                            </div>
+            
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <%}%> <!-- //carList[i].cart_array for문 -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <%}%> <!-- //carList for문 -->
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div> <!-- card-body -->
+                                </div> <!-- card -->
+                            </div> <!-- row -->
+                    </div>
+                </div>
+            </div>
+                    
+
+                    
+                <!-- End Page-content -->
+                <%- include('../../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <script type="text/javascript">
+            $(".subway-map").subwayMap({ debug: true });
+        </script>
+
+<script>
+    $(function() {
+        $("li").on("click",function() {
+           // alert("click");
+            //showLoader();
+            //$("#loading-content").load("dataSearch.php?"+this.id, hideLoader);
+        });
+    });
+
+  //  function onclickevt(){
+      //  alert("click");
+  //  }
+</script>   
+<script>
+    function tabclick(no){
+        //alert(no);
+        
+    }
+    
+</script>
+
+        <%- include('../../common/sidebarRight.ejs') %>
+
+        <%- include('../../common/scripts.ejs') %>
+
+    </body>
+
+    <script src="/assets/js/app.js"></script>
+
+    <script src="/attach/js/common.js"></script> 
+    
+</html>

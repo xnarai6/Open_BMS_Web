@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+    </head>
+
+    <body>
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">QNA</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="/bbs/qna">게시판</a></li>
+                                            <li class="breadcrumb-item"><a href="/bbs/qna">QNA</a></li>
+                                            <li class="breadcrumb-item active">글쓰기</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                        <!-- start row -->
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">QNA 글쓰기</h4>
+                                        <p class="card-title-desc"></p>
+        
+                                        <form class="custom-validation" action="#" novalidate="">
+                                            <div class="mb-3">
+                                                <label class="form-label" style="color: white;">제목</label>
+                                                <div>
+                                                    <input type="text" class="form-control" required="required" id="qna_title">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label" style="color: white;">내용</label>
+                                                <div>
+                                                    <textarea required="required" class="form-control" rows="15" id="qna_content"></textarea>
+                                                </div>
+                                            </div>
+                                            <div style="float: right;">
+                                                <div>
+                                                    <button type="button" onclick="location.href='/bbs/qna'" class="btn btn-secondary waves-effect">
+                                                        목록으로
+                                                    </button>
+                                                    <button type="button" id="submitBtn" class="btn btn-primary waves-effect waves-light me-1">
+                                                        등록
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+        
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+
+        <script src="/attach/js/common.js"></script>
+
+        <script>
+    
+            $("#submitBtn").on("click", function() {
+
+                if(!valCheck("is", $("#qna_title").val())) {
+                    alert("제목을 입력해주십시오");
+                    return false;
+                }
+                if(!valCheck("is", $("#qna_content").val())) {
+                    alert("내용을 입력해주십시오");
+                    return false;
+                }
+    
+                let postData = {
+                    qna_title: $("#qna_title").val(),
+                    qna_content: $("#qna_content").val()
+                }
+                        
+                let result = syncAjax("POST", "/bbs/qna/reg/complete", postData);
+    
+                if(result.status == 'FAIL') {
+                    window.alert(result.msg);
+                }else{
+                    window.alert(result.msg);
+                }
+    
+                var url = result.url;
+    
+                $(location).attr('href',url);
+    
+            });
+        </script>
+    </body>
+</html>

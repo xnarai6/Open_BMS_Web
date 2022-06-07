@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../../layout/meta.ejs') %>
+        <%- include('../../layout/title.ejs') %>
+        <%- include('../../layout/css.ejs') %>
+        <style>
+            #chartCard::-webkit-scrollbar {
+              width: 100%;
+            }
+            #chartCard::-webkit-scrollbar-thumb {
+              background-color: #2f3542;
+              border-radius: 10px;
+              background-clip: padding-box;
+              border: 2px solid transparent;
+            }
+            #chartCard::-webkit-scrollbar-track {
+              background-color: #9295a4;
+              border-radius: 10px;
+              box-shadow: inset 0px 0px 5px white;
+            }
+          </style>
+    </head>
+
+    <body onload="init();">
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+            <%- include('../../layout/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <%- include('../../layout/dashForProduction.ejs') %>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between"><h4 class="mb-0">배터리 보고서</h4></div>
+                            </div>
+                        </div>
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-lg">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">수요업체</label>
+                                                        <select class="form-control form-select" id="search_cmpy_seq">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">설치장소</label>
+                                                        <select class="form-control form-select" id="search_loc_seq">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 종류</label>
+                                                        <select class="form-control form-select" id="search_btry_ty">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">기간</label>
+                                                        <div class="input-daterange input-group" id="datepicker6" data-date-format="yyyymmdd" data-date-autoclose="true" data-provide="datepicker" data-date-container="#datepicker6">
+                                                            <input type="text" class="form-control" name="start" id="startDate" placeholder="Start Date">
+                                                            <input type="text" class="form-control" name="end" id="endDate" placeholder="End Date">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg">
+                                                    <div class="d-flex flex-row-reverse align-items-center mt-4" style="width: 100%;">
+                                                        <button type="button" id="searchBtn" class="btn btn-lg btn-primary waves-effect waves-light me-1">
+                                                            검색
+                                                        </button>
+                                                    </div> 
+                                                </div>
+                                            </div>   
+                                        </form>        
+                                    </div>
+                                </div>
+                                <!-- end form-select -->
+                            </div>
+                        </div>
+                        <!-- end page title -->                   
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table id = "myTable" class="table table-centered table-nowrap table-hover mb-0">
+                                        <thead class="table-light">
+                                            <tr class="bg-transparent">
+                                                <th>배터리</th>
+                                                <th>수요업체</th>
+                                                <th>설치장소</th>                                           
+                                                <th>충전회수</th>
+                                                <th>최종 SOC(%)</th>
+                                                <th>최종 SOH(%)</th>
+                                                <th>최종 전압</th>
+                                                <th>최종 전류</th>     
+                                                <th>최종 온도</th>                                                                                   
+                                            </tr>
+                                        </thead>
+                                        <tbody id="batteryReportBody">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end table -->
+                                <!-- 페이지네이션 -->
+                                <div class="row mt-4">
+                                    <div class="col-sm-6">
+                                        <div>
+                                            <p class="mb-sm-0" id="bms-page-string"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="float-sm-end">
+                                            <ul class="pagination pagination-rounded mb-sm-0" id="bms-pagination">
+                                                
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+                <%- include('../../layout/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+        </div>
+        <!-- END layout-wrapper -->
+        <%- include('../../layout/scripts.ejs') %>
+
+    </body>
+
+    <script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+    <script>
+
+        var globalCmpySeq = "";
+        var globalLocSeq = "";
+        var globalStartDate = "00000000";
+        var globalEndDate = "99999999";
+
+        window.onload = function() {
+            getCmpyList();
+        }
+
+        $("#search_cmpy_seq").on("change", function(){
+            globalCmpySeq = $("#search_cmpy_seq option:selected").val();
+            getLocList();
+        });
+
+        $("#search_loc_seq").on("change", function(){
+            globalLocSeq = $("#search_loc_seq option:selected").val();
+        });
+
+        function getCmpyList(){
+            // ajax 통신
+            let postData = {
+                //postData 없음
+            }
+
+            let result = syncAjax("default","POST", "/production/report/battery/postOperCmpyListWithAll",postData);
+            var cmpy_list = result.cmpy_list;
+            var html = '';
+            if(cmpy_list != null && cmpy_list.length !=0){
+                for (var i in cmpy_list) {
+                html += "<option value=" + "'" + cmpy_list[i].cmpy_seq + "'>" + cmpy_list[i].cmpy_nm + "</option>";
+                }
+                globalCmpySeq = cmpy_list[0].cmpy_seq;
+            }else{
+                html += "<option value=''>수요업체 없음</option>";
+            }
+            $("select[id='search_cmpy_seq']").html(html);
+            getLocList();
+        }
+
+        function getLocList(){
+            // ajax 통신
+            let postData = {
+                cmpy_seq : globalCmpySeq
+            }
+
+            let result = syncAjax("default","POST", "/production/report/battery/postLocListByCmpyWithAll",postData);
+            var loc_list = result.loc_list;
+            var html = '';
+            if((loc_list != null && loc_list.length !=0)){
+                for (var i in loc_list) {
+                html += "<option value=" + "'" + loc_list[i].loc_seq + "'>" + loc_list[i].loc_nm + "</option>";
+                }
+                globalLocSeq = loc_list[0].loc_seq;
+            }else{
+                html += "<option value=''>설치장소 없음</option>";
+            }
+            $("select[id='search_loc_seq']").html(html);
+        }
+    </script>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('../../layout/meta.ejs') %>
+        <%- include('../../layout/title.ejs') %>
+        <%- include('../../layout/css.ejs') %>
+    </head>
+
+    <body>
+        <div id="layout-wrapper">
+            <%- include('../../layout/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <%- include('../../layout/dashForProduction.ejs') %>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">사용자 관리 - 상세</h4>
+                                    <div>
+                                        <input type="submit" class="btn btn-primary waves-effect waves-light me-1" id="chgBtn" value="수정">
+                                        <input type="reset" class="btn btn-secondary waves-effect" id="resetBtn" value="되돌리기">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">아이디</label>
+                                                    <input type="text" class="form-control" id="userId" disabled>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">이름</label>
+                                                    <input type="text" class="form-control" id="userName">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3 mb-3">
+                                                    <label class="form-label">이메일</label>
+                                                    <input type="text" class="form-control" id="userEmailId">
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                    <label class="form-label d-none d-md-block">&nbsp;</label>
+                                                    <select class="form-control form-select" id="userEmailSelect">
+                                                        <option value="input">직접입력</option>
+                                                        <option value="naver.com">naver.com</option>
+                                                        <option value="gmail.com">gmail.com</option>
+                                                        <option value="hanmail.net">hanmail.net</option>
+                                                        <option value="hotmail.com">hotmail.com</option>
+                                                        <option value="nate.com">nate.com</option>
+                                                        <option value="yahoo.co.kr">yahoo.co.kr</option>
+                                                        <option value="empas.com">empas.com</option>
+                                                        <option value="dreamwiz.com">dreamwiz.com</option>
+                                                        <option value="freechal.com">freechal.com</option>
+                                                        <option value="lycos.co.kr">lycos.co.kr</option>
+                                                        <option value="korea.com">korea.com</option>
+                                                        <option value="hanmir.com">hanmir.com</option>
+                                                        <option value="paran.com">paran.com</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label d-none d-md-block">&nbsp;</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend"><div class="input-group-text">@</div></div>
+                                                        <input type="text" class="form-control" id="userEmailAddr">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 mb-3">
+                                                    <label class="form-label d-none d-md-block">알람수신여부</label>
+                                                    <div class="form-check form-switch form-switch-lg mb-0">
+                                                        <input name="switch" type="checkbox" class="form-check-input" id="userEmailAllow">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3 mb-3">
+                                                    <label class="form-label">휴대폰번호</label>
+                                                    <select class="form-control form-select" id="userTel1">
+                                                        <option value="010">010</option>
+                                                        <option value="011">011</option>
+                                                        <option value="016">016</option>
+                                                        <option value="017">017</option>
+                                                        <option value="019">019</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                    <label class="form-label d-none d-md-block">&nbsp;</label>
+                                                    <input type="text" class="form-control" id="userTel2" maxlength="4" onkeyup="this.value=this.value.replace(/[^0-9,-]/g,'');">
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label d-none d-md-block">&nbsp;</label>
+                                                    <input type="text" class="form-control" id="userTel3" maxlength="4" onkeyup="this.value=this.value.replace(/[^0-9,-]/g,'');">
+                                                </div>
+                                                <div class="col-md-2 mb-3">
+                                                    <label class="form-label d-none d-md-block">알람수신여부</label>
+                                                    <div class="form-check form-switch form-switch-lg mb-0">
+                                                        <input name="switch" type="checkbox" class="form-check-input" id="userTelAllow">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">권한</label>
+                                                    <select class="form-control form-select" id="userRole"></select>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">상태</label>
+                                                    <select class="form-control form-select" id="userStat"></select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <%- include('../../layout/footer.ejs') %>
+            </div>
+        </div>
+
+        <%- include('../../layout/scripts.ejs') %>
+        <script>
+            let firstData;
+
+            $(async function() {
+                // 1. code list 가져오기
+                let result = await syncAjax('default', 'POST', '/production/manage/user/detail/<%=param%>/info', {});
+
+                // 2. 결과 fail 체크
+                let resultChk = syncAjaxFailChk(result);
+                if (!resultChk) return false;
+
+                firstData = result.data
+
+                // 3. 유저 정보 출력
+                setupUserInfo(result.data['userDetailInfo'], result.data['codeMap']);
+            });
+
+            // 수정
+            $('#chgBtn').on('click', async function(e) {
+                e.preventDefault();
+
+                // 1. post data 생성
+                let postData = {
+                    id: $('#userId').val(),
+                    name: $('#userName').val(),
+                    email: $('#userEmailId').val() + '@' + $('#userEmailAddr').val(),
+                    tel: $('#userTel1').val() + '-' + $('#userTel2').val() + '-' + $('#userTel3').val(),
+                    emailAllow: ($('#userEmailAllow').is(":checked") ? 'Y' : 'N'),
+                    telAllow: ($('#userTelAllow').is(":checked") ? 'Y' : 'N'),
+                    role: $('#userRole').val(),
+                    stat: $('#userStat').val(),
+                }
+
+                // 2. 수정 요청
+                let result = await syncAjax('default', 'POST', '/production/manage/user/detail/<%=param%>/chg', postData);
+
+                // 3. 결과 fail 체크
+                let resultChk = syncAjaxFailChk(result);
+                if (!resultChk) return false;
+
+                // 4. 결과 SUCCESS
+                swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                    var url = result.url;
+                    $(location).attr('href',result.path);
+                });
+            });
+
+            // 되돌리기
+            $('#resetBtn').on('click', function(e) {
+                e.preventDefault();
+                setupUserInfo(firstData['userDetailInfo'], firstData['codeMap']);
+            });
+
+            // 이메일 select 변경
+            $(document).on('change', '#userEmailSelect', function() {
+                if($(this).val() == 'input') $('#userEmailAddr').attr('disabled', false).val('');
+                else $('#userEmailAddr').attr('disabled', true).val($(this).val());
+            });
+
+            function setupUserInfo(info, codeMap) {
+                $('#userId').val(info['acnt_id']);
+                $('#userName').val(info['acnt_nm']);
+
+                let userEmailArray = info['acnt_email'].split('@');
+                if (Array.isArray(userEmailArray) && userEmailArray.length >= 2) {
+                    $('#userEmailId').val(userEmailArray[0]);
+                    $('#userEmailSelect option:contains("' + userEmailArray[1] + '")').length > 0 ? $('#userEmailSelect').val(userEmailArray[1]) : $('#userEmailSelect').val('input');
+                    $('#userEmailSelect').change();
+                    $('#userEmailAddr').val(userEmailArray[1]);
+                }
+
+                let userTelArray = info['acnt_tel'].split('-');
+                if (Array.isArray(userTelArray) && userTelArray.length >= 3) {
+                    $('#userTel1 option:contains("' + userTelArray[0] + '")').length > 0 ? $('#userTel1').val(userTelArray[0]) : $('#userTel1').val('010');
+                    $('#userTel2').val(userTelArray[1]);
+                    $('#userTel3').val(userTelArray[2]);
+                }
+
+                $('#userEmailAllow').attr('checked', info['acnt_email_allow'] == 'Y' ? true : false);
+                $('#userTelAllow').attr('checked', info['acnt_tel_allow'] == 'Y' ? true : false);
+                
+                makeSelectList(false, $('#userRole'), Object.keys(codeMap['role_m']).map(e => { return { val: e, name: codeMap['role_m'][e] } }));
+                makeSelectList(false, $('#userStat'), Object.keys(codeMap['acnt_stat']).map(e => { return { val: e, name: codeMap['acnt_stat'][e] } }));
+
+                $('#userRole').val(info['acnt_role_cd']);
+                $('#userStat').val(info['acnt_stat_cd']);
+            }
+
+            function makeSelectList(all, target, list) {
+                $(target).empty();
+                if (all) $(target).append('<option value="all">전체</option>');
+                for (var el of list) $(target).append('<option value="' + el.val + '">' + el.name + '</option>');
+                $(target).change();
+            }
+        </script>
+    </body>
+</html>

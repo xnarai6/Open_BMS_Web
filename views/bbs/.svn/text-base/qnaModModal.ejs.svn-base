@@ -1,0 +1,55 @@
+<div class="modal fade bs-example-modal-lg" tabindex="-1" aria-labelledby="qnaModModalLabel" style="display: none;" aria-hidden="true" id="qnaModModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="qnaModModalLabel">QNA 수정</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- start row -->
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title"></h4>
+                                <p class="card-title-desc"></p>
+
+                                <form class="custom-validation" action="#" novalidate="">
+                                    <div class="mb-3">
+                                        <label class="form-label" style="color: white;">제목</label>
+                                        <div>
+                                            <input type="text" class="form-control" required="required" id="qna_title_mod" value="<%=qnaView[0].qna_title%>">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label" style="color: white;">내용</label>
+                                        <div>
+                                            <textarea required="required" class="form-control" rows="15" id="qna_content_mod"><%=qnaView[0].qna_content%></textarea>
+                                        </div>
+                                    </div>
+                                        <!-- <div class="mb-3" style="float: right;">
+                                            <input type="checkbox" id="qna_stat_mod" switch="bool" checked="checked">
+                                            <label for="qna_stat_mod" data-on-label="Yes" data-off-label="No" style="transform: scale(1);"></label>
+                                        </div> -->
+                                        <!-- <div class="mb-3" style="float: right; color: white; font-size: 14.4px;">
+                                            공개 여부&nbsp;&nbsp;&nbsp;
+                                        </div> -->
+                                        <div class="mb-3">
+                                            <div>
+                                                <button type="button" id="submitBtn_mod" class="btn btn-primary waves-effect waves-light me-1">
+                                                    수정
+                                                </button>
+                                            </div>
+                                        </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div>
+                <!-- end row -->
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>

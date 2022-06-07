@@ -1,0 +1,63 @@
+<div class="modal fade bs-example-modal-md" tabindex="-1" aria-labelledby="pwModModalLabel" style="display: none;" aria-hidden="true" id="pwModModal">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="pwModModalLabel">비밀번호 변경</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- start row -->
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title"></h4>
+                                <p class="card-title-desc"></p>
+
+                                <form class="custom-validation" action="#" novalidate="">
+                                    <div class="mb-3">
+                                        <label class="form-label" style="color: white;">현재 비밀번호</label>
+                                        <div>
+                                            <input type="password" class="form-control" required="required" id="current_pw">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label" style="color: white;">새로운 비밀번호</label>
+                                        <div>
+                                            <input type="password" class="form-control" required="required" id="new_pw">
+                                        </div>
+                                        <div class="mb-3">
+                                            <span style="color:red;" id="passwordCheck"></span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label" style="color: white;">새로운 비밀번호 확인</label>
+                                        <div>
+                                            <input type="password" class="form-control" required="required" id="new_pw_check">
+                                        </div>
+                                        <div class="mb-3">
+                                            <span style="color:red;" id="passwordCheck2"></span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3" style="float: right;">
+                                        <div>
+                                            <button type="button" id="pwModBtn" class="btn btn-primary waves-effect waves-light me-1">
+                                                변경
+                                            </button>
+                                            <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-secondary waves-effect">
+                                                취소
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div>
+                <!-- end row -->
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>

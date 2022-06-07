@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+        <link href="/assets/css/app-dark.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    </head>
+
+    <body onload="init();">
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <%- include('../common/dash.ejs') %>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-4">BMS Event</h4>
+                                        <div class="table-responsive">
+                                            <table class="table table-centered table-nowrap mb-0">
+                                                <thead class="table-light">                                                
+                                                    <tr class="bg-transparent">                                               
+                                                        <th>BTRY ID</th>
+                                                        <th>Date</th>
+                                                        <th>tp1</th>
+                                                        <th>tp2</th>
+                                                        <th>hd1</th>
+                                                        <th>hd2</th>
+                                                        <th>전압</th>
+                                                        <th>전류</th>                                                                              
+                                                    </tr>                                               
+                                                </thead>
+                                                <tbody id = "myTable">
+                                                    
+                                                </tbody>
+                                            </table>
+                                             <!-- 페이지네이션 -->
+                                            <div class="row mt-4">
+                                                <div class="col-sm-6">
+                                                    <div>
+                                                        <p class="mb-sm-0" id="bms-page-string"></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="float-sm-end">
+                                                        <ul class="pagination pagination-rounded mb-sm-0" id="bms-pagination">
+                                                            
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <!-- 페이지네이션 -->
+                                        </div>
+                                        <!-- end table-responsive -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+
+
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+      
+        <!-- apexcharts -->
+       
+        <script src="/assets/js/app.js"></script>
+
+               <!-- flot plugins -->
+               <script src="/assets/libs/flot-charts/jquery.flot.js"></script>
+               <script src="/assets/libs/flot-charts/jquery.flot.time.js"></script>
+               <script src="/assets/libs/jquery.flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+               <script src="/assets/libs/flot-charts/jquery.flot.resize.js"></script>
+               <script src="/assets/libs/flot-charts/jquery.flot.pie.js"></script>
+               <script src="/assets/libs/flot-charts/jquery.flot.selection.js"></script>
+               <script src="/assets/libs/flot-charts/jquery.flot.stack.js"></script>
+               <script src="/assets/libs/flot.curvedlines/curvedLines.js"></script>
+               <script src="/assets/libs/flot-charts/jquery.flot.crosshair.js"></script>
+
+                <script src="/assets/js/app.js"></script>
+
+       
+    </body>
+    <script>
+         var globalId = "";
+
+         window.onload = function(){
+             init();
+         }
+
+        function init(){
+            getRealtimedataList();
+        }
+        
+        function getRealtimedataList(){
+     
+            $("tbody").empty();
+                
+                let postData = {
+                    btry_seq: '<%=btry_seq%>',
+                    page: 0
+                }
+
+                //post 통신
+                let result = syncAjax("GET", "/operation/log/getRealtimedataList", postData);
+
+
+                var objPerson = result.data;
+                var pages = result.pages;
+                var liRow = result.liRow;
+
+                           
+                var html = '';
+                
+                for (var i in objPerson) {
+                    html += "<tr><td>" + objPerson[i].btry_seq + "</td>";
+                    html += "<td>" + objPerson[i].ins_dttm + "</td>";
+                    html += "<td>" + objPerson[i].tp1 + "</td>";
+                    html += "<td>" + objPerson[i].tp2 + "</td>";
+                    html += "<td>" + objPerson[i].hd1 + "</td>";
+                    html += "<td>" + objPerson[i].hd2 + "</td>";
+                    html += "<td>" + objPerson[i].volt + "</td>";
+                    html += "<td>" + objPerson[i].curr + "</td>";
+                    html += "</tr>";
+                    $("tbody").append(html);
+                }     
+                
+                // 테이블 페이징
+                var pageHtml = '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ pages.previousPage +')"><i class="mdi mdi-chevron-left"></i></a></li>';
+
+                for(index in liRow){
+                    if(liRow[index] == pages.currentPage){
+                        pageHtml += '<li class="page-item active"><a class="page-link">'+ liRow[index] +'</a></li>';
+                    } else {
+                        pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ liRow[index] +')">'+ liRow[index] +'</a></li>';
+                    }
+                }
+                pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ pages.nextPage +')"><i class="mdi mdi-chevron-right"></i></a></li>';
+                $("#bms-pagination").html(pageHtml);                    
+                
+            }
+
+    </script>   
+    <script src="/attach/js/common.js"></script>
+</html>

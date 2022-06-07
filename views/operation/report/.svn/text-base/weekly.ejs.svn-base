@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+    </head>
+
+    <body onload="init()">
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <%- include('../common/dash.ejs') %>
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">  
+                                        <h4 class="card-title">BMS 선택</h4>           
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">설치장소</label>
+                                                        <select class="form-control form-select" id="select1">
+                                                            <option>Select</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3 mt-3 mt-lg-0">
+                                                        <label class="form-label">BMS</label>
+                                                        <select class="form-control form-select" id="form-select">
+                                                            <option>Select</option>
+                                                        </select>                                                        
+                                                    </div>
+                                                </div>
+                                            </div>        
+                                        </form>        
+                                    </div>
+                                </div>
+                                <!-- end form-select -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">Weekly Report</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Report</a></li>
+                                            <li class="breadcrumb-item active">Weekly</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div>
+                                     <!--       
+                                    <div class="float-end">
+                                        <form class="d-inline-flex mb-3">
+                                            <label class="form-check-label my-2 me-2" for="order-selectinput">Orders</label>
+                                            <select class="form-select" id="order-selectinput">
+                                                <option selected>All</option>
+                                                <option value="1">Active</option>
+                                                <option value="2">Unpaid</option>
+                                            </select>
+                                        </form>
+                                        
+                                    </div>
+                                    <button type="button" class="btn btn-success waves-effect waves-light mb-3">
+                                        <i class="mdi mdi-plus me-1"></i> Add New Order
+                                    </button>
+                                -->
+                                </div>
+                                <div class="table-responsive mb-4">
+                                    <table id="myTable" class="table table-centered datatable dt-responsive nowrap table-card-list" style="border-collapse: collapse; border-spacing: 0 12px; width: 100%;">
+                                        <thead>
+                                            <tr class="bg-transparent">
+                                                <th>BMS ID</th>
+                                                <th>요일</th>
+                                                <th>Date</th>
+                                                <th>집계결과</th>
+                                                <th>평균충전시간</th>
+                                                <th>평균방전시간</th>                                                
+                                                <th>평균대기시간</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end table -->
+                            </div>
+                        </div>
+                        <!-- end row -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+
+    </body>
+
+    <script>
+        window.onload = function(){
+            init();
+        }
+
+        var globalId = "";
+
+        function init(){
+            getLOCList();
+        }
+        function getLOCList(){
+            // ajax 통신
+            $.ajax({
+                    type : "GET",            // HTTP method type(GET, POST) 형식이다.
+                    url : "/common/getIDtoLocationlist",      // 컨트롤러에서 대기중인 URL 주소이다.
+                    data : "",            // Json 형식의 데이터이다.
+                    contentType: "application/json",
+                    success : function(data){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
+                        // 응답코드 > 0000
+                        var jsonArray 	= new Array();
+                        var jsonObj		= new Object();
+
+                        jsonArray = JSON.stringify(data);
+                        var objPerson = JSON.parse(jsonArray);
+                        jsonObj = objPerson[0];
+
+                        var html = '';
+                        html += "<option value=''>선택</option>";
+                        for (var i in objPerson) {
+                            html += "<option value=" + "'" + objPerson[i].loc_seq + "'>" + objPerson[i].loc_nm + "</option>";
+                        }
+                        
+                        $("select[id='select1']").html(html);
+
+                       
+                    },
+                    error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+                        alert("통신 실패.")
+                    }
+            });
+        }
+     
+                
+            $("select[id='select1']").on("change", function(){
+
+                var option = $("#select1 option:selected").val();
+               
+                var sendurl =   "/common/getLOCtoBtrylist?loc_seq="+option;
+                   // ajax 통신
+                   $.ajax({
+                    type : "GET",            // HTTP method type(GET, POST) 형식이다.
+                    url : sendurl,      // 컨트롤러에서 대기중인 URL 주소이다.
+                    data : "",            // Json 형식의 데이터이다.
+                    contentType: "application/json",
+                    success : function(data){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
+                        if(data == "No data"){
+                            var html = '';
+                            html += " <option value=''>No Data</option>";
+                            $("select[id='form-select']").html(html);
+                        }else{// 응답코드 > 0000
+                            var jsonArray 	= new Array();
+                            var jsonObj		= new Object();
+
+                            jsonArray = JSON.stringify(data);
+                            var objPerson = JSON.parse(jsonArray);
+                            jsonObj = objPerson[0];
+
+                          
+                            var html = '';
+                            html += "<option value=''>선택</option>";
+                            for (var i in objPerson) {
+                                html += "<option value=" + "'" + objPerson[i].btry_seq + "'>" + objPerson[i].btry_nm + "</option>";
+                            }
+                            
+                            $("select[id='form-select']").html(html);
+                        }
+
+                       
+                    },
+                    error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+                        alert("통신 실패.")
+                    }
+                });
+            })
+
+            $("select[id='form-select']").on("change", function(){
+                var option = $("#form-select option:selected").val();
+                globalId = option;
+                getAjaxData(null);
+                 
+            })
+
+            function getAjaxData(page){
+
+                $("tbody").empty();
+                
+                let postData = {
+                    bms_seq: globalId,
+                    page: page
+                }
+
+                //post 통신
+                let result = syncAjax("POST", "/report/weekly/history", postData);
+
+
+                var objPerson = result.data;
+                var pages = result.pages;
+                var liRow = result.liRow;
+
+                var weekdayString = ["일", "월", "화", "수", "목", "금", "토"];
+
+                var html = '';
+                for (var i in objPerson) {
+                    html = "<tr><td>" + objPerson[i].btry_seq + "</td>";
+                    html += "<td>" + weekdayString[objPerson[i].sttc_dayweek] + "</td>";
+                    html += "<td>" + objPerson[i].ins_dttm + "</td>";
+                    html += "<td>" + objPerson[i].comment + "</td>";
+                    html += "<td>" + objPerson[i].avg_chrg_time + "</td>";
+                    html += "<td>" + objPerson[i].avg_dischrg_time + "</td>";
+                    html += "<td>" + objPerson[i].avg_standby_time + "</td></tr>";
+                    $("tbody").append(html);
+                }    
+                       
+            }
+    </script>
+
+        
+<script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+
+<script src="/assets/js/pages/dashboard.init.js"></script>
+
+<script src="/attach/js/common.js"></script>
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../../common/meta.ejs') %>
+        <%- include('../../common/title.ejs') %>
+        <%- include('../../common/css.ejs') %>
+        <link href="/assets/css/app-dark.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    </head>
+
+    <body>
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../../common/topbar.ejs') %>
+            <%- include('../../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="float-end mt-2">
+                                            <img width="45" height="46" src="/assets/images/icon-golf-cart.svg" class="loaded">                                        
+                                        </div>
+                                        <div>
+                                            <h4 class="mb-1 mt-1">
+                                                    <%= entire_no %>
+                                            </h4>
+                                            <p class="text-muted mb-0">전체 카트</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- end col-->
+
+                            <div class="col-md-6 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="float-end mt-2">
+                                            <div>
+                                                <img width="45" height="46" src="/assets/images/icon-car-steering.svg" class="loaded">
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h4 class="mb-1 mt-1">
+                                                    <%=y_no%>
+                                                </h4>
+                                            <p class="text-muted mb-0">운행중 카트</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- end col-->
+
+                            <div class="col-md-6 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="float-end mt-2">
+                                            <img width="45" height="46" src="/assets/images/icon-car-waiting.svg" class="loaded">
+                                        </div>
+                                        <div>
+                                            <h4 class="mb-1 mt-1">
+                                                <%=c_no%>
+                                            </h4>
+                                            <p class="text-muted mb-0">대기중 카트</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- end col-->
+                            <div class="col-md-6 col-xl-3">
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="float-end mt-2">
+                                            <img width="45" height="46" src="/assets/images/icon-car-repairing.svg" class="loaded">
+                                        </div>
+                                        <div>
+                                            <h4 class="mb-1 mt-1">
+                                                    <%=n_no%>
+                                                </h4>
+                                            <p class="text-muted mb-0">점검중 카트</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- end col-->
+                        </div> <!-- end row-->
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-4">현재 카트 상태</h4>
+                                        <div class="row">
+                                            <div class="mb-2" style="margin: 0 auto;">
+                                                <div class="custom-radio form-check form-check-inline" style="float: right;">
+                                                    <input type="radio" id="searchStat4" name="searchStat" class="form-check-input" value="I">
+                                                    <label class="form-check-label" for="searchStat4">점검중</label>
+                                                </div>
+                                                <div class="custom-radio form-check form-check-inline" style="float: right;">
+                                                    <input type="radio" id="searchStat3" name="searchStat" class="form-check-input" value="W">
+                                                    <label class="form-check-label" for="searchStat3">대기중</label>
+                                                </div>
+                                                <div class="custom-radio form-check form-check-inline" style="float: right;">
+                                                    <input type="radio" id="searchStat2" name="searchStat" class="form-check-input" value="Y">
+                                                    <label class="form-check-label" for="searchStat2">운행중</label>
+                                                </div>
+                                                <div class="custom-radio form-check form-check-inline" style="float: right;">
+                                                    <input type="radio" id="searchStat1" name="searchStat" class="form-check-input" value="all" checked="checked">
+                                                    <label class="form-check-label" for="searchStat1">전체</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-centered table-nowrap table-hover mb-0">
+                                                    <thead class="table-light">                                                
+                                                        <tr class="bg-transparent">
+                                                            <th>No.</th>
+                                                            <th>카트 이름</th>
+                                                            <th>코스</th>
+                                                            <th>홀</th>                                                        
+                                                            <th>상태</th>
+                                                            <th>SOC</th>
+                                                            <th>가동 예상 시간</th>
+                                                            <th>평균 가동 시간</th>
+                                                            <th>전일 가동 시간</th>
+                                                            <th>충전시간</th>     
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="cartListBody">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <!-- end table-responsive -->
+                                            <!-- 페이지네이션 -->
+                                            <div class="row mt-4">
+                                                <div class="col-sm-6">
+                                                    <div>
+                                                        <p class="mb-sm-0" id="bms-page-string"></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="float-sm-end">
+                                                        <ul class="pagination pagination-rounded mb-sm-0" id="cart-pagination">
+                                                            
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+
+
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+
+                <%- include('../../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../../common/sidebarRight.ejs') %>
+
+        <%- include('../../common/scripts.ejs') %>
+      
+        <script>
+
+            var globalSearchStat = $('input:radio[name="searchStat"]:checked').val();
+
+            $(document).ready(function() {
+                $('input:radio[name="searchStat"]').change(function(){ 
+                    globalSearchStat = $('input:radio[name="searchStat"]:checked').val();
+                    getAjaxData(1);
+                });
+                if(globalSearchStat == null || globalSearchStat == ''){
+                    globalSearchStat = "all";
+                }
+                getAjaxData(1);
+
+                $(document).on("click", "input:radio[name='searchStat']", function () {
+                    globalSearchStat = $(this).val();
+                });
+            });
+
+            function getAjaxData(page){
+
+                $("#cartListBody").empty();
+
+                let postData = {
+                    searchStat : globalSearchStat,
+                    page: page
+                }
+
+                //post 통신
+                let result = syncAjax("POST", "/system/ccms/cart/postList", postData);
+
+                var cartList = result.cartList;
+                var pages = result.pages;
+                var liRow = result.liRow;
+
+                var html = '';
+
+                if(cartList == null || cartList.length == 0){
+                    html += "<tr style='text-align: center;'><td colspan='10'>검색된 카트 목록이 없습니다.</td></tr>";
+                }else{
+                    
+                    for (var i in cartList) { 
+                        html += "<tr  onclick='location.href=&quot;/system/ccms/cart/cartdetail&quot;?cart_seq="+ cartList[i].cart_seq +"' >";
+                        html += "<th id='" + cartList[i].cart_seq + "' scope='row'>" + ( parseInt(i) + parseInt(1) ) + "</th>";
+                        html += "<td>" + cartList[i].cart_nm + "</td>";
+                        if(cartList[i].cart_loc_cors == 0){
+                            html += "<td>창고대기</td>";
+                        }else{
+                            html += "<td>" + cartList[i].cart_loc_cors + "</td>";
+                        }
+                        if(cartList[i].cart_loc_hole == 0){
+                            html += "<td>창고대기</td>";
+                        }else{
+                            html += "<td>" + cartList[i].cart_loc_hole + "</td>";
+                        }
+                        html += "<td>";
+                        if(cartList[i].cart_stat == 'Y'){
+                            html += "<div class='badge bg-pill bg-soft-success font-size-12'>운행중</div>";
+                        }else if(cartList[i].cart_stat == 'N'){
+                            html += "<div class='badge bg-pill bg-soft-danger font-size-12'>정지</div>";
+                        }else if(cartList[i].cart_stat == 'C'){
+                            html += "<div class='badge bg-pill bg-soft-primary font-size-12'>충전중</div>";
+                        }else if(cartList[i].cart_stat == 'W'){
+                            html += "<div class='badge bg-pill bg-soft-info font-size-12'>대기중</div>";
+                        }else if(cartList[i].cart_stat == 'I'){
+                            html += "<div class='badge bg-pill bg-soft-secondary font-size-12'>점검중</div>";
+                        }
+                        html += "</td>";
+                        html += "<td>" + cartList[i].btry_rmn_amt + "</td>";
+                        html += "<td>04시간 20분</td>";
+                        html += "<td>02시간 10분</td>";
+                        html += "<td>05시간 20분</td>";
+                        html += "<td>" + cartList[i].btry_chrg_tm + "</td>";
+                        //html += "<td><button type='button' class='btn btn-primary btn-sm btn-rounded waves-effect waves-light' onclick='location.href='/dashboard/indivbatterylog?btry_seq=" +cartList[i].btry_seq +"&loc_seq=" +cartList[i].loc_seq + "''>View Details</button></td>";
+                        html +=" </tr>";
+                    }
+                }
+                $("#cartListBody").append(html);
+
+
+                //bms 테이블 페이징
+                var pageHtml = '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ pages.previousPage +')"><i class="mdi mdi-chevron-left"></i></a></li>';
+
+                for(index in liRow){
+                    if(liRow[index] == pages.currentPage){
+                        pageHtml += '<li class="page-item active"><a class="page-link">'+ liRow[index] +'</a></li>';
+                    } else {
+                        pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ liRow[index] +')">'+ liRow[index] +'</a></li>';
+                    }
+                }
+
+                pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ pages.nextPage +')"><i class="mdi mdi-chevron-right"></i></a></li>';
+
+                $("#cart-pagination").html(pageHtml);
+
+                //위쪽 카트 현황 숫자
+                for(var i = 0; i < cartList.length; i++){
+                var btry_rmn_amt = document.getElementById("btry_rmn_" + i).innerHTML;
+
+                if (btry_rmn_amt == "") {
+                    document.getElementById('btry_rmn progress-bar_' + i).style.width = "0%";
+                } else {
+                    document.getElementById('btry_rmn progress-bar_' + i).style.width = btry_rmn_amt + "%";
+                }
+
+            
+
+                if(btry_rmn_amt > 90){
+                    document.getElementById("btry_rmn_" + i).innerHTML = '<img src="/assets/images/battery_img/battery_4.png" width="50">'
+                } else if (btry_rmn_amt > 60){
+                    document.getElementById("btry_rmn_" + i).innerHTML = '<img src="/assets/images/battery_img/battery_3.png" width="50">'
+                } else if (btry_rmn_amt > 40){
+                    document.getElementById("btry_rmn_" + i).innerHTML = '<img src="/assets/images/battery_img/battery_2.png" width="50">'
+                } else {
+                    document.getElementById("btry_rmn_" + i).innerHTML = '<img src="/assets/images/battery_img/battery_1.png" width="50">'
+                }
+
+            }
+                
+            }
+            
+        </script>
+
+    <!-- flot plugins -->
+    <script src="/assets/libs/flot-charts/jquery.flot.js"></script>
+    <script src="/assets/libs/flot-charts/jquery.flot.time.js"></script>
+    <script src="/assets/libs/jquery.flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+    <script src="/assets/libs/flot-charts/jquery.flot.resize.js"></script>
+    <script src="/assets/libs/flot-charts/jquery.flot.pie.js"></script>
+    <script src="/assets/libs/flot-charts/jquery.flot.selection.js"></script>
+    <script src="/assets/libs/flot-charts/jquery.flot.stack.js"></script>
+    <script src="/assets/libs/flot.curvedlines/curvedLines.js"></script>
+    <script src="/assets/libs/flot-charts/jquery.flot.crosshair.js"></script>
+    </body>
+
+    <!-- apexcharts -->
+    <script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+
+    <script src="/assets/js/pages/dashboard.init.js"></script>
+
+    <script src="/assets/js/app.js"></script>
+
+    <script src="/attach/js/common.js"></script> 
+    
+</html>

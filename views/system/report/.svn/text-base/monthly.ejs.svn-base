@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+    </head>
+
+    <body onload="init()">
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <%- include('../common/dash.ejs') %>
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+        
+                                        <h4 class="card-title">BMS 선택</h4>                                      
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">설치장소</label>
+                                                        <select class="form-control form-select" id="select_loc">
+                                                            <option>Select</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="col-lg-4">
+                                                    <div class="mb-3 mt-3 mt-lg-0">
+                                                        <label class="form-label">BMS</label>
+                                                        <select class="form-control form-select" id="select_bms">
+                                                            <option>Select</option>                                                          
+                                                        </select>                                                        
+                                                    </div>
+                                                </div> -->
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">기간</label>
+                                                        <div class="input-daterange input-group" id="datepicker6" data-date-format="yyyymm" data-date-autoclose="true" data-provide="datepicker" data-date-container="#datepicker6" data-date-min-view-mode="1">
+                                                            <input type="text" class="form-control" name="start" id="startMonth" placeholder="Start Month">
+                                                            <input type="text" class="form-control" name="end" id="endMonth" placeholder="End Month">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>        
+                                        </form>        
+                                    </div>
+                                </div>
+                                <!-- end form-select -->
+                            </div>
+                        </div>
+
+                        <!-- 검색한 기간동안의 데이터 -->
+                        <div class="row">
+                            <div class="col-md-3 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body" style="height: 104px;">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h4 class="mb-1 mt-1"><span data-plugin="counterup" id="inspecCount1"></span>회</h4>
+                                            <p class="text-muted mb-0">점검회수</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h4 class="mb-1 mt-1"><span data-plugin="counterup">0</span>회</h4>
+                                            <p class="text-muted mb-0">이벤트 회수</p>
+                                            </div>
+                                        </div>
+                                        <!-- 
+                                            
+                                         -->
+                                    </div>
+                                </div>
+                            </div> <!-- end col-->
+                            <div class="col-md-3 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-start">
+                                            <div class="avatar-sm me-4">
+                                                <span class="avatar-title bg-soft-primary text-primary font-size-16 rounded-circle">
+                                                    전압
+                                                </span>
+                                            </div>
+                                            <div class="flex-1 align-self-center">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="mt-3">
+                                                            <p class="text-muted mb-2">최고 전압</p>
+                                                            <h5 class="font-size-16 mb-0" id="max_volt"></h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="mt-3">
+                                                            <p class="text-muted mb-2">최저 전압</p>
+                                                            <h5 class="font-size-16 mb-0" id="min_volt"></h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div> <!-- end col-->
+                            <div class="col-md-3 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-start">
+                                            <div class="avatar-sm me-4">
+                                                <span class="avatar-title bg-soft-primary text-primary font-size-16 rounded-circle">
+                                                    전류
+                                                </span>
+                                            </div>
+                                            <div class="flex-1 align-self-center">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="mt-3">
+                                                            <p class="text-muted mb-2">최고 전류</p>
+                                                            <h5 class="font-size-16 mb-0" id="max_curr"></h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="mt-3">
+                                                            <p class="text-muted mb-2">최저 전류</p>
+                                                            <h5 class="font-size-16 mb-0" id="min_curr"></h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div> <!-- end col-->
+                            <div class="col-md-3 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-start">
+                                            <div class="avatar-sm me-4">
+                                                <span class="avatar-title bg-soft-primary text-primary font-size-16 rounded-circle">
+                                                    온도
+                                                </span>
+                                            </div>
+                                            <div class="flex-1 align-self-center">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="mt-3">
+                                                            <p class="text-muted mb-2">최고 온도</p>
+                                                            <h5 class="font-size-16 mb-0" id="max_tp"></h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="mt-3">
+                                                            <p class="text-muted mb-2">최저 온도</p>
+                                                            <h5 class="font-size-16 mb-0" id="min_tp"></h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div> <!-- end col-->
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0" id="monthly-report-title">Monthly Report</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Report</a></li>
+                                            <li class="breadcrumb-item active">Monthly</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div>
+                                     <!--       
+                                    <div class="float-end">
+                                        <form class="d-inline-flex mb-3">
+                                            <label class="form-check-label my-2 me-2" for="order-selectinput">Orders</label>
+                                            <select class="form-select" id="order-selectinput">
+                                                <option selected>All</option>
+                                                <option value="1">Active</option>
+                                                <option value="2">Unpaid</option>
+                                            </select>
+                                        </form>
+                                        
+                                    </div>
+                                    <button type="button" class="btn btn-success waves-effect waves-light mb-3">
+                                        <i class="mdi mdi-plus me-1"></i> Add New Order
+                                    </button>
+                                -->
+                                </div>
+                                <div class="table-responsive mb-4">
+                                    <table id="myTable" class="table table-centered datatable dt-responsive nowrap table-card-list" style="border-collapse: collapse; border-spacing: 0 12px; width: 100%;">
+                                        <thead>
+                                            <tr class="bg-transparent">
+                                                <th>Month</th>
+                                                <th>평균충전시간</th>
+                                                <th>평균방전시간</th>                                                
+                                                <th>평균대기시간</th>
+                                                <th>평균 SOC(%)</th>
+                                                <th>평균 SOH(%)</th>
+                                                <th>충전횟수</th>
+                                                <th>비고</th>    
+                                            </tr>
+                                        </thead>
+                                        <tbody id="monthlyReportBody">
+
+                                            
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end table -->
+                                <!-- 페이지네이션 -->
+                                <div class="row mt-4">
+                                    <div class="col-sm-6">
+                                        <div>
+                                            <p class="mb-sm-0" id="bms-page-string"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="float-sm-end">
+                                            <ul class="pagination pagination-rounded mb-sm-0" id="bms-pagination">
+                                                
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+
+    </body>
+
+    <script>
+
+        window.onload = function() {
+            init();
+        }
+        
+
+        var globalLocSeq = "";
+        var globalBmsSeq = "";
+        var globalStartMonth = "000000";
+        var globalEndMonth = "999999";
+
+        function init(){
+            var loc_seq = $("#select_loc option:selected").val();
+            globalLocSeq = loc_seq;
+            getLOCList();
+        }
+        function getLOCList(){
+            // ajax 통신
+
+            let postData = {
+
+            }
+
+            let data = syncAjax("POST", "/common/postIDtoLocationlist",postData);
+
+            var jsonArray 	= new Array();
+            var jsonObj		= new Object();
+
+            jsonArray = JSON.stringify(data);
+            var objPerson = JSON.parse(jsonArray);
+            jsonObj = objPerson[0];
+
+            var html = '';
+            if(objPerson.length !=0 && objPerson != null){
+                for (var i in objPerson) {
+                html += "<option value=" + "'" + objPerson[i].loc_seq + "'>" + objPerson[i].loc_nm + "</option>";
+                }
+                globalLocSeq = objPerson[0].loc_seq;
+                getBatteryList();
+            }else{
+                html += "<option value=''>설치장소 없음</option>";
+            }
+
+            getAjaxData(null);
+            
+            $("select[id='select_loc']").html(html);
+        }
+
+        function getBatteryList(){
+
+                let postData = {
+                    loc_seq : globalLocSeq
+                }
+
+                let result = syncAjax("POST", "/common/postLOCtoBtrylist", postData);
+
+                var objPerson = result.data;
+
+                
+                var html = '';
+                if(objPerson.length !=0 && objPerson != null){
+                html += "<option value=''>전체</option>";
+                    for (var i in objPerson) {
+                        html += "<option value=" + "'" + objPerson[i].btry_seq + "'>" + objPerson[i].btry_nm + "</option>";
+                    }
+                }else{
+                    html += "<option value=''>BMS 없음<option>";
+                }
+
+                getAjaxData(null);
+                    
+                $("select[id='select_bms']").html(html);
+        }
+     
+                
+            $("select[id='select_loc']").on("change", function(){
+                var loc_seq = $("#select_loc option:selected").val();
+                globalLocSeq = loc_seq;
+                globalBmsSeq = null;
+                getBatteryList();
+            })
+
+            $("select[id='select_bms']").on("change", function(){
+                var bms_seq = $("#select_bms option:selected").val();
+                globalBmsSeq = bms_seq;
+                getAjaxData(null);
+                 
+            })
+
+            $("#startMonth").on("change", function(){
+                globalStartMonth = $("#startMonth").val();
+                getAjaxData(null);
+            })
+
+            $("#endMonth").on("change", function(){
+                globalEndMonth = $("#endMonth").val();
+                getAjaxData(null);
+            })
+
+            function getAjaxData(page){
+
+                $("#monthlyReportBody").empty();
+                
+                let postData = {
+                    bms_seq: globalBmsSeq,
+                    loc_seq: globalLocSeq,
+                    startMonth : globalStartMonth,
+                    endMonth : globalEndMonth,
+                    page: page
+                }
+
+                //post 통신
+                let result = syncAjax("POST", "/system/report/monthly/history", postData);
+
+                if(result.msg != null && result.msg != ''){
+                    alert(result.msg);
+                }
+
+                var objPerson = result.data;
+                var pages = result.pages;
+                var liRow = result.liRow;
+                var inspecData = result.inspecData;
+                var maxminData = result.maxminData;
+
+                $("#inspecCount1").html(0);
+                $("#inspecCount2").html(0);
+
+                for(var i in inspecData){
+                    if(inspecData[i].inspec_type == '1'){
+                        $("#inspecCount1").html(inspecData[i].count);
+                    }else if(inspecData[i].inspec_type == '2'){
+                        $("#inspecCount2").html(inspecData[i].count);
+                    }
+                }
+
+                $("#max_volt").html(maxminData[0].max_volt);
+                $("#min_volt").html(maxminData[0].min_volt);
+                $("#max_curr").html(maxminData[0].max_curr);
+                $("#min_curr").html(maxminData[0].min_curr);
+                $("#max_tp").html(maxminData[0].max_tp);
+                $("#min_tp").html(maxminData[0].min_tp);
+
+                var html = '';
+                if(objPerson == null || objPerson.length == 0){
+                    html += "<tr style='text-align: center;'><td colspan='9'>등록된 월별 보고서가 없습니다.</td></tr>";
+                }else{
+
+                    document.getElementById("monthly-report-title").innerHTML = "Monthly Report ( " + objPerson[0].btry_nm + " )";
+
+                    for (var i in objPerson) {
+                    html += "<tr>";
+                    html += "<td>" + objPerson[i].sttc_month + "</td>";
+                    html += "<td>" + objPerson[i].avg_chrg_time + "</td>";
+                    html += "<td>" + objPerson[i].avg_dischrg_time + "</td>";
+                    html += "<td>" + objPerson[i].avg_standby_time + "</td>";
+                    html += "<td>" + objPerson[i].avg_soc + "</td>";
+                    html += "<td>" + objPerson[i].avg_soh + "</td>";
+                    html += "<td>" + objPerson[i].chrg_cnt + "</td>";
+                    html += "<td>" + objPerson[i].comment + "</td>";
+                    html +=" </tr>";
+                }
+                }
+                $("#monthlyReportBody").append(html);  
+
+
+                //bms 테이블 페이징
+                var pageHtml = '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ pages.previousPage +')"><i class="mdi mdi-chevron-left"></i></a></li>';
+
+                for(index in liRow){
+                    if(liRow[index] == pages.currentPage){
+                        pageHtml += '<li class="page-item active"><a class="page-link">'+ liRow[index] +'</a></li>';
+                    } else {
+                        pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ liRow[index] +')">'+ liRow[index] +'</a></li>';
+                    }
+                }
+
+                pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ pages.nextPage +')"><i class="mdi mdi-chevron-right"></i></a></li>';
+
+                $("#bms-pagination").html(pageHtml);
+                       
+            }
+    </script>
+
+    
+<script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+
+<script src="/assets/js/pages/dashboard.init.js"></script>
+
+<script src="/attach/js/common.js"></script>
+     
+</html>

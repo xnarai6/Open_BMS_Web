@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('../../layout/meta.ejs') %>
+        <%- include('../../layout/title.ejs') %>
+        <%- include('../../layout/css.ejs') %>
+        <style>
+            .table-fixed {
+                width: 100%;
+                background-color: #f3f3f3;
+            }
+            .table-fixed tbody {
+                height:200px;
+                overflow-y:auto;
+                width: 100%;
+            }
+            .table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
+                display:block;
+            }
+            .table-fixed tbody td {
+                float: left;
+            }
+            .table-fixed thead tr th {
+                float:left;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="layout-wrapper">
+            <%- include('../../layout/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <!-- <%- include('../common/topcard.ejs') %> -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between"><h4 class="mb-0">배터리 조회 - 테스트</h4></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">테스트</h4>
+                                        <div id="vcChart" class="apex-charts" dir="ltr"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <%- include('../../layout/footer.ejs') %>
+            </div>
+        </div>
+
+        <%- include('../../layout/scripts.ejs') %>
+
+        <script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+        <script src="/attach/js/bootstrap-datepicker.kr.min.js"></script>
+        <script>
+            let btryData, chartData, chartArray = [];
+
+            $(async function() {
+                let list = [];
+                let result3 = await syncAjax("default", "POST", "/smartpole/search/battery/<%=param1%>/test/<%=param2%>", {});
+                list = result3.data.aaa;
+                
+                let start = 0;
+                let x = [], y = [];
+                /*
+                for (let i = 0; i < 8640; i++) {
+                    x.push(start);
+
+                    let d = list.find(e => e.key1 == start);
+                    y.push(d ? d.soc : 0);
+
+                    start = start += 10
+                }*/
+
+                for (let a of list) {
+                    x.push(a.key1)
+                    y.push(a.soc)
+                }
+
+                // 5. 전압/전류 차트 생성
+                
+                makeVCChart($('#vcChart'), {
+                    xData: x,
+                    yData: [{ name: 'A', data: y }]
+                });
+            });
+
+            // 현재 일 + 시 출력
+            function getNowDth(date) {
+                let result = '';
+                    result += date.getFullYear();
+                    result += ('0' + (1 + date.getMonth())).slice(-2);
+                    result += ('0' + date.getDate()).slice(-2);
+                    result += ('0' + date.getHours()).slice(-2);
+
+                return  result;
+            }
+
+            // 차트 초기화
+            function resetChartArray(chartArray) {
+                for (let c of chartArray) c.destroy();
+                chartArray = [];
+            }
+
+            // 전압전류 차트 생성
+            function makeVCChart(target, dataSet) {
+                let chartOption = {
+                    series: dataSet.yData,
+                    chart: { type: 'line', height: 380, toolbar: { show: false }, zoom: { enabled: false } },
+                    sparkline: { enabled: true },
+                    colors: ['#5b73e8'],
+                    stroke: { width: [2], dashArray: [0], curve: "smooth" },
+                    legend: { show: true, labels: { useSeriesColors: true } },
+                    yaxis: [{ seriesName: 'A', title: { text: "A", style: { color: '#5b73e8', } } }],
+                    xaxis: { categories: dataSet.xData },
+                }
+
+                let chart = new ApexCharts($(target).get(0), chartOption);
+                chartArray.push(chart);
+                chart.render();
+            }
+            
+            function periodMinToHorMin(min, div) {
+                return (min < 600 ? ('0' + parseInt(min / 60)).slice(-2) : parseInt(min / 60)) + div + ('0' + min % 60).slice(-2);
+            }
+        </script>
+    </body>
+</html>

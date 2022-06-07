@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../../layout/meta.ejs') %>
+        <%- include('../../layout/title.ejs') %>
+        <%- include('../../layout/css.ejs') %>
+        <style>
+            table tr td {
+                max-width: 200px;
+                text-overflow: ellipsis;
+                -o-text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../../layout/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <!-- <%- include('../common/topcard.ejs') %> -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between"><h4 class="mb-0">알람 조회</h4></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div>
+                                                        <label class="form-label">기간</label>
+                                                        <div>
+                                                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group" style="width: 100%;">
+                                                                <input type="radio" class="btn-check btn-md" name="btnradio" id="oneDayBefore" autocomplete="off" checked="">
+                                                                <label class="btn btn-light btn-md" for="oneDayBefore" style="color: #9295a4;">1 일</label>
+                                                                <input type="radio" class="btn-check" name="btnradio" id="oneWeekBefore" autocomplete="off">
+                                                                <label class="btn btn-light btn-md" for="oneWeekBefore" style="color: #9295a4;">1 주</label>
+                                                                <input type="radio" class="btn-check" name="btnradio" id="oneMonthBefore" autocomplete="off">
+                                                                <label class="btn btn-light btn-md" for="oneMonthBefore" style="color: #9295a4;">1 달</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                    <label class="form-label">&nbsp;</label>
+                                                        <div class="input-daterange input-group" id="search_inspec_date" data-date-format="yyyymmdd" data-date-autoclose="true" data-provide="datepicker" data-date-container="#search_inspec_date">
+                                                            <input type="text" class="form-control" name="start" id="alm_hsty_start_date" placeholder="Start Date" data-date-format="yyyymmdd">
+                                                            <input type="text" class="form-control" name="end" id="alm_hsty_end_date" placeholder="End Date" data-date-format="yyyymmdd">
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="d-flex flex-row-reverse align-items-center mt-4" style="width: 100%;">
+                                                <button type="button" id="searchBtn" class="btn btn-lg btn-primary waves-effect waves-light me-1">
+                                                    검색
+                                                </button>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title mb-4" id="hstry-table-title">알람 이력</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-centered table-nowrap table-hover mb-0">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <!-- <th>상세</th> -->
+                                                <th>알람명</th> 
+                                                <th>배터리</th>   
+                                                <th>업체</th> 
+                                                <th>알림내용</th>                                                     
+                                                <th>일자</th>
+                                                <th>시간</th>                                               
+                                                <!-- <th>View Details</th> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody id="hstry-table">
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end table-responsive -->
+                                <!-- 페이지네이션 -->
+                                <div class="row mt-4">
+                                    <div class="col-sm-6">
+                                        <div>
+                                            <p class="mb-sm-0" id="hstry-page-string"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="float-sm-end">
+                                            <ul class="pagination pagination-rounded mb-sm-0" id="hstry-pagination">
+                                                
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!-- 페이지네이션 -->
+                            </div>
+                        </div>
+                        </div>
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <%- include('../../layout/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../../layout/scripts.ejs') %>
+    </body>
+    <script>
+        var globalCmpySeq = "";
+        var globalStartDate = "00000000";
+        var globalEndDate = "99999999";
+
+        window.onload = function() {
+            getAjaxHstryList(1);
+        }
+
+        $("#oneDayBefore").on("click", function(){
+            var today = new Date();
+            $( "#alm_hsty_end_date" ).datepicker( "setDate", today );
+            var yesterday = new Date(today.setDate(today.getDate() - 1));
+            $( "#alm_hsty_start_date" ).datepicker( "setDate", yesterday);
+        });
+
+        $("#oneWeekBefore").on("click", function(){
+            var today = new Date();
+            $( "#alm_hsty_end_date" ).datepicker( "setDate", today );
+            var lastWeek = new Date(today.setDate(today.getDate() - 7));
+            $( "#alm_hsty_start_date" ).datepicker( "setDate", lastWeek);
+        });
+
+        $("#oneMonthBefore").on("click", function(){
+            var today = new Date();
+            $( "#alm_hsty_end_date" ).datepicker( "setDate", today );
+            var lastMonth = new Date(today.setMonth(today.getMonth() - 1));
+            $( "#alm_hsty_start_date" ).datepicker( "setDate", lastMonth);
+        });
+
+        $("#alm_hsty_start_date").on("change", function(){
+            globalStartDate = $("#alm_hsty_start_date").val();
+        });
+
+        $("#alm_hsty_end_date").on("change", function(){
+            globalEndDate = $("#alm_hsty_end_date").val();
+        });
+
+        $("#searchBtn").on("click", function(){
+            globalCmpySeq = $("#search_cmpy_seq option:selected").val();
+            getAjaxHstryList(1);
+        });
+
+        //점검이력 리스트 받기
+        function getAjaxHstryList(page){
+
+            if(!valCheck("is", globalStartDate) || globalStartDate == "00000000"){
+                globalStartDate = "00000000";
+            }else{
+                globalStartDate = $("#alm_hsty_start_date").val();
+            }
+            
+            if(!valCheck("is", globalEndDate) || globalEndDate == "99999999"){
+                globalEndDate = "99999999";
+            }else{
+                globalEndDate = $("#alm_hsty_end_date").val();
+            }
+
+            let postData = {
+                start_date : globalStartDate,
+                end_date : globalEndDate,
+                page: page
+            }
+
+                //post 통신
+                let result = syncAjax("default","POST", "/smartpole/search/check/postAlarmHstyList", postData);
+
+                var trList = "";
+                var hstryList = result.hstryList;
+                var pages = result.pages;
+                var liRow = result.liRow;
+                
+                //데이터 테이블 형태로 넣기
+                if(hstryList == null || hstryList.length == 0){
+                    var tr = '<tr><td colspan="7" style="text-align: center;">알람 발생 이력이 없습니다.</td></tr>';
+                    trList += tr;
+                }else{
+                    for(var i in hstryList){
+                        var tr = '<tr> ';
+                        // tr += "<td><a href='/smartpole/search/alarmHsty/" + hstryList[i].alm_hsty_seq + "' class='px-2 text-primary'><i class='uil uil-location-arrow font-size-18'></i></a></td>";
+                        tr += '<td>'+ hstryList[i].alm_set_nm +'</td>';
+                        tr += '<td>'+ hstryList[i].btry_nm +'</td>';
+                        tr += '<td>'+ hstryList[i].cmpy_nm +'</td>';
+                        tr += '<td>'+ hstryList[i].alm_hsty_comment +'</td>';
+                        tr += '<td>'+ hstryList[i].alm_hsty_date +'</td>';
+                        tr += '<td>'+ hstryList[i].alm_hsty_time+'</td>';
+                        tr += '</tr>';
+                        trList += tr;
+                    }
+                }
+
+                $("#hstry-table").html(trList);
+
+                //bms 테이블 페이징
+                if(pages.currentPage != null && pages.pageCount != null){
+                    $("#hstry-page-string").html("Page " + pages.currentPage + " of " + pages.pageCount);
+                }else{
+                    $("#hstry-page-string").html();
+                }
+
+                var pageHtml = '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxHstryList('+ pages.previousPage +')"><i class="mdi mdi-chevron-left"></i></a></li>';
+
+                for(index in liRow){
+                    if(liRow[index] == pages.currentPage){
+                        pageHtml += '<li class="page-item active"><a class="page-link">'+ liRow[index] +'</a></li>';
+                    } else {
+                        pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxHstryList('+ liRow[index] +')">'+ liRow[index] +'</a></li>';
+                    }
+                }
+
+                pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxHstryList('+ pages.nextPage +')"><i class="mdi mdi-chevron-right"></i></a></li>';
+
+                $("#hstry-pagination").html(pageHtml);
+                
+            }
+    </script>
+</html>

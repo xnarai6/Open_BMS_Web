@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+        <style>
+            /*pre 태그의 줄바꿈이 안될 때*/
+            pre{
+                white-space: pre-wrap; /* CSS3*/
+                white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+                white-space: -pre-wrap; /* Opera 4-6 */
+                white-space: -o-pre-wrap; /* Opera 7 */
+                word-wrap: break-all; /* Internet Explorer 5.5+ */ 
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">QNA</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="/bbs/qna">게시판</a></li>
+                                            <li class="breadcrumb-item"><a href="/bbs/qna">QNA</a></li>
+                                            <li class="breadcrumb-item active">게시글</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                        <!-- start row -->
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div style="float: right;">
+                                            <div>
+                                                <button type="button" onclick="location.href='/bbs/qna'" class="btn btn-secondary waves-effect">
+                                                    목록
+                                                </button>
+                                                <%
+                                                if(locals.userInfo.acnt_role == "SA"){
+                                                    %>
+                                                    <button type="button" class="btn btn-primary waves-effect" data-bs-toggle="modal" data-bs-target="#qnaModModal">
+                                                    수정
+                                                    </button>
+                                                    <button type="button" class="btn btn-danger waves-effect" id="deleteQnaBtn">
+                                                    삭제
+                                                    </button>
+                                                    <%
+                                                }
+                                                %>
+                                            </div>
+                                        </div>
+                                        <h4 class="card-title">QNA 게시글</h4>
+                                        <p class="card-title-desc"></p>
+        
+                                        <form class="custom-validation" action="#" novalidate="">
+
+                                            <input type="hidden" id="qna_seq" value="<%=qnaView[0].qna_seq%>">
+
+                                                <div class="d-flex align-items-start mb-4">
+                                                    <div class="flex-1">
+                                                        <h4 class="font-size-14 my-1"><%=qnaView[0].qna_title%></h4>
+                                                        <small class="text-muted"><%=qnaView[0].ins_nm%>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<%=qnaView[0].ins_dttm%></small>
+                                                    </div>
+                                                </div>
+    
+                                                <p><pre><%=qnaView[0].qna_content%></pre></p>
+                                                <hr>
+                                            <%
+                                            
+                                                if(qnaView[0].ans_content != null){
+                                                    %>
+                                                    <br>
+                                                    <div class="mt-4">
+                                                        <h5 class="badge bg-success font-size-14 mb-3">답변</h5>
+                                                        <div class="border p-4 rounded">
+                                                            <div class="border-bottom pb-3">
+                                                                <input type="hidden" id="qna_ans_seq" value="<%=qnaView[0].ans_seq%>">
+                                                                <p class="float-sm-end text-muted font-size-13"><%=qnaView[0].ans_ins_dttm%></p>
+                                                                <div class="mb-2" style="font-weight: bold; color: white;"><%=qnaView[0].ans_title%></div>
+                                                                <p class="text-muted mb-4"><pre><%=qnaView[0].ans_content%></pre></p>
+                                                                <div class="d-flex align-items-start">
+                                                                    <div class="flex-1">
+                                                                        <h5 class="font-size-13 mb-0 text-muted">답변자: <%=qnaView[0].ans_ins_nm%></h5>
+                                                                        <%
+                                                                    if( locals.userInfo.acnt_role == "SA" ){
+                                                                            %>
+                                                                            <h5 class="font-size-13 mb-0 text-muted">답변일시: <%=qnaView[0].ans_ins_dttm%></h5>
+                                                                            <h5 class="font-size-13 mb-0 text-muted">수정자: <%=qnaView[0].ans_upd_nm%></h5>
+                                                                            <h5 class="font-size-13 mb-0 text-muted">마지막 수정일시: <%=qnaView[0].ans_upd_dttm%></h5>
+                                                                            <%
+
+                                                                    }
+                                                                    %>
+                                                                    </div>
+                                                                    
+                                                                    <%
+                                                                    if(locals.userInfo.acnt_role == 'SA' ){
+                                                                            %>
+                                                                            <ul class="list-inline product-review-link mb-0">
+                                                                                <li class="list-inline-item">
+                                                                                    <button type="button" class="btn btn-success btn-sm btn-soft-success" data-bs-toggle="modal" data-bs-target="#qnaAnsModModal">수정<i class="uil uil-edit-alt"></i></button>
+                                                                                </li>
+                                                                                <li class="list-inline-item">
+                                                                                    <button type="button" class="btn btn-danger btn-sm btn-soft-danger" id="deleteQnaAnsBtn">삭제<i class="uil uil-trash-alt"></i></button>
+                                                                                </li>
+                                                                            </ul>
+                                                                            <%
+
+                                                                    }
+                                                                    %>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <%
+                                                }else{
+                                                    %>
+                                                    <div style="float: right;">
+                                                        <div>
+                                                            <%
+                                                            if( locals.userInfo.acnt_role == 'SA' ){
+                                                                %>
+                                                                    <button type="button" id="showQnaAnsBtn" class="btn btn-primary me-1">
+                                                                        답변달기
+                                                                    </button>
+                                                                <%
+                                                            }
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                    <%
+                                                }
+                                            
+                                            %>
+                                            
+                                        </form>
+        
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+
+                        <!-- start row -->
+                        <div class="row" id="qnaAnsRow" style="display: none;">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">QNA 답변</h4>
+                                        <p class="card-title-desc"></p>
+        
+                                        <form class="custom-validation" action="#" novalidate="">
+                                            <div class="mb-3">
+                                                <label class="form-label">제목</label>
+                                                <div>
+                                                    <input type="text" class="form-control" required="required" id="qna_ans_title" value="[답변]<%=qnaView[0].qna_title%>">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">내용</label>
+                                                <div>
+                                                    <textarea required="required" class="form-control" rows="15" id="qna_ans_content"></textarea>
+                                                </div>
+                                            </div>
+                                            <div style="float: right;">
+                                                <div>
+                                                    <button type="button" id="hideQnaAnsBtn" class="btn btn-secondary waves-effect">
+                                                        취소
+                                                    </button>
+                                                    <button type="button" id="submitQnaAnsBtn" class="btn btn-primary waves-effect waves-light me-1">
+                                                        답변등록
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+        
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+        
+        <%- include('./qnaModModal.ejs') %>
+
+        <%- include('./qnaAnsModModal.ejs') %>
+
+        <script src="/attach/js/common.js"></script>
+
+        <script>
+
+            $(document).ready(function(){
+
+                var qna_stat = "<%= qnaView[0].qna_stat %>";
+                var ans_stat = "<%= qnaView[0].ans_stat %>";
+            
+                if(qna_stat == 'Y'){
+                    $("#qna_stat_mod").prop('checked', true);
+                }else{
+                    $("#qna_stat_mod").prop('checked', false);
+                }
+
+                if(ans_stat == 'Y'){
+                    $("#qna_ans_stat_mod").prop('checked', true);
+                }else{
+                    $("#qna_ans_stat_mod").prop('checked', false);
+                }
+
+                $("#qna_stat_mod").on('change', function() {
+                    if ($(this).is(':checked')) {
+                        $(this).attr('value', 'Y');
+                    }
+                    else {
+                    $(this).attr('value', 'N');
+                }});
+
+                $("#qna_ans_stat_mod").on('change', function() {
+                    if ($(this).is(':checked')) {
+                        $(this).attr('value', 'Y');
+                    }
+                    else {
+                    $(this).attr('value', 'N');
+                }});
+
+            });
+
+            $("#showQnaAnsBtn").on("click", function() {
+
+                $("#qnaAnsRow").show();
+                
+            });
+
+            $("#hideQnaAnsBtn").on("click", function() {
+
+                $("#qnaAnsRow").hide();
+
+            });
+    
+            $("#submitQnaAnsBtn").on("click", function() {
+
+                if(!valCheck("is", $("#qna_seq").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","원글이 존재하지 않습니다.")).then((warningResult) => {
+                        return false;
+                    });
+                }
+                if(!valCheck("is", $("#qna_ans_title").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","답변 제목을 입력해주십시오")).then((warningResult) => {
+                        return false;
+                    });
+                }
+                if(!valCheck("is", $("#qna_ans_content").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","답변 내용을 입력해주십시오")).then((warningResult) => {
+                        return false;
+                    });
+                }
+    
+                let postData = {
+                    qna_seq: $("#qna_seq").val(),
+                    qna_ans_title: $("#qna_ans_title").val(),
+                    qna_ans_content: $("#qna_ans_content").val(),
+                    qna_ans_stat: "<%=qnaView[0].qna_stat%>"
+                }
+                        
+                let result = syncAjax("POST", "/bbs/qna/ans/reg/complete", postData);
+    
+                if(result.status == 'FAIL') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("error",result.msg)).then((errorResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                    });
+                }else{
+                    swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                    });
+                }
+    
+            });
+
+            $("#submitBtn_mod").on("click", function() {
+
+                if(!valCheck("is", $("#qna_title_mod").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","제목을 입력해주십시오")).then((warningResult) => {
+                        return false;
+                    });
+                }
+                if(!valCheck("is", $("#qna_content_mod").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","내용을 입력해주십시오")).then((warningResult) => {
+                        return false;
+                    });
+                }
+
+                let postData = {
+                    qna_seq : $("#qna_seq").val(),
+                    qna_title_mod: $("#qna_title_mod").val(),
+                    qna_content_mod: $("#qna_content_mod").val(),
+                    qna_stat_mod: $("#qna_stat_mod").val()
+                }
+                        
+                let result = syncAjax("POST", "/bbs/qna/mod/complete", postData);
+
+                if(result.status == 'FAIL') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("error",result.msg)).then((errorResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                    });
+                }else{
+                    swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                    });
+                }
+
+            });
+
+            $("#submitBtn_ans_mod").on("click", function() {
+
+                if(!valCheck("is", $("#qna_ans_title_mod").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","답변 제목을 입력해주십시오")).then((warningResult) => {
+                        return false;
+                    });
+                }
+                if(!valCheck("is", $("#qna_ans_content_mod").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","답변 내용을 입력해주십시오")).then((warningResult) => {
+                        return false;
+                    });
+                }
+
+                let postData = {
+                    qna_seq : $("#qna_seq").val(),
+                    qna_ans_seq : $("#qna_ans_seq").val(),
+                    qna_ans_title_mod: $("#qna_ans_title_mod").val(),
+                    qna_ans_content_mod: $("#qna_ans_content_mod").val(),
+                    qna_ans_stat_mod: 'Y'
+                }
+                        
+                let result = syncAjax("POST", "/bbs/qna/ans/mod/complete", postData);
+
+                if(result.status == 'FAIL') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("error",result.msg)).then((errorResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                    });
+                }else{
+                    swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                    });
+                }
+            });
+
+            $("#deleteQnaAnsBtn").on("click", function() {
+
+                swalWithBootstrapButtons.fire({
+                title: '답변을 삭제하시겠습니까?',
+                //text: "You won't be able to revert this!",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Delete!',
+                confirmButtonClass: "btn btn-success mx-1",
+                cancelButtonText: 'Cancel',
+                cancelButtonClass: "btn btn-danger mx-1",
+                reverseButtons: true
+                }).then((chooseResult) => {
+                    if (chooseResult.isConfirmed) {
+
+                        let postData = {
+                        qna_seq : $("#qna_seq").val(),
+                        qna_ans_seq : $("#qna_ans_seq").val()
+                    }
+                            
+                    let result = syncAjax("POST", "/bbs/qna/ans/delete/complete", postData);
+
+                    if(result.status == 'FAIL') {
+                        swalWithBootstrapButtons.fire(makeAlertObj("error",result.msg)).then((errorResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                        });
+                    }else{
+                        swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                        });
+                    }
+
+                    }else{
+                        return false;
+                    }
+                });
+            });
+
+            $("#deleteQnaBtn").on("click", function() {
+
+                swalWithBootstrapButtons.fire({
+                title: '게시글을 삭제하시겠습니까?',
+                text: "게시글 삭제 시 답변도 같이 삭제됩니다.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Delete!',
+                confirmButtonClass: "btn btn-success mx-1",
+                cancelButtonText: 'Cancel',
+                cancelButtonClass: "btn btn-danger mx-1",
+                reverseButtons: true
+                }).then((chooseResult) => {
+                    if (chooseResult.isConfirmed) {
+
+                        let postData = {
+                        qna_seq : $("#qna_seq").val(),
+                        qna_ans_seq : $("#qna_ans_seq").val()
+                    }
+                            
+                    let result = syncAjax("POST", "/bbs/qna/delete/complete", postData);
+
+                    if(result.status == 'FAIL') {
+                        swalWithBootstrapButtons.fire(makeAlertObj("error",result.msg)).then((errorResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                        });
+                    }else{
+                        swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                        });
+                    }
+
+                    }else{
+                        return false;
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,169 @@
+<!-- ========== Left Sidebar Start ========== -->
+<div class="vertical-menu">
+
+    <!-- LOGO -->
+    <div class="navbar-brand-box">
+        <a href="/dashboard" class="logo logo-dark">
+            <span class="logo-sm">
+                <img src="/assets/images/Open-BMS_logo_symbol.png" alt="" style="height:22px;">
+            </span>
+            <span class="logo-lg">
+                <img src="/assets/images/Open-BMS_logo.png" alt="" style="display: block; margin: 10px auto; margin-left: 50px; height:55px;">
+            </span>
+        </a>
+
+        <a href="/dashboard" class="logo logo-light">
+            <span class="logo-sm">
+                <img src="/assets/images/Open-BMS_logo_symbol.png" alt="" style="height:22px;">
+            </span>
+            <span class="logo-lg">
+                <img src="/assets/images/Open-BMS_logo_white.png" alt="" style="display: block; margin: 10px auto; margin-left: 50px; height:55px;">
+            </span>
+        </a>
+    </div>
+
+    <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect vertical-menu-btn">
+        <i class="fa fa-fw fa-bars"></i>
+    </button>
+
+    <div data-simplebar class="sidebar-menu-scroll">
+
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
+            <!-- Left Menu Start -->
+            <ul class="metismenu list-unstyled" id="side-menu">
+                <li class="menu-title">Menu</li>
+    
+                <li>
+                    <a href="/operation/dashboard">
+                      <!--  <i class="uil-home-alt"></i><span class="badge rounded-pill bg-primary float-end">01</span>-->
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="uil-file-alt"></i>
+                        <span>보고서</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+
+                        <li><a href="/operation/report/daily">일별 보고서</a></li>
+                        <!-- <li><a href="/report/weekly">주간 보고서</a></li> -->
+                        <li><a href="/operation/report/monthly">월간 보고서</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="uil-chart-line"></i>
+                        <span>로그</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="/operation/log/realtimelog">실시간 모니터링</a></li>                     
+                    </ul>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="#">로그인 기록</a></li>                     
+                    </ul>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="#">알람확인 기록</a></li>                     
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect"> 
+                        <i class="uil-analytics"></i>
+                        <span>분석</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="/operation/analytics/health">기기별 건강상태 분석</a></li>                     
+                        <li><a href="/operation/analytics/analytics">과거데이터비교 분석</a></li>                     
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect"> 
+                        <i class="uil-list-ul"></i>
+                        <span>조회</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="#">배터리 종류별 조회</a></li>                     
+                        <li><a href="#">생산업체별 배터리 조회</a></li>
+                        <li><a href="#">실시간 조회</a></li>
+                        <li><a href="#">알람 조회</a></li>      
+                        <li><a href="#">점검 조회</a></li>                           
+                    </ul>
+                </li>
+
+                <!-- <li class="menu-title">자산관리</li>
+
+                <li>
+                    <a href="/operation/asset/assetlocation" class="waves-effect">
+                        <i class="uil-folder-check"></i>
+                        <span>자산관리</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/operation/asset/assethistory" class="waves-effect">
+                        <i class="uil-files-landscapes"></i>
+                        <span>점검이력조회</span>
+                    </a>
+                </li> -->
+                <li class="menu-title">게시판</li>
+
+                <li>
+                    <a href="/operation/bbs/faq" class="waves-effect">
+                        <i class="dripicons-question"></i>
+                        <span>FAQ</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/operation/bbs/qna" class="waves-effect">
+                        <i class="bx bx-smile"></i>
+                        <span>1대1 게시판</span>
+                    </a>
+                </li>
+
+                <li class="menu-title">관리</li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect"> 
+                        <i class="uil-user-circle"></i>
+                        <span>설치장소 관리</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="#">설치장소 등록</a></li>                     
+                        <li><a href="#">설치장소 목록</a></li>                        
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect"> 
+                        <i class="uil-user-circle"></i>
+                        <span>사용자 관리</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="/operation/mng/acnt/acntReg">사용자 등록</a></li>                     
+                        <li><a href="/operation/mng/acnt/acntList">사용자 목록</a></li>                        
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect"> 
+                        <i class="uil-bell"></i>
+                        <span>알람 관리</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="#">알람 등록</a></li>
+                        <li><a href="#">알람 목록</a></li>                     
+                        <li><a href="#">알람 변경이력</a></li>
+                        <li><a href="#">배터리-알람 목록</a></li>
+                        <li><a href="#">배터리-알람 변경이력</a></li>                              
+                    </ul>
+                </li>
+                
+
+
+            </ul>
+        </div>
+        <!-- Sidebar -->
+    </div>
+</div>
+<!-- Left Sidebar End -->

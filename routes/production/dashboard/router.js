@@ -1,0 +1,17 @@
+const express = require('express');
+const router = express.Router();
+const path = require('path');
+const common = require(path.join(appRoot, 'routes/production/common/common.js'));
+const controller = require('./controller.js');
+
+router.route('/')
+    .get(common.readDashCard,controller.getDashboard);
+
+router.route('/postBtryListByBtryType')
+    .post(controller.postBtryListByBtryType);
+router.route('/postBtryListByBtryCmpy')
+    .post(controller.postBtryListByBtryCmpy);
+router.route('/postAlarmHstyList')
+    .post(controller.postAlarmHstyList);
+
+module.exports = router;

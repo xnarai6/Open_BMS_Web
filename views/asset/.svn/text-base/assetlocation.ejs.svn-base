@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        
+
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+    </head>
+
+    <body>
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <%- include('../common/dash.ejs') %>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-4">설치장소</h4>
+                                        <div class="table-responsive">
+                                            <table class="table table-centered table-nowrap table-hover mb-0" >
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        
+                                                        <th>ID</th>
+                                                        <th>Location</th>                                                        
+                                                        <th>Operation</th>
+                                                        <th>Status</th>
+                                                        <th>Date</th>
+                                                        <th>View Details</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="loc-table">
+                                                    <% for(var i in locList){ %>
+                                                        <tr>
+                                                            
+                                                            <td id="<%=locList[i].loc_seq %>"><%= parseInt(i) + 1 %></td>
+                                                            <td><%= locList[i].loc_nm %></td>                                                       
+                                                            <td>
+                                                                <%=locList[i].btry_cnt%>/<%=locList[i].btry_max_pwr%>
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge rounded-pill bg-soft-success font-size-12">NORMAL</span>
+                                                            </td>
+                                                            <td id="dttm_<%=i%>"> 
+                                                                <%=locList[i].ins_dttm%>
+                                                            </td>
+                                                            <td>
+                                                                <!-- Button trigger modal -->
+                                                                <button type="button" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">
+                                                                    View Details
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    <% } %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- 페이지네이션 -->
+                                        <div class="row mt-4">
+                                            <div class="col-sm-6">
+                                                <div>
+                                                    <p class="mb-sm-0">Page <%=pages.currentPage%> of <%=pages.pageCount%></p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="float-sm-end">
+                                                    <ul class="pagination pagination-rounded mb-sm-0">
+                                                        <!-- 이전페이지 -->
+                                                        <li class="page-item">
+                                                            <a class="page-link" href="/asset/assetlocation?page=<%=pages.previousPage%>">
+                                                                <i class="mdi mdi-chevron-left"></i>
+                                                            </a>
+                                                        </li>
+
+                                                        <% for(index in liRow) { %>
+                                                            <% if(liRow[index] == pages.currentPage) { %>
+                                                                <li class="page-item active"><a class="page-link"><%= liRow[index] %></a></li>
+                                                            <% } else { %>
+                                                                <li class="page-item"><a class="page-link" href="/asset/assetlocation?page=<%=liRow[index]%>"><%= liRow[index] %></a></li>
+                                                            <% } %>
+                                                        <% } %>
+
+                                                        <!-- 다음페이지 -->
+                                                        <li class="page-item">
+                                                            <a class="page-link" href="/asset/assetlocation?page=<%=pages.nextPage%>">
+                                                                <i class="mdi mdi-chevron-right"></i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <!-- 페이지네이션 -->
+                                        <!-- end table-responsive -->
+                                    </div>
+                                </div>
+                            </div>   
+
+                        </div> <!-- end row -->
+        
+
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-4" id="bms-table-title">BMS List</h4>
+                                        <div class="table-responsive">
+                                            <table class="table table-centered table-nowrap table-hover mb-0">
+                                                <thead class="table-light">
+                                                    <tr>                                                        
+                                                        <th>BMS Name</th>
+                                                        <th>Company</th>
+                                                        <th>설치일</th>                                                                                                             
+                                                        <th>가동일</th>    
+                                                        <th>정격전력</th>                                                      
+                                                        <th>평균충전시간</th>
+                                                        <th>총 충전횟수</th>
+                                                        <th>평균SOC</th>
+                                                        <th>SOH</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="bms-table">
+                                                    
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- end table-responsive -->
+                                        <!-- 페이지네이션 -->
+                                        <div class="row mt-4">
+                                            <div class="col-sm-6">
+                                                <div>
+                                                    <p class="mb-sm-0" id="bms-page-string"></p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="float-sm-end">
+                                                    <ul class="pagination pagination-rounded mb-sm-0" id="bms-pagination">
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <!-- 페이지네이션 -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+
+
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+
+        <script>
+
+            var globalId = "";
+
+            //설치장소 클릭 -> BMS List 갱신
+            $('#loc-table').on("click", "tr", function(){
+
+                //설치장소 seq값 저장 loc_seq
+                //var seq = $(this).find("td:eq(0)").text();
+                
+                var id = $(this).find("td:eq(0)").attr("id");
+                
+
+                globalId = id;
+
+
+                //BMS List 제목 변경
+                $("#bms-table-title").html("BMS List (" + $(this).find("td:eq(1)").text() + ")");
+                
+                getAjaxData(null);
+                
+                
+            });
+
+            function getAjaxData(page){
+
+                let postData = {
+                    loc: globalId,
+                    page: page
+                }
+
+                //post 통신
+                let result = syncAjax("POST", "/asset/assetLocation/btry", postData);
+
+                var trList = "";
+                var btryList = result.btryList;
+                var pages = result.pages;
+                var liRow = result.liRow;
+
+                $("#bms-page-string").html("Page " + pages.currentPage + " of " + pages.pageCount);
+
+                //데이터 테이블 형태로 넣기
+                if(btryList != null && btryList.length !=0){
+                    for(var i in btryList){
+                        var tr = '<tr>';
+                        tr += '<td><a href="javascript: void(0);" class="text-body fw-bold">' + btryList[i].btry_nm + '</a> </td>';
+                        tr += '<td> ' + btryList[i].btry_mfctor_nm + ' </td>';
+                        tr += '<td>' + btryList[i].ins_dttm + '</td>';
+                        var operation = parseInt(btryList[i].btry_max_volt == null ? 0 : btryList[i].btry_max_volt) + parseInt(btryList[i].btry_max_curr == null ? 0 : btryList[i].btry_max_curr);
+                    
+                        tr += '<td>' +  btryList[i].diff+'days</td>'; // 가동일수
+                        tr += '<td>' +  btryList[i].btry_max_pwr + '</td>';
+                        tr += '<td>' +  btryList[i].avg_chrg_time+'Hour</td>'; // 평균충전시간
+                        tr += '<td>' +  btryList[i].chrg_cnt+'</td>'; // 총 충전횟수
+                        tr += '<td>' +  btryList[i].avg_soc+'</td>'; // 평균SOC
+                        tr += '<td>' +  btryList[i].end_soh+'%</td>'; // SOH
+                        
+                        tr += '</tr>';
+
+                        trList += tr;
+                    }
+                }else{
+                    var tr = '<tr><td colspan="9" style="text-align:center;">BMS List가 없습니다.</td></tr>';
+                    trList += tr;
+                }
+
+                $("#bms-table").html(trList);
+
+                //bms 테이블 페이징
+                var pageHtml = '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ pages.previousPage +')"><i class="mdi mdi-chevron-left"></i></a></li>';
+
+                for(index in liRow){
+                    if(liRow[index] == pages.currentPage){
+                        pageHtml += '<li class="page-item active"><a class="page-link">'+ liRow[index] +'</a></li>';
+                    } else {
+                        pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ liRow[index] +')">'+ liRow[index] +'</a></li>';
+                    }
+                }
+
+                pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ pages.nextPage +')"><i class="mdi mdi-chevron-right"></i></a></li>';
+
+                $("#bms-pagination").html(pageHtml);
+            }
+            
+        </script>
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+
+      
+        <script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+
+        <script src="/assets/js/pages/dashboard.init.js"></script>
+
+        <script src="/attach/js/common.js"></script>    
+    </body>
+</html>

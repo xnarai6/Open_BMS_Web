@@ -1,0 +1,52 @@
+<header id="page-topbar">
+    <div class="navbar-header">
+        <div class="d-flex">
+            <!-- 모바일 로고 -->
+            <!-- <div class="navbar-brand-box">
+                <a href="/" class="logo logo-dark">
+                    <span class="logo-sm"><img src="/assets/images/Open-BMS_logo_symbol.png" alt="" height="22"></span>
+                    <span class="logo-lg"><img src="/assets/images/Open-BMS_logo_white.png" alt="" height="20"></span>
+                </a>
+            </div> -->
+            <!-- 모바일 메뉴 호출버튼 -->
+            <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect vertical-menu-btn"><i class="fa fa-fw fa-bars"></i></button>
+        </div>
+
+        <!-- 탑 메뉴 -->
+        <div class="d-flex">
+            <!-- 알람 -->
+            <div class="dropdown d-inline-block">
+                <button type="button" class="btn header-item waves-effect content-short" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="uil-bell font-size-14"></i><span class="ms-1 fw-medium font-size-14 content-short">0건</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                    <a class="dropdown-item content-short" href="#"><i class="uil-exclamation-triangle font-size-14 align-middle me-1"></i><span class="font-size-14 align-middle">최근 알람 내역이 없습니다</span></a>
+                    <!-- <a class="dropdown-item" href="/dashboard/viewProfile"><i class="uil-exclamation-triangle font-size-14 align-middle me-1"></i><span class="font-size-14 align-middle">~~~~~~~~~~알람 발생5</span></a>
+                    <a class="dropdown-item" href="/dashboard/viewProfile"><i class="uil-exclamation-triangle font-size-14 align-middle me-1"></i><span class="font-size-14 align-middle">~~~~~~~~~~알람 발생4</span></a>
+                    <a class="dropdown-item" href="/dashboard/viewProfile"><i class="uil-exclamation-triangle font-size-14 align-middle me-1"></i><span class="font-size-14 align-middle">~~~~~~~~~~알람 발생3</span></a>
+                    <a class="dropdown-item" href="/dashboard/viewProfile"><i class="uil-exclamation-triangle font-size-14 align-middle me-1"></i><span class="font-size-14 align-middle">~~~~~~~~~~알람 발생2</span></a>
+                    <a class="dropdown-item" href="/dashboard/viewProfile"><i class="uil-exclamation-triangle font-size-14 align-middle me-1"></i><span class="font-size-14 align-middle">~~~~~~~~~~알람 발생1</span></a> -->
+                </div>
+            </div>
+
+            <!-- 시간 -->
+            <div class="dropdown d-none d-md-inline-block content-short"><button type="button" class="btn header-item noti-icon waves-effect"><span id="clock" class="font-size-14"></span></button></div>
+            
+            <!-- 이름 -->
+            <div class="dropdown d-inline-block">
+                <button type="button" class="btn header-item waves-effect content-short" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="ms-1 fw-medium font-size-14 content-short"><%= locals && locals.userInfo && locals.userInfo.acnt_nm ? locals.userInfo.acnt_nm : '' %></span><i class="uil-angle-down font-size-14"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end">
+                    <% if (locals && locals.userInfo && locals.userInfo.cmpy_biz_type && locals.userInfo.cmpy_biz_type == '50') { %>
+                        <a class="dropdown-item" href="/golf/account/profile"><i class="uil uil-user-circle font-size-18 align-middle text-muted me-1"></i> <span class="align-middle">내 정보</span></a>
+                    <% } %>
+                    <% if (locals && locals.userInfo && locals.userInfo.acnt_role && (locals.userInfo.acnt_role == 'MA' || locals.userInfo.acnt_role == 'MC')) { %>
+                        <a class="dropdown-item" href="/production/account/profile"><i class="uil uil-user-circle font-size-18 align-middle text-muted me-1"></i> <span class="align-middle">내 정보</span></a>
+                    <% } %>
+                    <a class="dropdown-item" href="/account/logout"><i class="uil uil-sign-out-alt font-size-18 align-middle me-1 text-muted"></i> <span class="align-middle">로그아웃</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../../layout/meta.ejs') %>
+        <%- include('../../layout/title.ejs') %>
+        <%- include('../../layout/css.ejs') %>
+        <!-- ION Slider -->
+        <link href="/assets/libs/ion-rangeslider/css/ion.rangeSlider.min.css" rel="stylesheet" type="text/css"/>
+        <style>
+            .greenText{ color:green; }
+
+            .blueText{ color:blue; }
+
+            .redText{ color:red; }
+        </style>
+    </head>
+
+    <body>
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../../layout/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <%- include('../common/topcard.ejs') %>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between"><h4 class="mb-0">알람</h4></div>
+                            </div>
+                        </div>
+                        <!-- start page title -->
+
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="p-3">
+                                                    <h5 class="font-size-14 mb-3 mt-0">알림 설정</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                <label class="form-label">알람 ON/OFF</label>
+                                                    <select class="form-control form-select" id="alm_use_yn" name="alm_use_yn" onChange="this.focus();this.className='form-control form-select ' + this.options[this.selectedIndex].className;this.blur();">
+                                                        <option value="Y" class="greenText">ON</option>
+                                                        <option value="N" class="redText"">OFF</option>                                                                                                                             
+                                                    </select>        
+                                                </div>
+                                             </div>
+                                             <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">알림 주기</label>
+                                                    <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
+                                                        <input class="form-control" id="cycle"  onkeypress="return isNumberKeyOnlyNumber(event)" onkeyup="return delHangle(event)" maxlength="4">
+                                                        <span class="input-group-addon bootstrap-touchspin-postfix input-group-append">
+                                                            <span class="input-group-text">분</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <span style="color: yellow; float: right;">* 1440분 이하로 설정</span>
+                                             </div>
+                                        </div>
+                                        <br>
+                                        <hr style="color: white;">
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="p-3">
+                                                    <h5 class="font-size-14 mb-3 mt-0">SOC 알림 범위</h5>
+                                                    <input type="text" id="range_soc">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <hr style="color: white;">
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="p-3">
+                                                    <h5 class="font-size-14 mb-3 mt-0">배터리 충전 알림 시간</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md">
+                                                <div class="mb-3">
+                                                    <label class="form-label">시작시간1</label>
+                                                    <input class="form-control" type="time" id="start_time1">
+                                                </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="mb-3">
+                                                    <label class="form-label">종료시간1</label>
+                                                    <input class="form-control" type="time" id="end_time1">
+                                                </div>
+                                            </div>
+                                            <div class="col-md d-flex align-items-center">
+                                                <div class="mt-3">
+                                                    <input type="checkbox" id="time_on_off1" switch="bool" value="N">
+                                                    <label  for="time_on_off1" data-on-label="ON" data-off-label="OFF"></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="mb-3">
+                                                    <label class="form-label">시작시간2</label>
+                                                    <input class="form-control" type="time" id="start_time2">
+                                                </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="mb-3">
+                                                    <label class="form-label">종료시간2</label>
+                                                    <input class="form-control" type="time" id="end_time2">
+                                                </div>
+                                            </div>
+                                            <div class="col-md d-flex align-items-center">
+                                                <div class="mt-3">
+                                                    <input type="checkbox" id="time_on_off2" switch="bool" value="N">
+                                                    <label  for="time_on_off2" data-on-label="ON" data-off-label="OFF"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md">
+                                                <div class="mb-3">
+                                                    <label class="form-label">시작시간3</label>
+                                                    <input class="form-control" type="time" id="start_time3">
+                                                </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="mb-3">
+                                                    <label class="form-label">종료시간3</label>
+                                                    <input class="form-control" type="time" id="end_time3">
+                                                </div>
+                                            </div>
+                                            <div class="col-md d-flex align-items-center">
+                                                <div class="mt-3">
+                                                    <input type="checkbox" id="time_on_off3" switch="bool" value="N">
+                                                    <label  for="time_on_off3" data-on-label="ON" data-off-label="OFF"></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="mb-3">
+                                                    <label class="form-label">시작시간4</label>
+                                                    <input class="form-control" type="time" id="start_time4">
+                                                </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="mb-3">
+                                                    <label class="form-label">종료시간4</label>
+                                                    <input class="form-control" type="time" id="end_time4">
+                                                </div>
+                                            </div>
+                                            <div class="col-md d-flex align-items-center">
+                                                <div class="mt-3">
+                                                    <input type="checkbox" id="time_on_off4" switch="bool" value="N">
+                                                    <label for="time_on_off4" data-on-label="ON" data-off-label="OFF"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div>
+                                            <div style="float: right;">
+                                                <button type="button" id="setBtn" class="btn btn-primary waves-effect waves-light me-1">
+                                                    설정
+                                                </button>
+                                                <button type="button" onclick="javascript:location.reload();" class="btn btn-secondary waves-effect">
+                                                    기존 설정값으로
+                                                </button>
+                                            </div>
+                                        </div> 
+                                    </form>       
+
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+
+
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <%- include('../../layout/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../../layout/scripts.ejs') %>
+        <script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+        <script src="/assets/libs/ion-rangeslider/js/ion.rangeSlider.min.js"></script>
+        <script>
+
+            var alm_seq = "<%=ALM_INFO[0].alm_seq%>";
+
+            //SOC 알림범위 rangeSlider 설정
+            $("#range_soc").ionRangeSlider({
+                skin: "round",
+                type: "double",
+                grid: !0,
+                min: 0,
+                max: 100,
+                from: "<%=ALM_INFO[0].alm_min_soc%>",
+                to: "<%=ALM_INFO[0].alm_max_soc%>",
+                step: 1
+            });
+
+            $(document).ready(function(){
+                //알람 기존 설정값 세팅
+                var alm_use_yn_value = "<%=ALM_INFO[0].alm_use_yn%>";
+                $("#alm_use_yn > option[value="+alm_use_yn_value+"]").attr("selected","true");        
+                $("#cycle").val("<%=ALM_INFO[0].alm_cycle%>");       
+                $("#start_time1").val("<%=ALM_INFO[0].start_time1%>");
+                $("#end_time1").val("<%=ALM_INFO[0].end_time1%>");
+                $("#time_on_off1").val("<%=ALM_INFO[0].time_on_off1%>");
+                if("<%=ALM_INFO[0].time_on_off1%>" == "Y"){$("#time_on_off1").prop("checked",true);}
+                $("#start_time2").val("<%=ALM_INFO[0].start_time2%>");
+                $("#end_time2").val("<%=ALM_INFO[0].end_time2%>");
+                $("#time_on_off2").val("<%=ALM_INFO[0].time_on_off2%>");
+                if("<%=ALM_INFO[0].time_on_off2%>" == "Y"){$("#time_on_off2").prop("checked",true);}
+                $("#start_time3").val("<%=ALM_INFO[0].start_time3%>");
+                $("#end_time3").val("<%=ALM_INFO[0].end_time3%>");
+                $("#time_on_off3").val("<%=ALM_INFO[0].time_on_off3%>");
+                if("<%=ALM_INFO[0].time_on_off3%>" == "Y"){$("#time_on_off3").prop("checked",true);}
+                $("#start_time4").val("<%=ALM_INFO[0].start_time4%>");
+                $("#end_time4").val("<%=ALM_INFO[0].end_time4%>");
+                $("#time_on_off4").val("<%=ALM_INFO[0].time_on_off4%>");
+                if("<%=ALM_INFO[0].time_on_off4%>" == "Y"){$("#time_on_off4").prop("checked",true);}
+                
+                //onChange 관련
+                alm_use_yn_value == 'Y' ? $("#alm_use_yn").attr('class','form-control form-select greenText') : $("#alm_use_yn").attr('class','form-control form-select redText');
+
+                $("#time_on_off1").on('change', function() {
+                    if ($(this).is(':checked')) {
+                        $(this).attr('value', 'Y');
+                    }
+                    else {
+                    $(this).attr('value', 'N');
+                }});
+                $("#time_on_off2").on('change', function() {
+                    if ($(this).is(':checked')) {
+                        $(this).attr('value', 'Y');
+                    }
+                    else {
+                    $(this).attr('value', 'N');
+                }});
+                $("#time_on_off3").on('change', function() {
+                    if ($(this).is(':checked')) {
+                        $(this).attr('value', 'Y');
+                    }
+                    else {
+                    $(this).attr('value', 'N');
+                }});
+                $("#time_on_off4").on('change', function() {
+                    if ($(this).is(':checked')) {
+                        $(this).attr('value', 'Y');
+                    }
+                    else {
+                    $(this).attr('value', 'N');
+                }});
+            });
+
+            $("#setBtn").on("click", async function() {
+
+                var range_soc = $("#range_soc").val().replace(";",",");
+                var alm_use_yn = $("#alm_use_yn").val();
+                var cycle = $("#cycle").val();
+                var start_time1 = $("#start_time1").val();
+                var end_time1 = $("#end_time1").val();
+                var time_on_off1 = $("#time_on_off1").val();
+                var start_time2 = $("#start_time2").val();
+                var end_time2 = $("#end_time2").val();
+                var time_on_off2 = $("#time_on_off2").val();
+                var start_time3 = $("#start_time3").val();
+                var end_time3 = $("#end_time3").val();
+                var time_on_off3 = $("#time_on_off3").val();
+                var start_time4 = $("#start_time4").val();
+                var end_time4 = $("#end_time4").val();
+                var time_on_off4 = $("#time_on_off4").val();
+
+                if(!valCheck("is", cycle)){
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","알림 주기를 입력해주세요"));
+                    return false;
+                }
+
+                if(cycle > 1440){
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","알림 주기가 1440분을 초과합니다."));
+                    return false;
+                }
+
+                if(time_on_off1 == "Y"){
+                    if(!valCheck("is", start_time1) || !valCheck("is", end_time1)){
+                        swalWithBootstrapButtons.fire(makeAlertObj("warning","ON 상태의 시작시간과 종료시간을 모두 입력해주세요"));
+                        return false;
+                    }
+                }
+                if(time_on_off2 == "Y"){
+                    if(!valCheck("is", start_time2) || !valCheck("is", end_time2)){
+                        swalWithBootstrapButtons.fire(makeAlertObj("warning","ON 상태의 시작시간과 종료시간을 모두 입력해주세요"));
+                        return false;
+                    }
+                }
+                if(time_on_off3 == "Y"){
+                    if(!valCheck("is", start_time3) || !valCheck("is", end_time3)){
+                        swalWithBootstrapButtons.fire(makeAlertObj("warning","ON 상태의 시작시간과 종료시간을 모두 입력해주세요"));
+                        return false;
+                    }
+                }
+                if(time_on_off4 == "Y"){
+                    if(!valCheck("is", start_time4) || !valCheck("is", end_time4)){
+                        swalWithBootstrapButtons.fire(makeAlertObj("warning","ON 상태의 시작시간과 종료시간을 모두 입력해주세요"));
+                        return false;
+                    }
+                }
+
+                let postData = {
+                    alm_seq : alm_seq,
+                    range_soc : range_soc,
+                    alm_use_yn : alm_use_yn,
+                    cycle : cycle,
+                    start_time1 : start_time1,
+                    end_time1 : end_time1,
+                    time_on_off1 : time_on_off1,
+                    start_time2 : start_time2,
+                    end_time2 : end_time2,
+                    time_on_off2 : time_on_off2,
+                    start_time3 : start_time3,
+                    end_time3 : end_time3,
+                    time_on_off3 : time_on_off3,
+                    start_time4 : start_time4,
+                    end_time4 : end_time4,
+                    time_on_off4 : time_on_off4,
+                }
+
+                let result = await syncAjax("default", "POST", "/golf/alarm/postSetAlarm", postData);
+
+                // 2. 결과 fail 체크
+                let resultChk = syncAjaxSuccessOrFail(result);
+                if (!resultChk) return false;
+                // if(result.status == 'FAIL') {
+                //     swalWithBootstrapButtons.fire(makeAlertObj("error",result.msg)).then((errorResult) => {
+                //         var url = result.url;
+                //         $(location).attr('href',url);
+                //     });
+                // }else{
+                //     swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                //         var url = result.url;
+                //         $(location).attr('href',url);
+                //     });
+                // }
+
+            });
+
+        </script>
+
+    </body> 
+</html>

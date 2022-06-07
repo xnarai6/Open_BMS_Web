@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('../../layout/meta.ejs') %>
+        <%- include('../../layout/title.ejs') %>
+        <%- include('../../layout/css.ejs') %>
+    </head>
+
+    <body>
+        <div id="layout-wrapper">
+            <%- include('../../layout/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <%- include('../../layout/dashForProduction.ejs') %>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between"><h4 class="mb-0">수요업체별 조회 - 상세</h4></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table class="table table-centered content-short">
+                                        <thead>
+                                            <tr>
+                                                <th>배터리</th>
+                                                <th>제조사</th>
+                                                <th>타입</th>
+                                                <!-- <th>정격전력</th> -->
+                                                <th>충전 회수</th>
+                                                <th>SOC</th>
+                                                <th>최종수신일자</th>
+                                                <th>최종수신시간</th>
+                                                <th>상태</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="btryInfo"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+						<div class="row">
+							<div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="periodDate" readonly>
+                                            <input type="button" class="input-group-text" id="periodBtn" value="조회">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+						</div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">전압/전류</h4>
+                                        <div id="vcChart" class="apex-charts" dir="ltr"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">온도</h4>
+                                        <div id="tpChart" class="apex-charts" dir="ltr"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-3">
+                                <div class="card card-fixed-height">
+                                    <div class="card-body">
+                                        <div class="table-responsive table-fixed-height">
+                                            <table class="table table-centered content-short">
+                                                <thead>
+                                                    <tr>
+                                                        <th>일자</th>
+                                                        <th>최대 전압</th>
+                                                        <th>최소 전압</th>
+                                                        <th>최대 전류</th>
+                                                        <th>최소 전류</th>
+                                                        <th>최대 온도</th>
+                                                        <th>최소 온도</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="font-size-12" id="dailyList"></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="float-end position-relative mt-3"><ul class="pagination pagination-rounded mb-sm-0 mb-0" id="dailyListPaging"></ul></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 mb-3">
+                                <div class="card card-fixed-height">
+                                    <div class="card-body">
+                                        <div class="table-responsive table-fixed-height">
+                                            <table class="table table-centered content-short">
+                                                <thead>
+                                                    <tr>
+                                                        <th>타입</th>
+                                                        <th>시간(분)</th>
+                                                        <th>기간</th>
+                                                        <th>전압</th>
+                                                        <th>전류</th>
+                                                        <th>온도</th>
+                                                        <th>SOC</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="font-size-12" id="periodList"></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="float-end position-relative mt-3"><ul class="pagination pagination-rounded mb-sm-0 mb-0" id="periodListPaging"></ul></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <%- include('../../layout/footer.ejs') %>
+            </div>
+        </div>
+
+        <%- include('../../layout/scripts.ejs') %>
+
+        <script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+        <script src="/attach/js/bootstrap-datepicker.kr.min.js"></script>
+        <script>
+            let btryData, periodDt, chartArray = [];
+
+            $(async function() {
+                // 0. date picker 설정
+                $('#periodDate').datepicker({
+                    format: 'yyyy-mm-dd',
+                    language: 'kr',
+                    autoclose: true,
+                    endDate: '0d',
+                });
+
+                // 0. 배터리 데이터 가져오기
+                let result1 = await syncAjax("default", "POST", "/production/search/batteryByOper/<%=param%>/info", {});
+                btryData = result1.data;
+
+                // 1. 상단 배터리 정보 생성
+                makeBtryInfo($('#btryInfo'), btryData.btryInfo);
+
+                // 2. 오늘 일시 / 일 + 시 / 시 생성
+                let now = moment(), nowDt = now.format('YYYY-MM-DD');
+
+                // daily List 생성
+                getDailyList(1);
+
+                // 초기값 생성
+                setFirstValue(nowDt);
+            });
+
+            // 검색 클릭시
+            $('#periodBtn').on('click', function (e) {
+                e.preventDefault();
+
+                let dt = $('#periodDate').val();
+                dt = dt.replace(/-/gi, '');
+
+				let h = moment().format('YYYYMMDD') == dt ? moment().subtract(1, 'hours').format('HH') : '23';
+                
+                getPeriodList(dt, 1);
+				setGraphValue(dt, h);
+            });
+
+			// 그래프 생성
+			async function setGraphValue(dt, h) {
+				let now = moment(dt + h, 'YYYYMMDDHH'), nowDth = dt + h, nowH = Number(h);
+
+				// 1. (일 + 시)까지의 차트 데이터 가져오기
+                let result2 = await syncAjax("default", "POST", "/production/search/batteryByOper/<%=param%>/graph/" + nowDth, {});
+                let chartData = result2.data;
+
+                // 4. 차트 데이터 생성(현재시 - 1 ~ 00시)
+                let xAxisArray = [], voltMaxArray = [], voltMinArray = [], currMaxArray = [], currMinArray = [], tpMaxArray = [], tpMinArray = [];
+                for (let i = 0; i <= nowH; i++) {
+                    let currDth = now.format('YYYYMMDDHH'), currDthFormat = now.format('HH') + '';
+
+                    // 2. 일 + 시 저장
+                    xAxisArray.push(currDthFormat);
+
+                    // 3. 일치하는 일 + 시의 데이터 가져오기 
+                    let currChartData = chartData.btryDthList.find(e => e.sttc_dt + '' + e.sttc_hour == currDth);
+
+                    // 4. 일치하는 일 + 시의 데이터 저장
+                    voltMaxArray.push(currChartData ? currChartData.max_volt : 0);
+                    voltMinArray.push(currChartData ? currChartData.min_volt : 0);
+                    currMaxArray.push(currChartData ? currChartData.max_curr : 0);
+                    currMinArray.push(currChartData ? currChartData.min_curr : 0);
+                    tpMaxArray.push(currChartData ? currChartData.max_tp : 0);
+                    tpMinArray.push(currChartData ? currChartData.min_tp : 0);
+
+					now.subtract(1, 'hours');
+                }
+
+				// 5. 기존 차트 초기화
+				resetChartArray(chartArray);
+
+                // 6. 전압/전류 차트 생성
+                makeVCChart($('#vcChart'), {
+                    xData: xAxisArray.reverse(),
+                    yData: [
+                        { name: '최대 전압', data: voltMaxArray.reverse() }, { name: '최소 전압', data: voltMinArray.reverse() },
+                        { name: '최대 전류', data: currMaxArray.reverse() }, { name: '최소 전류', data: currMinArray.reverse() }]
+                });
+
+                // 7. 온도 차트 생성
+                makeTPChart($('#tpChart'), {
+                    xData: xAxisArray,
+                    yData: [{ name: '최대 온도', data: tpMaxArray.reverse() }, { name: '최소 온도', data: tpMinArray.reverse() }]
+                });
+            }
+
+			// 초기값 셋팅
+            function setFirstValue(nowDt) {
+                $('#periodDate').val(nowDt);
+                $('#periodBtn').click();
+            }
+
+            // 상단 배터리 정보 생성
+            function makeBtryInfo(target, info) {
+                $(target).html(formatBtryInfo(info, 8));
+            }
+
+            // 배터리 정보 포맷
+            function formatBtryInfo(info, count) {
+                if (!info) return '<tr class="text-center"><td colspan="' + count + '">데이터가 없습니다</td></tr>';
+
+                let chk1 = false, statHtml = '<td class="text-warning">점검중</td>';
+                    chk1 = info.btry_stat == 'Y' && info.last_dttm != null && moment().diff(moment(info.last_dttm), 'days') <= 0  && info.chrg_stat_cd != null
+
+                if (chk1 && info.chrg_stat_cd == 'DC') statHtml = '<td class="text-primary">방전중</td>';
+                if (chk1 && info.chrg_stat_cd == 'C') statHtml = '<td class="text-success">충전중</td>';
+                if (chk1 && info.chrg_stat_cd == 'W') statHtml = '<td class="text-muted">대기중</td>';
+
+                let result = '';
+                    result += '<tr>';
+                    result += '    <td>' + info.btry_nm + '</td>';
+                    result += '    <td>' + info.mdl_mftr + '</td>';
+                    result += '    <td>' + info.btry_ty + '</td>';
+                    // result += '    <td>' + info.btry_pw + 'W</td>';
+                    result += '    <td>' + info.btry_chrg_cnt + '</td>';
+                    result += '    <td>' + info.soc + '</td>';
+                    result += '    <td>' + moment(info.last_dttm).format('YYYY-MM-DD') + '</td>';
+                    result += '    <td>' + moment(info.last_dttm).format('HH:mm:ss') + '</td>';
+                    result += '    ' + statHtml;
+                    result += '</tr>';
+
+                return result;
+            }
+
+            // 현재 일 + 시 출력
+            function getNowDth(date) {
+                let result = '';
+                    result += date.getFullYear();
+                    result += ('0' + (1 + date.getMonth())).slice(-2);
+                    result += ('0' + date.getDate()).slice(-2);
+                    result += ('0' + date.getHours()).slice(-2);
+
+                return  result;
+            }
+
+            // 차트 초기화
+            function resetChartArray(chartArray) {
+                for (let c of chartArray) c.destroy();
+                chartArray = [];
+            }
+
+            // 전압전류 차트 생성
+            function makeVCChart(target, dataSet) {
+                let chartOption = {
+                    series: dataSet.yData,
+                    chart: { type: 'line', height: 380, toolbar: { show: false }, zoom: { enabled: false } },
+                    sparkline: { enabled: true },
+                    colors: ['#5b73e8', '#247BA0', '#FFB44C', '#DD3E22'],
+                    stroke: { width: [2, 2, 2, 2], dashArray: [0, 0, 0, 0], curve: "smooth" },
+                    legend: { show: true, labels: { useSeriesColors: true } },
+                    yaxis: [
+                        { seriesName: '최대 전압', title: { text: "전압", style: { color: '#5b73e8', } } },
+                        { seriesName: '최대 전압', show: false },
+                        { opposite: true, seriesName: '최대 전류', title: { text: "전류" } },
+                        { opposite: true, seriesName: '최대 전류', show: false }
+                    ], xaxis: { categories: dataSet.xData },
+                }
+
+                let chart = new ApexCharts($(target).get(0), chartOption);
+                chartArray.push(chart);
+                chart.render();
+            }
+            
+            // 온도 차트 생성
+            function makeTPChart(target, dataSet) {
+                let chartOption = {
+                    series: dataSet.yData,
+                    chart: { type: 'line', height: 380, toolbar: { show: false }, zoom: { enabled: false } },
+                    sparkline: { enabled: true },
+                    colors: ['#FFB44C', '#DD3E22'],
+                    stroke: { width: [2, 2], dashArray: [0, 0], curve: "smooth" },
+                    legend: { show: true, labels: { useSeriesColors: true } },
+                    yaxis: [
+                        { seriesName: '최대 온도', title: { text: "온도" } },
+                        { seriesName: '최대 온도', show: false }
+                    ], xaxis: { categories: dataSet.xData },
+                }
+
+                let chart = new ApexCharts($(target).get(0), chartOption);
+                chartArray.push(chart);
+                chart.render();
+            }
+
+            // 일별 리스트 가져오기
+            async function getDailyList(page) {
+                let result = await syncAjax("default", "POST", "/production/search/batteryByOper/<%=param%>/daily", { page: page });
+
+                let resultChk = syncAjaxFailChk(result);
+                if (!resultChk) return false;
+
+                let dailyData = result.data;
+
+                // make list / paging
+                $("#dailyList").html(formatDailyList(dailyData.dailyList, 7));
+                $("#dailyListPaging").html(formatPaging('getDailyList', dailyData.dailyPaging));
+            }
+
+            // 일별 리스트 포맷
+            function formatDailyList(list, count) {
+                if (!list) return '<tr class="text-center"><td colspan="' + count + '">데이터가 없습니다</td></tr>';
+
+                let result = '';
+                for (let el of list) {
+                    result += '<tr>';
+                    result += '    <td>' + el.sttc_dt + '</td>';
+                    result += '    <td>' + el.max_volt + '</td>';
+                    result += '    <td>' + el.min_volt + '</td>';
+                    result += '    <td>' + el.max_curr + '</td>';
+                    result += '    <td>' + el.min_curr + '</td>';
+                    result += '    <td>' + el.max_tp + '</td>';
+                    result += '    <td>' + el.min_tp + '</td>';
+                    result += '</tr>';
+                }
+                return result;
+            }
+
+            // 간격 리스트 가져오기
+            function getPeriodList(dt, page) {
+				periodDt = dt;
+				getPeriodListPage(page);
+            }
+
+			async function getPeriodListPage(page) {
+                let result = await syncAjax('default', 'POST', '/production/search/batteryByOper/<%=param%>/period/' + periodDt, { page: page });
+
+                let resultChk = syncAjaxFailChk(result);
+                if (!resultChk) return false;
+
+                let periodData = result.data;
+
+                // make list / paging
+                $('#periodList').html(formatPeriodList(periodData.periodList, 7));
+                $('#periodListPaging').html(formatPaging('getPeriodListPage', periodData.paging));
+            }
+
+            // 간격 리스트 포맷
+            function formatPeriodList(list, count) {
+                if (!list) return '<tr class="text-center"><td colspan="' + count + '">데이터가 없습니다</td></tr>';
+
+                let result = '';
+                for (let el of list) {
+                    result += '<tr>';
+                    result += '    <td class="' + (el.type_cd == 'DC' ? 'text-primary' : el.type_cd == 'C' ? 'text-success' : el.type_cd == 'i' ? 'text-warning' : el.type_cd == 'W' ? 'text-muted' : 'text-white') + '">' + el.type + '</td>';
+                    result += '    <td>' + periodMinToHorMin(el.period_m, ':') + '</td>';
+                    result += '    <td>' + moment(el.end_dtm, 'YYYYMMDDHHmm').format('MM-DD HH:mm') + ' ~ ' + moment(el.start_dtm, 'YYYYMMDDHHmm').format('MM-DD HH:mm') + '</td>';
+                    result += '    <td>' + (el.end_volt ? el.end_volt : 0) + ' ~ ' + (el.start_volt ? el.start_volt : 0) + '</td>';
+                    result += '    <td>' + (el.end_curr ? el.end_curr : 0) + ' ~ ' + (el.start_curr ? el.start_curr : 0) + '</td>';
+                    result += '    <td>' + (el.end_tp ? el.end_tp : 0) + ' ~ ' + (el.start_tp ? el.start_tp : 0) + '</td>';
+                    result += '    <td>' + (el.end_soc ? el.end_soc : 0) + ' ~ ' + (el.start_soc ? el.start_soc : 0) + '</td>';
+                    result += '</tr>';
+                }
+                return result;
+            }
+
+            function periodMinToHorMin(min, div) {
+                return (min < 600 ? ('0' + parseInt(min / 60)).slice(-2) : parseInt(min / 60)) + div + ('0' + min % 60).slice(-2);
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('../../layout/meta.ejs') %>
+        <%- include('../../layout/title.ejs') %>
+        <%- include('../../layout/css.ejs') %>
+        <style>
+            .denied {
+                background-color: rgba(255, 0, 0, 0.1);
+            }
+            .underReview{
+                background-color: rgba(255 , 228, 0, 0.1);
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="layout-wrapper">
+            <%- include('../../layout/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <%- include('../../layout/dashForProduction.ejs') %>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">회사 관리</h4>
+
+                                    <a class="btn btn-primary" href="/production/manage/company/reg">등록 신청</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="table-responsive mb-2">
+                                            <table class="table table-centered content-short">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>상세</th>
+                                                        <th>권한</th>
+                                                        <th>회사명</th>
+                                                        <th>담당자</th>
+                                                        <th>담당자 이메일</th>
+                                                        <th>담당자 전화번호</th>
+                                                        <th>회사업종</th>
+                                                        <th>승인 상태</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="companyList"></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6"><div><p class="mb-sm-0"></p></div></div>
+                                            <div class="col-6"><div class="float-end"><ul class="pagination pagination-rounded mb-sm-0" id="companyListPaging"></ul></div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <%- include('../../layout/footer.ejs') %>
+            </div>
+        </div>
+
+        <%- include('../../layout/scripts.ejs') %>
+        <script>
+            $(async function() {
+                // user List 생성
+                getCompanyList(1);
+            });
+
+            async function getCompanyList(page) {
+                let postData = { page: page }
+
+                let result = await syncAjax("default", "POST", "/production/manage/company/list", postData);
+
+                // 2. 결과 fail 체크
+                let resultChk = syncAjaxFailChk(result);
+                if (!resultChk) return false;
+
+                let companyData = result.data;
+
+                // make list / paging
+                makeCompanyList($("#companyList"), companyData.rows);
+                makeCompanyListPaging($("#companyListPaging"), companyData.paging);
+            }
+
+            function makeCompanyList(target, list) {
+                $(target).html(formatCompanyList(list, 6));
+            }
+
+            function formatCompanyList(list, count) {
+                if (!list) return '<tr class="text-center"><td colspan="' + count + '">데이터가 없습니다</td></tr>';
+
+                let result = '';
+                    for (let el of list) {
+                        var trClass = "";
+                        switch(el.cmpy_approval_stat_cd){
+                            case "AP" : trClass = ""; break;
+                            case "DN" : trClass = "denied"; break;
+                            case "UR" : trClass = "underReview"; break;
+                            default : trClass = ""; break;
+                        }
+                        result += '<tr class="' + trClass + '">';
+                        result += '    <td><a href="/production/manage/company/detail/' + el.cmpy_seq + '" class="px-2 text-primary"><i class="uil uil-location-arrow font-size-18"></i></a></td>';
+                        result += '    <td>' + el.cmpy_ty + '</td>';
+                        result += '    <td>' + el.cmpy_nm + '</td>';
+                        result += '    <td>' + el.cmpy_chrg_nm + '</td>';
+                        result += '    <td>' + el.cmpy_chrg_mail + '</td>';
+                        result += '    <td>' + el.cmpy_chrg_tel + '</td>';
+                        result += '    <td>' + el.cmpy_biz_type + '</td>';
+                        result += '    <td>' + el.cmpy_approval_stat + '</td>';
+                        result += '</tr>';
+                    }
+                return result;
+            }
+
+            function makeCompanyListPaging(target, paging) {
+                $(target).html(formatCompanyListPaging(paging));
+            }
+
+            function formatCompanyListPaging(paging) {
+                if (!paging) return '';
+
+                let result = '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getCompanyList(' + paging.previousPage + ')"><i class="mdi mdi-chevron-left"></i></a></li>';
+                for (let page of paging.pages[paging.page - 1]) {
+                    if(page == paging.currentPage) result += '<li class="page-item active"><a class="page-link">' + page + '</a></li>';
+                    else result += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getCompanyList('+ page +')">' + page + '</a></li>';
+                }
+                result += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getCompanyList(' + paging.nextPage + ')"><i class="mdi mdi-chevron-right"></i></a></li>';
+
+                return result;
+            }
+        </script>
+    </body>
+</html>

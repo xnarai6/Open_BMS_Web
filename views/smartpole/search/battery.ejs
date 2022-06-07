@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('../../layout/meta.ejs') %>
+        <%- include('../../layout/title.ejs') %>
+        <%- include('../../layout/css.ejs') %>
+    </head>
+
+    <body>
+        <div id="layout-wrapper">
+            <%- include('../../layout/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <!-- <%- include('../common/topcard.ejs') %> -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between"><h4 class="mb-0">배터리 조회</h4></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-12 col-md-12 mb-3">
+                                                    <label class="form-label">설치일</label>
+                                                    <div class="input-daterange input-group" id="search_install_dttm" data-date-format="yyyy-mm-dd" data-date-autoclose="true" data-provide="datepicker" data-date-container="#search_install_dttm">
+                                                        <input type="text" class="form-control" id="insStart" name="param" placeholder="Start" readonly>
+                                                        <input type="text" class="form-control" id="insEnd" name="param" placeholder="End" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12 col-md-5 mb-3">
+                                                    <label class="form-label">SOC 범위</label>
+                                                    <div class="input-daterange input-group" id="search_soc_range">
+                                                        <input type="text" class="form-control decimal-point" id="socStart" name="param" placeholder="Start" onkeypress="return isNumberKeyForPercent(event)" onkeyup="return delHangle(event)">
+                                                        <input type="text" class="form-control decimal-point" id="socEnd" name="param" placeholder="End" onkeypress="return isNumberKeyForPercent(event)" onkeyup="return delHangle(event)">
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-5">
+                                                    <label class="form-label">배터리 상태</label>
+                                                    <select class="form-select" id="stat" name="param"></select>
+                                                </div>
+                                                <div class="col-12 col-md-2">
+                                                    <label class="form-label">&nbsp;</label>
+                                                    <button type="button" id="searchBtn" class="btn btn-primary col-12">검색</button>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="row">
+                                                <div class="col-12 d-flex justify-content-center">
+                                                    <button type="button" id="searchBtn" class="btn btn-primary col-12 col-md-2">검색</button>
+                                                </div>
+                                            </div> -->
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table class="table table-centered content-short">
+                                        <thead>
+                                            <tr class="bg-transparent">
+                                                <th>상세</th>
+                                                <th>배터리</th>
+                                                <th>스마트폴</th>
+                                                <th>설치일</th>
+                                                <th>SOC</th>
+                                                <!-- <th>SOH</th> -->
+                                                <th>최종수신일자</th>
+                                                <th>최종수신시간</th>
+                                                <th>상태</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="btryCartList"></tbody>
+                                    </table>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6"><div><p class="mb-sm-0"></p></div></div>
+                                    <div class="col-6"><div class="float-end"><ul class="pagination pagination-rounded mb-sm-0" id="btryCartListPaging"></ul></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <%- include('../../layout/footer.ejs') %>
+            </div>
+        </div>
+
+        <%- include('../../layout/scripts.ejs') %>
+        <script>
+            $(async function() {
+                // 1. code list 가져오기
+                let result = await syncAjax('default', 'POST', '/smartpole/search/battery/code', { });
+
+                // 2. 결과 fail 체크
+                let resultChk = syncAjaxFailChk(result);
+                if (!resultChk) return false;
+
+                // 3. code 저장
+                let codeMap = result.data.codeMap['btry_stat'];
+
+                // 4. code로 select 생성
+                let codeList = Object.keys(codeMap).map(e => {
+                    return {
+                        val: e, 
+                        name: codeMap[e],
+                        class: e == 'DC' ? 'text-primary' : e == 'C' ? 'text-success' : e == 'W' ? 'text-muted' : e == 'I' ? 'text-warning' : 'text-white',
+                    } 
+                });
+                makeBtryStatSelect(true, $('#stat'), codeList);
+
+                // 5. 초기 검색값 설정
+                setFirstValue();
+            });
+
+            //
+            $(document).on('change', '#stat', function(e) {
+                e.preventDefault();
+
+            });
+
+            // 검색 클릭시
+            $('#searchBtn').on('click', function (e) {
+                e.preventDefault();
+
+                // 검색 파라미터 값 data에 저장
+                $('[name="param"]').each(function (i, el) { $(this).data('param', $(this).val()); });
+
+                // 1페이지 검색
+                getBtryList(1);
+            });
+
+            // 초기값 설정
+            function setFirstValue() {
+                let stat = '<%=stat%>';
+                let now = new Date(), nowDt = getNowDtFormat(now);
+                    now.setMonth(now.getMonth() - 6);
+                prevDt = getNowDtFormat(now);
+                
+                $('#insStart').val(prevDt);
+                $('#insEnd').val(nowDt);
+                $('#socStart').val(0);
+                $('#socEnd').val(100);
+                $('#stat').val(stat);
+
+                $('#searchBtn').click();
+            }
+
+            // 배터리 리스트 가져오기
+            async function getBtryList(page) {
+                // 1. 파라미터 저장
+                let param = {
+                    insStart: $('#insStart').data('param'), insEnd: $('#insEnd').data('param'),
+                    socStart: $('#socStart').data('param'), socEnd: $('#socEnd').data('param'),
+                    stat: $('#stat').data('param'),
+                    page: page
+                }
+
+                // 2. 가져오기
+                let result = await syncAjax('default', 'POST', '/smartpole/search/battery/list', param);
+
+                // 3. 결과 fail 체크
+                let resultChk = syncAjaxFailChk(result);
+                if (!resultChk) return false;
+
+                let btryCartData = result.data.btryCartList;
+
+                makeBtryCartList($('#btryCartList'), btryCartData.rows);
+                makeBtryCartListPaging($('#btryCartListPaging'), btryCartData.paging);
+            }
+
+            // 상태 select 생성
+            function makeBtryStatSelect(all, target, list) {
+                $(target).empty();
+                if (all) $(target).append('<option class="text-white" value="all">전체</option>');
+                for (var el of list) $(target).append('<option class="' + el.class + '" value="' + el.val + '">' + el.name + '</option>');
+                $(target).change();
+            }
+
+            // 날짜 벼환
+            function getNowDtFormat(date) {
+                let result = '';
+                    result += date.getFullYear();
+                    result += '-' + ('0' + (1 + date.getMonth())).slice(-2);
+                    result += '-' + ('0' + date.getDate()).slice(-2);
+
+                return  result;
+            }
+
+            // 배터리 리스트 생성
+            function makeBtryCartList(target, list) {
+                $(target).html(formatBtryCartList(list, 8));
+            }
+
+            function formatBtryCartList(list, count) {
+                if (!list) return '<tr class="text-center"><td colspan="' + count + '">데이터가 없습니다</td></tr>';
+
+                let result = '';
+
+                for (let el of list) {
+                    let chk1 = false, statHtml = '<td class="text-warning">점검중</td>';
+                        chk1 = el.cart_stat == 'Y' && el.btry_stat == 'Y' && el.last_biz_dttm != null && moment().diff(moment(el.last_biz_dttm), 'days') <= 0  && el.chrg_stat_cd != null
+
+                    if (chk1 && el.chrg_stat_cd == 'DC') statHtml = '<td class="text-primary">방전중</td>';
+                    if (chk1 && el.chrg_stat_cd == 'C') statHtml = '<td class="text-success">충전중</td>';
+                    if (chk1 && el.chrg_stat_cd == 'W') statHtml = '<td class="text-muted">대기중</td>';
+
+                    result += '<tr>';
+                    result += '    <td><a href="/smartpole/search/battery/' + el.btry_seq + '" class="px-2 text-primary"><i class="uil uil-location-arrow font-size-18"></i></a></td>';
+                    result += '    <td>' + el.btry_nm + '</td>';
+                    result += '    <td>' + el.cart_nm + '</td>';
+                    result += '    <td>' + moment(el.install_dttm).format('YYYY-MM-DD') + '</td>';
+                    result += '    <td>' + el.soc + '</td>';
+                    result += '    <td>' + moment(el.last_biz_dttm).format('YYYY-MM-DD') + '</td>';
+                    result += '    <td>' + moment(el.last_biz_dttm).format('HH:mm:ss') + '</td>';
+                    result += '    ' + statHtml;
+                    result += '</tr>';
+                }
+
+                return result;
+            }
+
+            function makeBtryCartListPaging(target, paging) {
+                $(target).html(formatBtryCartListPaging(paging));
+            }
+
+            function formatBtryCartListPaging(paging) {
+                if (!paging) return '';
+
+                let result = '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getBtryList(' + paging.previousPage + ')"><i class="mdi mdi-chevron-left"></i></a></li>';
+                for (let page of paging.pages[paging.page - 1]) {
+                    if(page == paging.currentPage) result += '<li class="page-item active"><a class="page-link">' + page + '</a></li>';
+                    else result += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getBtryList('+ page +')">' + page + '</a></li>';
+                }
+                result += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getBtryList(' + paging.nextPage + ')"><i class="mdi mdi-chevron-right"></i></a></li>';
+
+                return result;
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,57 @@
+<div class="row">
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card btn-outline-light mb-3" role="button" onclick="location.href='/golf/search/battery?stt=all'">
+            <div class="card-body pt-3 pb-3">
+                <div class="float-end mt-2"><img src="/assets/images/icon-golf-cart.svg" class="card-icon"></div>
+                <div>
+                    <h4 class="mb-1 mt-1 content-short"><%= typeof locals.userInfo != 'undefined' && typeof locals.userInfo.topCartInfo != 'undefined' ? locals.userInfo.topCartInfo.total : 0 %></h4>
+                    <p class="mb-0 content-short">전체 카트</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card btn-outline-light mb-3" role="button" onclick="location.href='/golf/search/battery?stt=DC'">
+            <div class="card-body pt-3 pb-3">
+                <div class="float-end mt-2"><img src="/assets/images/icon-car-steering.svg" class="card-icon"></div>
+                <div>
+                    <h4 class="mb-1 mt-1 text-primary content-short"><%= typeof locals.userInfo != 'undefined' && typeof locals.userInfo.topCartInfo != 'undefined' ? locals.userInfo.topCartInfo.oper : 0 %></h4>
+                    <p class="mb-0 content-short"><span class="text-primary">운행</span> 카트</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card btn-outline-light mb-3" role="button" onclick="location.href='/golf/search/battery?stt=C'">
+            <div class="card-body pt-3 pb-3">
+                <div class="float-end mt-2"><img src="/assets/images/icon-car-waiting.svg" class="card-icon"></div>
+                <div>
+                    <h4 class="mb-1 mt-1 content-short">
+                        <span class="text-success">
+                            <%= typeof locals.userInfo != 'undefined' && typeof locals.userInfo.topCartInfo != 'undefined' ? locals.userInfo.topCartInfo.chrg : '0' %>
+                        </span>
+                        /
+                        <span class="text-muted">
+                            <%= typeof locals.userInfo != 'undefined' && typeof locals.userInfo.topCartInfo != 'undefined' ? locals.userInfo.topCartInfo.wait : '0' %>
+                        </span>
+                    </h4>
+                    <p class="mb-0 content-short">
+                        <span class="text-success">충전</span>
+                        /
+                        <span class="text-muted">대기</span> 카트</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card btn-outline-light mb-3" role="button" onclick="location.href='/golf/search/battery?stt=I'">
+            <div class="card-body pt-3 pb-3">
+                <div class="float-end mt-2"><img src="/assets/images/icon-car-repairing.svg" class="card-icon"></div>
+                <div>
+                    <h4 class="mb-1 mt-1 text-warning content-short"><%= typeof locals.userInfo != 'undefined' && typeof locals.userInfo.topCartInfo != 'undefined' && typeof locals.userInfo.topCartInfo.insp != 'undefined' ? locals.userInfo.topCartInfo.insp : 0 %></h4>
+                    <p class="mb-0 content-short"><span class="text-warning">점검</span> 카트</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

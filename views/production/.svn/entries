@@ -1,0 +1,55 @@
+10
+
+dir
+380
+svn://211.254.214.135/openBMS/views/production
+svn://211.254.214.135/openBMS
+
+
+
+2021-10-05T00:27:28.356835Z
+375
+leh
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+b90a72ea-475e-4844-89f0-3b35cf0bb6de
+
+log
+dir
+
+analysis
+dir
+
+search
+dir
+
+dashboard
+dir
+
+common
+dir
+
+manage
+dir
+
+report
+dir
+
+alarm
+dir
+
+account
+dir
+

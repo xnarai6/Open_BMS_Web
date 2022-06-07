@@ -1,0 +1,64 @@
+10
+
+dir
+380
+svn://211.254.214.135/openBMS/views/system
+svn://211.254.214.135/openBMS
+
+
+
+2021-07-01T07:01:56.288474Z
+297
+leh
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+b90a72ea-475e-4844-89f0-3b35cf0bb6de
+
+asset
+dir
+
+log
+dir
+
+ccms
+dir
+
+bbs
+dir
+
+analytics
+dir
+
+dashboard
+dir
+
+common
+dir
+
+location
+dir
+
+error
+dir
+
+report
+dir
+
+support
+dir
+
+setting
+dir
+

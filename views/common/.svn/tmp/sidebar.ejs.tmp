@@ -1,0 +1,194 @@
+<!-- ========== Left Sidebar Start ========== -->
+<div class="vertical-menu">
+
+    <!-- LOGO -->
+    <div class="navbar-brand-box">
+        <a href="/dashboard" class="logo logo-dark">
+            <span class="logo-sm">
+                <img src="/assets/images/logo-sm.png" alt="" height="22">
+            </span>
+            <span class="logo-lg">
+                <img src="/assets/images/logo-dark.png" alt="" height="20">
+            </span>
+        </a>
+
+        <a href="/dashboard" class="logo logo-light">
+            <span class="logo-sm">
+                <img src="/assets/images/logo-sm.png" alt="" height="22">
+            </span>
+            <span class="logo-lg">
+                <img src="/assets/images/logo-light.png" alt="" height="20">
+            </span>
+        </a>
+    </div>
+
+    <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect vertical-menu-btn">
+        <i class="fa fa-fw fa-bars"></i>
+    </button>
+
+    <div data-simplebar class="sidebar-menu-scroll">
+
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
+            <!-- Left Menu Start -->
+            <ul class="metismenu list-unstyled" id="side-menu">
+                <li class="menu-title">Menu</li>
+
+                <li>
+                    <a href="/dashboard">
+                      <!--  <i class="uil-home-alt"></i><span class="badge rounded-pill bg-primary float-end">01</span>-->
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="uil-file-alt"></i>
+                        <span>보고서</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+
+                        <li><a href="/report/daily">일별 보고서</a></li>
+                        <li><a href="/report/weekly">주간 보고서</a></li>
+                        <li><a href="/report/monthly">월간 보고서</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="uil-chart-line"></i>
+                        <span>로그</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="/log/realtimelog">실시간 모니터링</a></li>                     
+                    </ul>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="/log/realtimedatalog">실시간 데이터 모니터링</a></li>                     
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="uil-window-section"></i>
+                        <span>분석</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="/analytics/health">기기별 건강상태 분석</a></li>                     
+                    </ul>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="/analytics/analytics">과거데이터비교 분석</a></li>                     
+                    </ul>
+                </li>
+
+                <li class="menu-title">자산관리</li>
+
+                <li>
+                    <a href="/asset/assetlocation" class="waves-effect">
+                        <i class="uil-folder-check"></i>
+                        <span>자산관리</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/asset/assethistory" class="waves-effect">
+                        <i class="uil-files-landscapes"></i>
+                        <span>점검이력조회</span>
+                    </a>
+                </li>
+
+                <li class="menu-title">설정</li>
+
+                <li>
+                    <a href="/setting/acnt" class="waves-effect">
+                        <i class="uil-user-circle"></i>
+                        <span>사용자관리</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="uil-circuit"></i>
+                        <span>자원관리</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="/setting/mgtmodule">모듈관리</a></li>
+                        <li><a href="/setting/mgtbattery">배테리관리</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="/setting/mgtlocation" class="waves-effect">
+                        <i class="fas fa-campground"></i>
+                        <span>설치장소관리</span>
+                    </a>                    
+                </li>
+                <li>
+                    <a href="/setting/alarmsetup" class="has-arrow waves-effect">
+                        <i class="dripicons-alarm"></i>
+                        <span>알람설정</span>
+                    </a>                    
+                </li>
+
+                <li class="menu-title">게시판</li>
+
+                <li>
+                    <a href="/bbs/faq" class="has-arrow waves-effect">
+                        <i class="dripicons-question"></i>
+                        <span>FAQ</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/bbs/qna" class="has-arrow waves-effect">
+                        <i class="dripicons-question"></i>
+                        <span>QnA</span>
+                    </a>
+                </li>
+                
+
+                <% if(locals.userInfo != null && locals.userInfo.cmpy_biz_type == 50) { %>
+                <li class="menu-title">Go-Cart</li>
+                <li>
+                    <a href="/ccms/cart/list" class="has-arrow waves-effect">
+                     
+                        <i class="uil-flask"></i>
+                        <span>카트현황</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/ccms/cors/stat" class="has-arrow waves-effect">
+                        <i class="uil-flask"></i>
+                        <span>카트코스관리</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/ccms//mng/cc/ccList" class="has-arrow waves-effect">
+                            <i class="uil-flask"></i>
+                        <span>골프장정보</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/ccms/mng/cc/corsList" class="has-arrow waves-effect">
+                           <i class="uil-flask"></i>
+                        <span>코스목록</span>
+                    </a>
+                </li>
+                <% } %>
+
+                <li class="menu-title">부가서비스</li>
+
+                <li>
+                    <a href="http://14.63.174.168:8881/" target="_blank" class="has-arrow waves-effect">
+                        <i class="uil-streering"></i>
+                        <span>OpenCart</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="http://14.63.174.168/account/UI_010"  target="_blank" class="has-arrow waves-effect">
+                        <i class="uil-wifi-router"></i>
+                        <span>원격검침</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+        <!-- Sidebar -->
+    </div>
+</div>
+<!-- Left Sidebar End -->

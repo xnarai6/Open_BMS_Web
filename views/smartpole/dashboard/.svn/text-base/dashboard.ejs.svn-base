@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('../../layout/meta.ejs') %>
+        <%- include('../../layout/title.ejs') %>
+        <%- include('../../layout/css.ejs') %>
+        <style>
+            .collapse-btn,.collapse-btn label {
+                cursor: pointer;
+            }
+
+            .collapse-btn:after {
+                font-family: unicons-line;
+                content: '\eb3a';
+            }
+
+            .collapse-btn.active:after {
+                font-family: unicons-line;
+                content: '\eb56';
+            }
+
+            .collapse-btn:hover, .collapse-btn.active {
+                color: #5b73e8;
+            }
+
+            .overlaybox {
+                background-color: white;
+                font-size: 10px;
+                padding: 3px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="layout-wrapper">
+            <%- include('../../layout/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <!-- <%- include('../common/topcard.ejs') %> -->
+                        <div class="row">
+                            <div class="col-lg-9 col-sm-12 d-none d-md-block">
+                                <div class="card">
+                                    <div class="card-body p-3">
+                                        <!-- <div class="row">
+                                            <div class="col-xl-1 col-md-2 align-self-center mb-3">코스</div>
+                                            <div class="col-xl-5 col-md-4 mb-3"><select class="form-control form-select-sm" id="corsSelect"></select></div>
+                                            <div class="col-xl-1 col-md-2 align-self-center mb-3">홀</div>
+                                            <div class="col-xl-5 col-md-4 mb-3"><select class="form-control form-select-sm" id="holeSelect"></select></div>
+                                        </div> -->
+                                        <div id="map" class="daum-map mt-32"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12" id="corsList"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <%- include('../../layout/footer.ejs') %>
+            </div>
+        </div>
+
+        <%- include('../../layout/scripts.ejs') %>
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=83169544a26ef99b993902c5f8597485"></script>
+        <script>
+            let data, cartData, map, cartInfoArray = [], firstCardOpen = false;
+
+            let linePathList = [
+            ]
+
+            $(async function() {
+                // 0. 데이터 가져오기
+                let result1 = await syncAjax("default", "POST", "/smartpole/dashboard/info", {});
+                data = result1.data;
+
+                // 0. 카트 데이터 가져오기
+                let result2 = await syncAjax("default", "POST", "/smartpole/dashboard/info/cart", {});
+                cartData = result2.data;
+
+                // 1. cors select 생성
+                makeSelect($('#corsSelect'), data.corsList.map(e => { return { val: e.cors_seq, name: e.cors_nm } }));
+
+                // 2. cors list 생성
+                makeCorsCard($('#corsList'), data.corsList.map(e => { return { val: e.cors_seq, name: e.cors_nm } }));
+
+                // 1. 현재 위치 좌표
+                var lat = data.ccInfo.lat, lon = data.ccInfo.lon;
+
+                // 2. 지도 셋업
+                var container = document.getElementById('map');
+                var options = { center: new kakao.maps.LatLng(lat, lon), level: 4, disableDoubleClickZoom: true };
+
+                // 3. 지도 생성
+                map = new kakao.maps.Map(container, options);
+                map.setMaxLevel(5);
+                map.setZoomable(false);
+                map.setDraggable(false);
+				
+
+                // 지도 오른쪽에 줌 컨트롤이 표시되도록 지도에 컨트롤을 추가한다.
+                map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT);
+
+                // test. 지도 클릭 이벤트(좌표 가져오기)
+                /*var marker2 = new kakao.maps.Marker({ position: new kakao.maps.LatLng(lat, lon) });
+                    marker2.setMap(map);
+                kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+                    var latLon = mouseEvent.latLng;
+                    marker2.setPosition(latLon);
+                    console.log('' + latLon.getLat() + ',' + latLon.getLng() + '');
+                });*/
+
+                // test. 선그리기
+                // linePathList = linePathList.filter(e => e.key >= 20210728124819224 && e.key <= 20210728170810284)
+                // linePathList = linePathList.filter(e => e.key <= 20210725082330268)
+                /* var polyline = new kakao.maps.Polyline({
+                    path: linePathList.map(e => new kakao.maps.LatLng(e.lat, e.lon)), // 선을 구성하는 좌표배열 입니다
+                    strokeWeight: 1, // 선의 두께 입니다
+                    strokeColor: '#FFAE00', // 선의 색깔입니다
+                    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                    strokeStyle: 'solid' // 선의 스타일입니다
+                });
+                polyline.setMap(map);  */
+
+
+                // 4. 카트 마커 및 오버레이 생성
+                let cartInfoList = cartData.cartBtryList.map(e1 => {
+                    // 1. 카트 위치, 마커, 오버레이 생성
+                    let cartPosition = new kakao.maps.LatLng(e1.lat, e1.lon);
+                    let marker = new kakao.maps.Marker({ position: cartPosition });
+                    let overlay = new kakao.maps.CustomOverlay({ position : cartPosition, yAnchor: 1.8, content : formatCartOverlay(e1.name, e1.soc) });
+
+                    // 2. 마커, 오버레이 array에 추가
+                    cartInfoArray.push({ cartSeq: e1.cart_seq, marker: marker, overlay: overlay });
+
+                    // 3. 마커, 오버레이 표시
+                    marker.setMap(map);
+                    overlay.setMap(map);
+                });
+
+                // 5. 카트정보 갱신
+                reloadCartInfo();
+
+                // 홀 위치 그리기
+                let tColor = ['#FF0000', '#00FF00', '#0000FF', '#000000'];
+                let index = 0;
+                data.holeList.map(e2 => {
+                    if (e2.view_yn == 'Y') {
+                        let holeLocList = data.holeLocList.filter(e3 => e2.hole_seq == e3.hole_seq);
+                        new kakao.maps.Polygon(makePolygon(tColor[index], holeLocList)).setMap(map)
+
+                        index = (index + 1) % tColor.length;
+                    }
+                });
+            });
+
+            // cors select 변경 이벤트
+            $('#corsSelect').on('change', function(e) {
+                // 1. cors seq 가져오기
+                let corsSeq = $(this).val();
+
+                // 2. cors seq별 name 생성
+                let corsNameObject = {}
+                data.corsList.map(e => corsNameObject[e.cors_seq] = e.cors_nm);
+                
+                // 3. hole list 생성
+                let holeList = [];
+                if (corsSeq == 'all') holeList = data.holeList.map(e => { return { val: e.hole_seq, name: corsNameObject[e.cors_seq] + ' - ' + e.hole_nm + '(METER: ' + e.hole_meter + ' / PAR: ' + e.hole_par + ')' } });
+                if (corsSeq != 'all') holeList = data.holeList.filter(e => e.cors_seq == Number(corsSeq)).map(e => { return { val: e.hole_seq, name: corsNameObject[e.cors_seq] + ' - ' + e.hole_nm + '(METER: ' + e.hole_meter + ' / PAR: ' + e.hole_par + ')' } });
+
+                // 4. hole select 생성
+                makeSelect($('#holeSelect'), holeList);
+            });
+
+            // hole select 변경 이벤트
+            $('#holeSelect').on('change', function(e) {
+                // 1. hole seq 가져오기
+                let holeSeq = $(this).val(), corsSeq = $('#corsSelect').val();
+                let lat, lon, level;
+
+                // 2. select 상태 별 지도 이동 및 지도 level 설정
+                if (holeSeq == 'all' && corsSeq == 'all') ({lat: lat, lon: lon, level = 4} = data.ccInfo);
+                if (holeSeq == 'all' && corsSeq != 'all') ({lat: lat, lon: lon, level = 3} = data.corsList.find(e => e.cors_seq == corsSeq));
+                if (holeSeq != 'all') ({lat: lat, lon: lon, level = 2} = data.holeList.find(e => e.hole_seq == holeSeq));
+
+                // 3. 지도 이동
+                moveMap(lat, lon, level);
+            });
+
+            // cart collapse 버튼 이벤트
+            $(document).on('click', '.collapse-btn', function() { $('.collapse').collapse('hide'); if (!$(this).next('.collapse').hasClass('show')) $(this).next('.collapse').collapse('show'); });
+            $(document).on('show.bs.collapse', '.collapse', function() { $(this).prev('.collapse-btn').addClass('active'); });
+            $(document).on('hide.bs.collapse', '.collapse', function() { $(this).prev('.collapse-btn').removeClass('active'); });
+
+            // 카트 클릭 이동
+            $(document).on('click', '[name="cart-card"]', function(e) {
+                e.preventDefault();
+
+                location.href = '/smartpole/search/battery/' + $(this).data('btry');
+            });
+
+            // 다각형 생성
+            function makePolygon(color, locationArray) {
+                let result = {
+                    strokeColor: color,
+                    path: locationArray.map(e => new kakao.maps.LatLng(e.lat, e.lon)),
+                    strokeWeight: 3, strokeOpacity: 0.8, strokeStyle: 'longdash',
+                    fillColor: color, fillOpacity: 0.7
+                }
+
+                return result
+            }
+
+            // 전체가 포함된 select 생성
+            function makeSelect(target, list) {
+                $(target).empty();
+                $(target).append('<option value="all">전체</option>');
+                for (var el of list) $(target).append('<option value="' + el.val + '">' + el.name + '</option>');
+                $(target).change();
+            }
+
+            // 지도 이동
+            function moveMap(lat, lon, level) {
+                if (map) {
+                    map.setLevel(level);
+                    map.panTo(new kakao.maps.LatLng(lat, lon));
+                }
+            }
+
+            // 우측 코스 생성
+            function makeCorsCard(target, list) {
+                let result = formatCorsCard('점검/대기중');
+                for (let el of list) result += formatCorsCard(el.name, el.val);
+                $(target).html(result);
+            }
+
+            // 우측 코스 포맷
+            function formatCorsCard(name, val) {
+                let result = '';
+                    result += '<div class="card">';
+                    result += '    <div class="card-body">';
+                    result += '        <div class="d-flex justify-content-between collapse-btn"><label class="form-label mb-0">' + name + '</label></div>';
+                    result += '        <div class="collapse" name="cartList" data-cors="' + (val ? val : 0) + '"></div>';
+                    result += '    </div>';
+                    result += '</div>';
+
+                return result;
+            }
+
+            // 위치정보 갱신
+            async function reloadCartInfo() {
+                let r = await syncAjax("default", "POST", "/smartpole/dashboard/info/cart", {});
+                let d = r.data;
+
+                // 1. 위치정보 갱신
+                cartInfoArray.map(e => {
+                    let cartInfo = d.cartBtryList.find(e2 => e.cartSeq == e2.cart_seq);
+
+                    if (cartInfo) {
+                        let cartPosition = new kakao.maps.LatLng(cartInfo.lat, cartInfo.lon);
+
+                        e.marker.setPosition(cartPosition);
+                        e.overlay.setPosition(cartPosition);
+                    }
+                });
+
+                // 2. 우측 카드 생성
+                $('[name="cartList"]').each(function (i, el) { $(el).html(''); });
+                d.cartBtryList.map(e1 => {
+                    // 1. 카트 위치, 마커, 오버레이 생성
+                    let cartLoc = { lat: Number(e1.lat), lon: Number(e1.lon) }
+                    
+                    // 2. 다각형에 속하는 홀 정보 가져오기
+                    let holeInfo = data.holeList.find(e2 => checkPolygonInside(cartLoc, data.holeLocList.filter(e3 => e2.hole_seq == e3.hole_seq)));
+
+                    // 3. 카트 카드 생성
+                    let cartCard = '';
+                    if (holeInfo) cartCard = formatCartCard(holeInfo.hole_nm, e1.name, e1.soc, e1.btry_seq);
+                    else cartCard = formatCartCard('pole', e1.name, e1.soc, e1.btry_seq);
+
+                    $('[name="cartList"]').each(function (i, el) {
+                        if ($(el).data('cors') == (holeInfo ? holeInfo.cors_seq : 0)) {
+                            $(el).append(cartCard);
+
+                            if (!firstCardOpen && !$(el).hasClass('show')) {
+                                $(el).collapse('show');
+                                firstCardOpen = true;
+                            }
+                        }
+                    });
+                });
+
+                // 주기별 호출
+                setTimeout("reloadCartInfo()", 10000);
+            }
+
+            // 우측 코스별 카트 포맷
+            function formatCartCard(hole, cart, soc, seq) {
+                let result = '';
+                    result += '<div class="d-flex mt-3 btn btn-outline-light" name="cart-card" data-btry="' + seq + '">';
+                    result += '    <div class="avatar-sm me-4"><span class="avatar-title bg-soft-primary rounded-circle font-size-14">' + hole + '</span></div>';
+                    result += '    <div class="overflow-hidden">';
+                    result += '        <p class="text-truncate m-0">CART: ' + cart + '</p>';
+                    result += '        <p class="text-truncate m-0">SOC: ' + (soc == null ? '?' : soc + '%') + '</p>';
+                    // result += '        <p class="text-truncate m-0">운행가능시간: 2시간30분</p>';
+                    result += '    </div>';
+                    result += '</div>';
+
+                return result;
+            }
+
+            // 지도 카트 오버레이 포맷
+            function formatCartOverlay(cart, soc) {
+                let result = '';
+                    result += '<div class="overlaybox">';
+                    result += '    ' + cart + '<br>';
+                    result += '    ' + (soc == null ? '?' : soc + '%');
+                    result += '</div>';
+
+                return result;
+            }
+
+            // 다각형 내 점 위치하는지 확인
+            function checkPolygonInside(cartLoc, holeLocList) {
+                // 1. 교차점 개수
+                let crosses = 0;
+
+                // 2. i: 첫번째 위치 / j: 두번째 위치
+                for (let i = 0; i < holeLocList.length; i++) {
+                    let j = (i + 1) % holeLocList.length;
+
+                    let aY = Number(holeLocList[i].lat), aX = Number(holeLocList[i].lon);
+                    let bY = Number(holeLocList[j].lat), bX = Number(holeLocList[j].lon);
+
+                    // 3. 카트 Y(위도) 위치가 첫번째와 두번째 Y(위도) 사이에 있는 경우
+                    if ((aY > cartLoc.lat) != (bY > cartLoc.lat)) {
+                        // 4. 교점의 X(경도) 구하기
+                        let crossLon = (bX - aX) * (cartLoc.lat - aY) / (bY - aY) + aX;
+
+                        // 5. 교점의 X(경도)가 카트의 X(경도) 보다 큰지 확인
+                        if (cartLoc.lon < crossLon) crosses++;
+                    }
+                }
+
+                // 6. 교점 개수가 홀수인지 확인
+                return crosses % 2 > 0
+            }
+        </script>
+    </body>
+</html>

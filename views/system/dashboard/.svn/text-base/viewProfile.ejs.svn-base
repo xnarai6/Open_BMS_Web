@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+    </head>
+
+    <body >
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+          
+
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">                      
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">프로필 보기</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item active"></li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-xl-6" style="margin: 0 auto;">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="text-center">
+                                            <div class="clearfix"></div>
+                                            <h5 class="mt-3 mb-1"><%=acntInfo[0].acnt_id%></h5>
+                                            <p class="text-muted"><%
+                                                for(var i in roleList){
+                                                    if(roleList[i].cd == acntInfo[0].acnt_role){
+                                                        %><%=roleList[i].cd_desc%><%
+                                                        break;
+                                                    }
+                                                }
+                                            %> </p>
+
+                                            <div class="mt-4">
+                                                <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#pwModModal"><i class="uil uil-envelope-alt me-2"></i>비밀번호 변경</button>
+                                            </div>
+                                        </div>
+
+                                        <hr class="my-4">
+
+                                        <div class="text-muted">
+                                            <div class="table-responsive mt-4">
+                                                <div>
+                                                    <p class="mb-1">아이디 :</p>
+                                                    <h5 class="font-size-16"><%=acntInfo[0].acnt_id%></h5>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">이름 :</p>
+                                                    <h5 class="font-size-16"><%=acntInfo[0].acnt_nm%></h5>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">사용자 권한 :</p>
+                                                    <h5 class="font-size-16">
+                                                        <%
+                                                            for(var i in roleList){
+                                                                if(roleList[i].cd == acntInfo[0].acnt_role){
+                                                                    %><%=roleList[i].cd_desc%><%
+                                                                    break;
+                                                                }
+                                                            }
+                                                        %>  
+                                                    </h5>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">회사타입 :</p>
+                                                    <h5 class="font-size-16">
+                                                        <%
+                                                            for(var i in cmpyTyList){
+                                                                if(cmpyTyList[i].cd == acntInfo[0].cmpy_ty_cd){
+                                                                    %><%=cmpyTyList[i].cd_desc%><%
+                                                                    break;
+                                                                }
+                                                            }
+                                                        %> 
+                                                    </h5>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <p class="mb-1">회사명 :</p>
+                                                    <h5 class="font-size-16">
+                                                        <%=acntInfo[0].cmpy_nm%>   
+                                                    </h5>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('./pwModModal.ejs') %>
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+
+        <script src="/attach/js/common.js"></script>
+
+        <script>
+
+            //패스워드 형식 검사
+            $("#new_pw").on('keyup', function() {
+
+                if(!valCheck("password", $("#new_pw").val())) {
+                    $("#passwordCheck").html("&nbsp;&nbsp;비밀번호 형식이 올바르지 않습니다.<br>&nbsp;&nbsp;(영문,숫자,특수기호 포함 8~16자)");
+                }else{
+                    $("#passwordCheck").html("");
+                }
+
+            });
+
+            //패스워드 동일한지 여부 검사
+            $("#new_pw_check").on('keyup', function() {
+
+            if(!($("#new_pw").val() == $("#new_pw_check").val())){
+                $("#passwordCheck2").html("&nbsp;&nbsp;비밀번호가 일치하지 않습니다.");
+            }else{
+                    $("#passwordCheck2").html("");
+                }
+
+            });
+
+            $("#pwModBtn").on("click", function() {
+
+                if(!valCheck("is", $("#current_pw").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","비밀번호를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#new_pw").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","비밀번호를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#new_pw_check").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","비밀번호를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("password", $("#new_pw").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","비밀번호를 형식이 올바르지 않습니다.<br>(영문,숫자,특수기호 포함 8~16자)"));
+                    return false;
+                }
+                if(!valCheck("is", $("#new_pw_check").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","비밀번호 확인 입력해주십시오"));
+                    return false;
+                }
+                if(!($("#new_pw").val() == $("#new_pw_check").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","비밀번호가 일치하지 않습니다."));
+                    return false;
+                }
+
+                let postData = {
+                    current_pw: $("#current_pw").val(),
+                    new_pw: $("#new_pw").val(),
+                    new_pw_check: $("#new_pw_check").val()
+                }
+
+                let result1 = syncAjax("POST", "/system/dashboard/postCheckCurrentPw", postData);
+
+                if(result1.status == 'FAIL') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning",result1.msg));
+                    return false;
+                }
+                    
+                let result2 = syncAjax("POST", "/system/dashboard/postPwModComplete", postData);
+
+                if(result2.status == 'FAIL') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("error",result2.msg)).then((errorResult) => {
+                        window.location.reload();
+                    });
+                }else{
+                    swalWithBootstrapButtons.fire(makeAlertObj("success",result2.msg)).then((successResult) => {
+                        window.location.reload();
+                    });
+                }
+
+            });
+
+        </script>
+
+    </body>
+
+ 
+     
+</html>

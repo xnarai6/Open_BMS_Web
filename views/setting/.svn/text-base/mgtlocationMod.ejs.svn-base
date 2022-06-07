@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link href="/attach/css/addrlinkSample.css" rel="stylesheet" type="text/css">
+        <link href="/attach/css/multi-select.css" media="screen" rel="stylesheet" type="text/css">
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+
+    </head>
+
+    <body >
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+          
+
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">                      
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">설치장소 수정</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <button class="btn btn-primary" type="submit"  onclick="location.href='/setting/mgtlocation'">List</button>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">위치명</label>
+                                                    <div>
+                                                        <input type="hidden" id="loc_seq" value="<%=locInfo[0].loc_seq%>">
+                                                        <input type="text" class="form-control" placeholder="" id="loc_nm" value="<%=locInfo[0].loc_nm%>" maxlength="19"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                <label class="form-label">회사명</label>
+                                                    <select class="form-control form-select" id="cmpy_seq" name="cmpy_seq">
+                                                        <option value="-1">선택</option>
+                                                            <%
+                                                                for(var i in cmpy_list){
+                                                                    if(locInfo[0].cmpy_seq == cmpy_list[i].cmpy_seq){
+                                                                        %><option value="<%=cmpy_list[i].cmpy_seq%>" selected="selected"><%=cmpy_list[i].cmpy_nm%></option><%
+                                                                        continue;
+                                                                    }
+                                                                    %><option value="<%=cmpy_list[i].cmpy_seq%>"><%=cmpy_list[i].cmpy_nm%></option><%
+                                                                }
+                                                            %>                                                                                                                             
+                                                    </select>        
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">주소</label>
+                                                    <input type="hidden" id="siNm" name="siNm">
+                                                    <input type="hidden" id="sggNm" name="sggNm">
+                                                    <input type="hidden" id="emdNm" name="emdNm">
+                                                    <input type="hidden" id ="loc_weather_code" name="loc_weather_code" value="<%=locInfo[0].loc_weather_code%>">
+                                                    <div class="input-group" id="input-group1">
+                                                            <input type="text" class="form-control" id="loc_addr1" maxlength="99" value="<%=locInfo[0].loc_addr1%>" readonly="readonly">
+        
+                                                            <span class="input-group-button">
+                                                                <button type="button" id="searchAddr" class="btn btn-secondary btn-md waves-effect waves-light me-1" onclick="javascript:goPopup();">
+                                                                    주소검색
+                                                                </button>
+                                                            </span>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">상세주소</label>
+                                                    <div>
+                                                        <input type="text" class="form-control" placeholder="" id="loc_addr2" value="<%=locInfo[0].loc_addr2%>" maxlength="99"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">위치 위도</label>
+                                                    <div>
+                                                        <input type="text" class="form-control" placeholder="" id="loc_lat" value="<%=locInfo[0].loc_lat%>" maxlength="42"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">위치 경도</label>
+                                                    <div>
+                                                        <input type="text" class="form-control" placeholder="" id="loc_lon" value="<%=locInfo[0].loc_lon%>" maxlength="42"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                <label class="form-label">배터리 목록</label>
+                                                    <select class="form-control form-select" id="btry_seq_arr" name="btry_seq_arr" multiple="multiple">
+                                                            <%
+                                                                for(var i in loc_btry_list){
+                                                                    %><option value="<%=loc_btry_list[i].btry_seq%>" selected="selected" name="btry_seq_arr_option"><%=loc_btry_list[i].btry_nm%></option><%
+                                                                }
+                                                                for(var i in btry_list){
+                                                                    %><option value="<%=btry_list[i].btry_seq%>" name="btry_seq_arr_option"><%=btry_list[i].btry_nm%></option><%
+                                                                }
+                                                            %>                                                                                                                             
+                                                    </select>        
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">등록자</label>
+                                                    <div>
+                                                        <input type="text" class="form-control" placeholder="" id="ins_nm" value="<%=locInfo[0].ins_nm%>" readonly="readonly"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">등록일시</label>
+                                                    <div>
+                                                        <input type="text" class="form-control" placeholder="" id="ins_dttm" value="<%=locInfo[0].ins_dttm%>" readonly="readonly"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">변경자</label>
+                                                    <div>
+                                                        <input type="text" class="form-control" placeholder="" id="upd_nm" value="<%=locInfo[0].upd_nm%>" readonly="readonly"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">변경일시</label>
+                                                    <div>
+                                                        <input type="text" class="form-control" placeholder="" id="upd_dttm" value="<%=locInfo[0].upd_dttm%>" readonly="readonly"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div>
+                                                <button type="button" id="mgtlocationModBtn" class="btn btn-primary waves-effect waves-light me-1">
+                                                    Submit
+                                                </button>
+                                                <button type="button" class="btn btn-secondary waves-effect" onclick="javascript:location.reload();">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+
+        <script src="/attach/js/common.js"></script>
+        <script src="/attach/js/jquery.multi-select.js"></script>
+
+        <script>
+
+        $('#btry_seq_arr').multiSelect({
+            selectableHeader: "<div class='custom-header'>선택가능한 배터리</div>",
+            selectionHeader: "<div class='custom-header'>등록된 배터리</div>"
+        });
+
+        function goPopup(){
+            var pop = window.open("/setting/jusoPopup","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
+        }
+        $("#mgtlocationModBtn").on("click", function() {
+
+            if(!valCheck("is", $("#loc_nm").val())) {
+                swalWithBootstrapButtons.fire(makeAlertObj("warning"," 위치명을 입력해주십시오"));
+                return false;
+            }
+            if(!valCheck("is", $("#cmpy_seq").val())) {
+                swalWithBootstrapButtons.fire(makeAlertObj("warning"," 회사를 선택해주십시오"));
+                return false;
+            }
+            if(!valCheck("is", $("#loc_addr1").val())) {
+                swalWithBootstrapButtons.fire(makeAlertObj("warning"," 위치주소를 입력해주십시오"));
+                return false;
+            }
+            if(!valCheck("is", $("#loc_addr2").val())) {
+                
+            }
+            if(!valCheck("is", $("#loc_lat").val())) {
+                swalWithBootstrapButtons.fire(makeAlertObj("warning"," 위치 위도 입력해주십시오"));
+                return false;
+            }
+            if(!valCheck("is", $("#loc_lon").val())) {
+                swalWithBootstrapButtons.fire(makeAlertObj("warning"," 위치 경도를 입력해주십시오"));
+                return false;
+            }
+
+            var btry_seq_arr = $("#btry_seq_arr").val();
+            var post_btry_seq_arr = JSON.stringify(btry_seq_arr);
+
+            let postData = {
+                loc_seq: $("#loc_seq").val(),
+                loc_nm: $("#loc_nm").val(),
+                cmpy_seq: $("#cmpy_seq").val(),
+                loc_addr1: $("#loc_addr1").val(),
+                loc_addr2: $("#loc_addr2").val(),
+                loc_lon: $("#loc_lon").val(),
+                loc_lat: $("#loc_lat").val(),
+                siNm: $("#siNm").val(),
+                sggNm: $("#sggNm").val(),
+                emdNm: $("#emdNm").val(),
+                loc_weather_code : $("loc_weather_code").val(),
+                post_btry_seq_arr : post_btry_seq_arr
+            }
+                
+            let result = syncAjax("POST", "/setting/mgtlocation/mod/complete", postData);
+
+            if(result.status == 'FAIL') {
+                swalWithBootstrapButtons.fire(makeAlertObj("error",result.msg)).then((errorResult) => {
+                    var url = result.url;
+                    $(location).attr('href',url);
+                });
+            }else{
+                swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                    var url = result.url;
+                    $(location).attr('href',url);
+                });
+            }
+
+            });
+            function jusoCallBack(roadAddr1,roadAddr2,entX,entY,siNm,sggNm,emdNm){
+
+                $("#loc_addr1").val(roadAddr1);
+                $("#loc_addr2").val(roadAddr2);
+                $("#loc_lon").val(entX);
+                $("#loc_lat").val(entY);
+                $("#siNm").val(siNm);
+                $("#sggNm").val(sggNm);
+                $("#emdNm").val(emdNm);
+
+            }
+        </script>
+
+    </body>
+
+ 
+     
+</html>

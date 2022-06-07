@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('../../layout/meta.ejs') %>
+        <%- include('../../layout/title.ejs') %>
+        <%- include('../../layout/css.ejs') %>
+    </head>
+
+    <body>
+        <div id="layout-wrapper">
+            <%- include('../../layout/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <%- include('../../layout/dashForProduction.ejs') %>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between"><h4 class="mb-0">종류별 조회</h4></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-lg">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 종류</label>
+                                                        <select class="form-control form-select" id="search_btry_ty">
+                                                            <option value="all" selected="selected">전체</option>
+                                                            <%
+                                                                for(var i in btry_ty_list){
+                                                                    %><option value="<%=btry_ty_list[i].btry_type_cd%>"><%=btry_ty_list[i].btry_type%></option><%
+                                                                }
+                                                            %>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg">
+                                                    <div class="mb-3">
+                                                    <label class="form-label">생산일</label>
+                                                    <div class="input-daterange input-group" id="search_prd_dttm" data-date-format="yyyymmdd" data-date-autoclose="true" data-provide="datepicker" data-date-container="#search_prd_dttm">
+                                                        <input type="text" class="form-control" name="start" id="prd_start_date" placeholder="Start Date" value="">
+                                                        <input type="text" class="form-control" name="end" id="prd_end_date" placeholder="End Date">
+                                                    </div>
+                                                </div>
+                                                </div> 
+                                                <div class="col-lg">
+                                                    <div class="mb-3">
+                                                    <label class="form-label">설치일</label>
+                                                    <div class="input-daterange input-group" id="search_install_dttm" data-date-format="yyyymmdd" data-date-autoclose="true" data-provide="datepicker" data-date-container="#search_install_dttm">
+                                                        <input type="text" class="form-control" name="start" id="install_start_date" placeholder="Start Date">
+                                                        <input type="text" class="form-control" name="end" id="install_end_date" placeholder="End Date">
+                                                    </div>
+                                                </div>
+                                                </div> 
+                                                <div class="col-lg">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">SOC 구간</label>
+                                                        <div class="input-group" id="search_soc_range">
+                                                            <input type="text" class="form-control" name="search_soc_range_start" id="search_soc_range_start" placeholder="SOC 시작" onkeypress="return isNumberKeyForPercent(event)" onkeyup="return delHangle(event)">
+                                                            <input type="text" class="form-control" name="search_soc_range_end" id="search_soc_range_end" placeholder="SOC 끝" onkeypress="return isNumberKeyForPercent(event)" onkeyup="return delHangle(event)">
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class="col-lg-6">
+                                                    <div class="d-flex flex-row-reverse align-items-center mt-4" style="width: 100%;">
+                                                    <button type="button" id="searchBtn" class="btn btn-lg btn-primary waves-effect waves-light me-1">
+                                                        검색
+                                                    </button>
+                                                </div> 
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+										<div class="table-responsive">
+											<table class="table table-centered content-short" id="btryListTable">
+												<thead>
+													<tr class="bg-transparent">
+														<th>상세</th>
+														<th>배터리</th>
+														<th>종류</th>
+														<th>카트</th>
+														<th>생산일</th>
+														<th>설치일</th>
+														<th>SOC</th>
+														<!-- <th>SOH</th> -->
+													</tr>
+												</thead>
+												<tbody id="btryList"></tbody>
+											</table>
+										</div>
+										<div class="row">
+											<div class="col-6"><div><p class="mb-sm-0"></p></div></div>
+											<div class="col-6"><div class="float-end"><ul class="pagination pagination-rounded mb-sm-0" id="btryList_pagination"></ul></div></div>
+										</div>
+									</div>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <%- include('../../layout/footer.ejs') %>
+            </div>
+        </div>
+
+        <%- include('../../layout/scripts.ejs') %>
+		<script>
+			var globalBtryType = "all";
+			var globalPrdStart = "00000000";
+			var globalPrdEnd = "99999999";
+			var globalInstallStart = "00000000";
+			var globalInsatllEnd = "99999999";
+			var globalSocStart = "0";
+			var globalSocEnd = "100";
+			var globalSohStart = "0";
+			var globalSohEnd = "100";
+
+			$("#searchBtn").on("click", function(){
+				getAjaxData(1);
+			});
+
+			$(document).ready(function() {
+				getAjaxData(1);
+			});
+
+			function getAjaxData(page){
+				globalBtryType = $("#search_btry_ty option:selected").val();
+				globalPrdStart = $("#prd_start_date").val();
+				globalPrdEnd = $("#prd_end_date").val();
+				globalInstallStart = $("#install_start_date").val();
+				globalInsatllEnd = $("#install_end_date").val();
+				globalSocStart = $("#search_soc_range_start").val();
+				globalSocEnd = $("#search_soc_range_end").val();
+				globalSohStart = $("#search_soh_range_start").val();
+				globalSohEnd = $("#search_soh_range_end").val();
+
+				$("#btryList").empty();
+
+				let postData = {
+					btry_type : globalBtryType,
+					prd_start_dttm : globalPrdStart,
+					prd_end_dttm : globalPrdEnd,
+					install_start_dttm : globalInstallStart,
+					install_end_dttm : globalInsatllEnd,
+					soc_start : globalSocStart,
+					soc_end : globalSocEnd,
+					soh_start : globalSohStart,
+					soh_end : globalSohEnd,
+					page: page
+				}
+
+				//post 통신
+				let result = syncAjax("default","POST", "/production/search/batteryByType/postBatteryListByType", postData);
+
+				if(result.msg != null && result.msg != ''){
+					alert(result.msg);
+				}
+
+				var btryList = result.data;
+				var pages = result.pages;
+				var liRow = result.liRow;
+
+				var html = '';
+				if(btryList == null || btryList.length == 0){
+					html += "<tr style='text-align: center;'><td colspan='10'>목록이 없습니다.</td></tr>";
+				} else {
+					for (var i in btryList) {
+						html += "<tr>";
+						html += "<td><a href='/production/search/batteryByType/" + btryList[i].btry_seq + "' class='px-2 text-primary'><i class='uil uil-location-arrow font-size-18'></i></a></td>";
+						html += "<td>" + btryList[i].btry_nm + "</td>";
+						html += "<td>" + btryList[i].btry_ty_desc + "</td>";
+						html += "<td>" + btryList[i].btry_nm + "</td>";
+						html += "<td>" + btryList[i].prd_dttm + "</td>";
+						html += "<td>" + btryList[i].install_dttm + "</td>";
+						html += "<td>" + btryList[i].soc + "</td>";
+						html +=" </tr>";
+					}
+				}
+
+				$("#btryList").html(html);
+
+				//bms 테이블 페이징
+				var pageHtml = '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ pages.previousPage +')"><i class="mdi mdi-chevron-left"></i></a></li>';
+
+				for(index in liRow){
+					if(liRow[index] == pages.currentPage){
+						pageHtml += '<li class="page-item active"><a class="page-link">'+ liRow[index] +'</a></li>';
+					} else {
+						pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ liRow[index] +')">'+ liRow[index] +'</a></li>';
+					}
+				}
+
+				pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ pages.nextPage +')"><i class="mdi mdi-chevron-right"></i></a></li>';
+
+				$("#btryList_pagination").html(pageHtml);
+			}
+		</script>
+	</body>
+</html>

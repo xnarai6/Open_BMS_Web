@@ -1,0 +1,14 @@
+<footer class="footer">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <script>document.write(new Date().getFullYear())</script> © open-BMS.
+            </div>
+            <div class="col-sm-6">
+                <div class="text-sm-end d-none d-sm-block">
+                    Powered by <a href="http://www.hivvlab.co.kr/" target="_blank" class="text-reset">hivvlab</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

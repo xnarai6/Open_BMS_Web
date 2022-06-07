@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../../common/meta.ejs') %>
+        <%- include('../../common/title.ejs') %>
+        <%- include('../../common/css.ejs') %>
+        <link href="/assets/css/app-dark.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    </head>
+
+    <body>
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../../common/topbar.ejs') %>
+            <%- include('../../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+
+                        <!-- end row -->
+                        <div class="row">
+                         
+                                <div class="col-xl-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title mb-4">일별 사용시간</h4>
+                                            
+                                            <div id="column_chart_datalabel" class="apex-charts" dir="ltr"></div>
+                                        </div>
+                                    </div><!--end card-->
+                                </div>
+                                
+                            <div class="col-xl-4">
+                                <div class="mt-5 mt-lg-0">
+                                    <div class="card border shadow-none">
+                                        <div class="card-header bg-transparent border-bottom py-3 px-4">
+                                            <h5 class="font-size-16 mb-0">카트이름 <span class="float-end">C-001</span></h5>
+                                        </div>
+                                        <div class="card-body p-4">
+
+                                            <div class="table-responsive">
+                                                <table class="table mb-0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>제조사 :</td>
+                                                            <td class="text-end">TS60S</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>등록일 : </td>
+                                                            <td class="text-end">2021-06-17</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>상태 :</td>
+                                                            <td class="text-end">가동중</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>카트위치 </td>
+                                                            <td class="text-end">드림 in 코스 6hole</td>
+                                                        </tr>
+                                                       
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <!-- end table-responsive -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-xl-3 col-sm-2">
+                                <div class="text-center" dir="ltr">
+                                    <h5 class="font-size-14 mb-3">충전율</h5>
+                                    <input class="knob" data-width="100" data-angleoffset="90" data-linecap="round" data-fgcolor="#f1b44c" value="80" readonly>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-sm-2">
+                                <div class="text-center" dir="ltr">
+                                    <h5 class="font-size-14 mb-3">성능</h5>
+                                    <input class="knob" data-width="100" data-angleoffset="90" data-linecap="round" data-fgcolor="#f1b44c" value="85" readonly>
+                                </div>
+                            </div>
+                            <div class="col-xl-4">
+                                <div class="mt-5 mt-lg-0">
+                                    <div class="card border shadow-none">
+                                        <div class="card-header bg-transparent border-bottom py-3 px-4">
+                                            <h5 class="font-size-16 mb-0">가동예상시간 <span class="float-end">1시 30분</span></h5>
+                                        </div>
+                                        <div class="card-body p-4">
+
+                                            <div class="table-responsive">
+                                                <table class="table mb-0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>충전시간 :</td>
+                                                            <td class="text-end">78분</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>총 가동시간 : </td>
+                                                            <td class="text-end">5200시간</td>
+                                                        </tr>
+                                                    
+                                                       
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <!-- end table-responsive -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+
+                <%- include('../../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../../common/sidebarRight.ejs') %>
+
+        <%- include('../../common/scripts.ejs') %>
+      
+       
+        <!-- apexcharts -->
+        <script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+        <script src="/assets/js/pages/apexcharts.init.js"></script>
+
+     
+        <script src="/assets/js/app.js"></script>
+
+
+
+               <!-- flot plugins -->
+               <script src="/assets/libs/flot-charts/jquery.flot.js"></script>
+               <script src="/assets/libs/flot-charts/jquery.flot.time.js"></script>
+               <script src="/assets/libs/jquery.flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+               <script src="/assets/libs/flot-charts/jquery.flot.resize.js"></script>
+               <script src="/assets/libs/flot-charts/jquery.flot.pie.js"></script>
+               <script src="/assets/libs/flot-charts/jquery.flot.selection.js"></script>
+               <script src="/assets/libs/flot-charts/jquery.flot.stack.js"></script>
+               <script src="/assets/libs/flot.curvedlines/curvedLines.js"></script>
+               <script src="/assets/libs/flot-charts/jquery.flot.crosshair.js"></script>
+
+                <script src="/assets/js/app.js"></script>
+       
+    </body>
+
+    <!-- apexcharts -->
+    <script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+
+    <script src="/assets/js/pages/dashboard.init.js"></script>
+
+    <script src="/assets/js/app.js"></script>
+
+    <script src="/attach/js/common.js"></script> 
+
+      <!-- jquery-knob -->
+      <script src="/assets/libs/jquery-knob/jquery.knob.min.js"></script> 
+
+      <script src="/assets/js/pages/jquery-knob.init.js"></script> 
+    
+</html>

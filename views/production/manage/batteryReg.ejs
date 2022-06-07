@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('../../layout/meta.ejs') %>
+        <%- include('../../layout/title.ejs') %>
+        <%- include('../../layout/css.ejs') %>
+    </head>
+
+    <body>
+        <div id="layout-wrapper">
+            <%- include('../../layout/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <%- include('../../layout/dashForProduction.ejs') %>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">배터리 관리 - 등록</h4>
+                                    <div>
+                                        <input type="submit" class="btn btn-primary waves-effect waves-light me-1" id="regBtn" value="등록">
+                                        <input type="reset" class="btn btn-secondary waves-effect" id="resetBtn" value="초기화">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">배터리 이름</label>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" id="btry_nm" autocomplete="off" maxlength="19">
+                                                        <div class="input-group-prepend">
+                                                            <input type="button" class="input-group-text" id="btryNmChkBtn" value="중복체크">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                    <label class="form-label">배터리 제조사</label>
+                                                        <select class="form-control form-select" id="btry_mfctor_nm" name="btry_mfctor_nm">
+                                                                                                                                                                                       
+                                                        </select>        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 최소 전압</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_min_volt" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 최대 전압</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_max_volt" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 정격 전압</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_rat_volt" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 최소 전류</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_min_curr" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 최대 전류</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_max_curr" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 정격 전류</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_rat_curr" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 최소 온도</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_min_tp" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 최대 온도</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_max_tp" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 정격전력</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_max_pwr" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                    <label class="form-label">모듈 모델</label>
+                                                        <select class="form-control form-select" id="mdl_seq" name="mdl_seq">
+                                                                                                                                                                                        
+                                                        </select>        
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">모듈 제조사</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="btry_mdl_ty" data-cd="" readonly="readonly" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                    <label class="form-label">관리 상태</label>
+                                                        <select class="form-control form-select" id="btry_mng_stat" name="btry_mng_stat">
+                                                                                                                                                                                         
+                                                        </select>        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                    <label class="form-label">설치회사</label>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" id="dmdr_cmpy_nm" autocomplete="off" readonly="readonly" onclick="javascript:openDmdrCmpySearch();">
+                                                        <input type="hidden" id="dmdr_cmpy_seq">
+                                                        <div class="input-group-prepend">
+                                                            <input type="button" class="input-group-text" id="searchDmdrCmpyBtn" value="검색" onclick="javascript:openDmdrCmpySearch();">
+                                                        </div>
+                                                    </div>      
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                    <label class="form-label">설치장소</label>
+                                                        <select class="form-control form-select" id="dmdr_loc_seq" name="dmdr_loc_seq">
+                                                                                                                                                                                       
+                                                        </select>        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">생산자</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="prd_nm"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">생산일시</label>
+                                                        <div class="input-daterange input-group" id="datepicker_prd_dttm" data-date-format="yyyy-mm-dd" data-date-autoclose="true" data-provide="datepicker" data-date-container="#datepicker_prd_dttm">
+                                                            <input type="text" class="form-control" name="prd_nm" id="prd_nm" readonly="readonly">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <%- include('../../layout/footer.ejs') %>
+            </div>
+        </div>
+
+        <%- include('../../layout/scripts.ejs') %>
+        <script>
+            let btryNmChk = false;
+
+            function openDmdrCmpySearch(){
+                var pop = window.open("/production/manage/battery/openSearchDmdrCmpy","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
+            }
+
+            async function popupCallBack(cmpy_seq, cmpy_nm){
+                $("#dmdr_cmpy_nm").val(cmpy_nm);
+                $("#dmdr_cmpy_seq").val(cmpy_seq);
+
+                let postData = {
+                    cmpy_seq : cmpy_seq
+                }
+
+                let result = await syncAjax('default', 'POST', '/production/manage/battery/searchLocByDmdrCmpy', postData);
+
+                // 2. 결과 fail 체크
+                let resultChk = syncAjaxFailChk(result);
+                if (!resultChk) return false;
+
+                let dmdrLocMap = result.data.dmdrLocMap['dmdrLocList'];
+
+                if(dmdrLocMap == null){
+                    makeDmdrLocSelect(false, $('#dmdr_loc_seq'), null);
+                }else{
+                    makeDmdrLocSelect(false, $('#dmdr_loc_seq'), Object.keys(dmdrLocMap).map(e => { return { val: e, name: dmdrLocMap[e] } }));
+                }
+            }
+
+            $(async function() {
+                // 1. code list 가져오기
+                let result = await syncAjax('default', 'POST', '/production/manage/battery/codeList', {});
+
+                // 2. 결과 fail 체크
+                let resultChk = syncAjaxFailChk(result);
+                if (!resultChk) return false;
+
+                let mftrCmpyMap = result.data.mftrCmpyMap['mftrCmpyList'];
+                let mdlMap = result.data.mdlMap['mdlList'];
+                let codeMap = result.data.codeMap['btry_mng_stat'];
+
+                makeMftrSelect(false, $('#btry_mfctor_nm'), Object.keys(mftrCmpyMap).map(e => { return { val: e, name: mftrCmpyMap[e] } }));
+                makeSelect(false, $('#mdl_seq'), Object.keys(mdlMap).map(e => { return { val: e, name: mdlMap[e] } }));
+                makeSelect(false, $('#btry_mng_stat'), Object.keys(codeMap).map(e => { return { val: e, name: codeMap[e] } }));
+            });
+
+            function makeSelect(all, target, list) {
+                $(target).empty();
+                $(target).append('<option value="-1">선택</option>');
+                if (all) $(target).append('<option value="all">전체</option>');
+                for (var el of list) $(target).append('<option value="' + el.val + '">' + el.name + '</option>');
+                $(target).change();
+            }
+
+            function makeMftrSelect(all, target, list) {
+                $(target).empty();
+                $(target).append('<option value="-1">선택</option>');
+                if (all) $(target).append('<option value="all">전체</option>');
+                for (var el of list) $(target).append('<option value="' + el.name + '">' + el.name + '</option>');
+                $(target).change();
+            }
+
+            function makeDmdrLocSelect(all, target, list) {
+                $(target).empty();
+                $(target).append('<option value="-1">선택</option>');
+                if (all) $(target).append('<option value="all">전체</option>');
+                if(list == null || list.length == 0) {
+                    $(target).append('<option value="all">설치장소가 없습니다.</option>'); 
+                    return true;
+                }
+                for (var el of list) $(target).append('<option value="' + el.val + '">' + el.name + '</option>');
+                $(target).change();
+            }
+
+            //모듈 모델 선택 시 
+            $("#mdl_seq").on("change", async function() {
+
+                let postData = {
+                    mdl_seq : $(this).val()
+                }
+
+                let result = await syncAjax("default","POST", "/production/manage/battery/mdlMftrByMdlSeq", postData);
+
+                let resultChk = syncAjaxFailChk(result);
+                if (!resultChk) return false;
+
+                if(result.data.mdlInfo != null && result.data.mdlInfo.length > 0){
+                    $("#btry_mdl_ty").val(result.data.mdlInfo[0].btry_mdl_ty);
+                    $("#btry_mdl_ty").data("cd",result.data.mdlInfo[0].btry_mdl_ty_cd);
+                }else{
+                    $("#btry_mdl_ty").val("모듈 제조사가 존재하지 않습니다.");
+                    $("#btry_mdl_ty").data("cd","-1");
+                }
+
+            });
+
+            $("#regBtn").on("click", async function() {
+
+                // 0. 중복체크 확인
+                if (!btryNmChk) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning",'배터리 이름 중복체크 해주세요'));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_nm").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 이름을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_mfctor_nm").val()) || $("#btry_mfctor_nm").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 제조사를 선택해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_min_volt").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 최소 전압을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_max_volt").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 최대 전압을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_rat_volt").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 정격 전압을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_min_curr").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 최소 전류를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_max_curr").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 최대 전류를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_rat_curr").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 정격 전류를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_min_tp").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 최소 온도를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_max_tp").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 최대 온도를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_max_pwr").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 배터리 정격전력을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#mdl_seq").val()) || $("#mdl_seq").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","모듈 모델을 선택해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_mdl_ty").val()) || $("#btry_mdl_ty").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","모듈 제조사가 존재하지 않습니다"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_mng_stat").val()) || $("#btry_mng_stat").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","관리 상태를 선택해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#dmdr_cmpy_nm").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 설치회사를 선택해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#dmdr_loc_seq").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning"," 설치장소를 선택해주십시오"));
+                    return false;
+                }
+
+
+                let postData = {
+                    btry_nm: $("#btry_nm").val(),
+                    btry_mfctor_nm: $("#btry_mfctor_nm").val(),
+                    btry_min_volt: $("#btry_min_volt").val(),
+                    btry_max_volt: $("#btry_max_volt").val(),
+                    btry_rat_volt: $("#btry_rat_volt").val(),
+                    btry_min_curr: $("#btry_min_curr").val(),
+                    btry_max_curr: $("#btry_max_curr").val(),
+                    btry_rat_curr: $("#btry_rat_curr").val(),
+                    btry_min_tp: $("#btry_min_tp").val(),
+                    btry_max_tp: $("#btry_max_tp").val(),
+                    btry_max_pwr: $("#btry_max_pwr").val(),
+                    mdl_seq: $("#mdl_seq").val(),
+                    btry_mdl_ty_cd: $("#btry_mdl_ty").data("cd").val(),
+                    btry_mng_stat: $("#btry_mng_stat").val(),
+                    dmdr_cmpy_nm: $("#dmdr_cmpy_nm").val(),
+                    dmdr_loc_seq: $("#dmdr_loc_seq").val(),
+                    prd_nm: $("#prd_nm").val(),
+                    prd_dttm: $("#prd_dttm").val()
+                }
+                    
+                // 2. 등록 요청
+                let result = await syncAjax('default', 'POST', '/production/manage/battery/chk/reg', postData);
+
+                // 3. 결과 fail 체크
+                let resultChk = syncAjaxFailChk(result);
+                if (!resultChk) return false;
+
+                // 4. 결과 SUCCESS
+                swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                    var url = result.url;
+                    $(location).attr('href',result.path);
+                });
+
+            });
+
+            // 초기화
+            $('#resetBtn').on('click', function(e) {
+                e.preventDefault();
+                $('form').each(function() { this.reset(); });
+                btryNmChk = false;
+            });
+
+            // 중복가입 체크
+            $('#btryNmChkBtn').on('click', async function(e) {
+                e.preventDefault();
+
+                // 0. 이미 체크한 경우
+                if (btryNmChk) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning",'이미 중복체크한 아이디입니다'));
+                    return false;
+                }
+
+                // 1. post data 생성
+                let postData = { btry_nm: $('#btry_nm').val() }
+
+                // 2. 중복체크 요청
+                let result = await syncAjax('default', 'POST', '/production/manage/battery/reg/dup', postData);
+
+                // 3. 결과 fail 체크
+                let resultChk = syncAjaxFailChk(result);
+                if (!resultChk) {
+                    btryNmChk = false;
+                    return false;
+                }
+
+                // 4. 결과 SUCCESS
+                btryNmChk = true;
+                swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg));
+            });
+
+            // 사용자 id 변경
+            $('#btry_nm').on('change', function() {
+                btryNmChk = false;
+            });
+
+            // 이메일 select 변경
+            $('#userEmailSelect').on('change', function() {
+                if($(this).val() == 'input') $('#userEmailAddr').attr('disabled', false).val('');
+                else $('#userEmailAddr').attr('disabled', true).val($(this).val());
+            });
+        </script>
+    </body>
+</html>

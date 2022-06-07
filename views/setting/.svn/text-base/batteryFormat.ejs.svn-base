@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+
+        <!-- DataTables -->
+        <link href="/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/libs/datatables.net-rowreorder-bs/css/rowReorder.bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+        <style>
+            #protocolTable tbody tr:hover {
+                background-color: #3b3e4b
+            }
+
+            #protocolTable tbody tr.active {
+                background-color: #5b73e8
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="layout-wrapper">
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <%- include('../common/dash.ejs') %>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">배터리 프로토콜 포맷 정보</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-9">
+                                <div class="card mb-0">
+                                    <!-- Nav tabs -->
+                                    <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#about" role="tab">
+                                                <i class="uil uil-user-circle font-size-20"></i>
+                                                <span class="d-none d-sm-block">Protocol</span> 
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tasks" role="tab">
+                                                <i class="uil uil-clipboard-notes font-size-20"></i>
+                                                <span class="d-none d-sm-block">Data</span> 
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <!-- Tab content -->
+                                    <div class="tab-content p-4">
+                                        <div class="tab-pane active" id="about" role="tabpanel">
+                                            <div>
+                                                <div class="row mb-2">
+                                                    <label for="example-date-input" class="col-4 col-form-label text-dark">Protocol</label>
+                                                    <div class="col-8 text-end">
+                                                        <button type="button" class="btn btn-outline-success btn-sm" id="addBtn">Save</button>
+                                                        <button type="button" class="btn btn-outline-primary btn-sm" id="addBtn">Add</button>
+                                                    </div>
+                                                </div>
+                                                <div class="table-responsive">
+                                                    <table class="table w-100" id="protocolTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">#</th>
+                                                                <th scope="col">Name</th>
+                                                                <th scope="col">Byte</th>
+                                                                <th scope="col">Array Type</th>
+                                                                <th scope="col">Return Type</th>
+                                                                <th scope="col">Cal Type</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="tasks" role="tabpanel">
+                                            <div>
+                                                <h5 class="font-size-16 mb-4">Projects</h5>
+
+                                                <div class="table-responsive">
+                                                    <table class="table table-nowrap table-hover mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">#</th>
+                                                                <th scope="col">Projects</th>
+                                                                <th scope="col">Date</th>
+                                                                <th scope="col">Status</th>
+                                                                <th scope="col" style="width: 120px;">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">01</th>
+                                                                <td><a href="#" class="text-dark">Brand Logo Design</a></td>
+                                                                <td>
+                                                                    18 Jun, 2020
+                                                                </td>
+                                                                <td>
+                                                                    <span class="badge bg-soft-primary font-size-12">Open</span>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="dropdown">
+                                                                        <a class="text-muted dropdown-toggle font-size-18 px-2" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
+                                                                            <i class="uil uil-ellipsis-v"></i>
+                                                                        </a>
+                                                                    
+                                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                                            <a class="dropdown-item" href="#">Action</a>
+                                                                            <a class="dropdown-item" href="#">Another action</a>
+                                                                            <a class="dropdown-item" href="#">Something else here</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">02</th>
+                                                                <td><a href="#" class="text-dark">Minible Admin</a></td>
+                                                                <td>
+                                                                    06 Jun, 2020
+                                                                </td>
+                                                                <td>
+                                                                    <span class="badge bg-soft-primary font-size-12">Open</span>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="dropdown">
+                                                                        <a class="text-muted dropdown-toggle font-size-18 px-2" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
+                                                                            <i class="uil uil-ellipsis-v"></i>
+                                                                        </a>
+                                                                    
+                                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                                            <a class="dropdown-item" href="#">Action</a>
+                                                                            <a class="dropdown-item" href="#">Another action</a>
+                                                                            <a class="dropdown-item" href="#">Something else here</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">03</th>
+                                                                <td><a href="#" class="text-dark">Chat app Design</a></td>
+                                                                <td>
+                                                                    28 May, 2020
+                                                                </td>
+                                                                <td>
+                                                                    <span class="badge bg-soft-success font-size-12">Complete</span>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="dropdown">
+                                                                        <a class="text-muted dropdown-toggle font-size-18 px-2" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
+                                                                            <i class="uil uil-ellipsis-v"></i>
+                                                                        </a>
+                                                                    
+                                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                                            <a class="dropdown-item" href="#">Action</a>
+                                                                            <a class="dropdown-item" href="#">Another action</a>
+                                                                            <a class="dropdown-item" href="#">Something else here</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">04</th>
+                                                                <td><a href="#" class="text-dark">Minible Landing</a></td>
+                                                                <td>
+                                                                    13 May, 2020
+                                                                </td>
+                                                                <td>
+                                                                    <span class="badge bg-soft-success font-size-12">Complete</span>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="dropdown">
+                                                                        <a class="text-muted dropdown-toggle font-size-18 px-2" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
+                                                                            <i class="uil uil-ellipsis-v"></i>
+                                                                        </a>
+                                                                    
+                                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                                            <a class="dropdown-item" href="#">Action</a>
+                                                                            <a class="dropdown-item" href="#">Another action</a>
+                                                                            <a class="dropdown-item" href="#">Something else here</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">05</th>
+                                                                <td><a href="#" class="text-dark">Authentication Pages</a></td>
+                                                                <td>
+                                                                    06 May, 2020
+                                                                </td>
+                                                                <td>
+                                                                    <span class="badge bg-soft-success font-size-12">Complete</span>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="dropdown">
+                                                                        <a class="text-muted dropdown-toggle font-size-18 px-2" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
+                                                                            <i class="uil uil-ellipsis-v"></i>
+                                                                        </a>
+                                                                    
+                                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                                            <a class="dropdown-item" href="#">Action</a>
+                                                                            <a class="dropdown-item" href="#">Another action</a>
+                                                                            <a class="dropdown-item" href="#">Something else here</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- right -->
+                            <div class="col-3">
+                                <div class="card h-100">
+                                    <!-- Nav tabs -->
+                                    <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#about" role="tab">
+                                                <i class="uil uil-user-circle font-size-20"></i>
+                                                <span class="d-none d-sm-block">Preview</span> 
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div style="height: 100%">
+                                        <div id="chart3"></div>
+                                    </div>
+                                    <!-- <div class="card-body">
+                                        <div class="text-center">
+                                            <div>
+                                                <h5 class="font-size-15 mb-3">Preview</h5>
+                                                <canvas id="canvas" style="width: 100%; height: 800px;"></canvas>
+                                            </div> 
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <%- include('../common/footer.ejs') %>
+            </div>
+        </div>
+        <%- include('../common/sidebarRight.ejs') %>
+        <%- include('../common/scripts.ejs') %>
+
+        <script src="/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+        <script src="/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+        <script src="/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+        <script src="/assets/libs/jszip/jszip.min.js"></script>
+        <script src="/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+        <script src="/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+        <script src="/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+        <script src="/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+        <script src="/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+        <script src="/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+        <script src="/assets/libs/datatables.net-rowreorder/js/dataTables.rowReorder.min.js"></script>
+        <script src="/assets/libs/datatables.net-rowreorder-bs/js/rowReorder.bootstrap.min.js"></script>
+
+        <script src="/assets/libs/chart.js/Chart.bundle.min.js"></script>
+        <script src="/assets/libs/chartjs-plugin-datalabels/chartjs-plugin-datalabels.min.js"></script>
+
+        <script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+
+        <script src="/assets/js/app.js"></script>
+        <script src="/attach/js/common.js"></script>
+        <script>
+            let chartArray = [];
+
+            function spliceArray(array, index1, index2) {
+                let temp = array[index1]
+                array.splice(index1, 1);
+                array.splice(index2, 0, temp);
+            }
+
+            function makeRandomHexColor() {
+                return '#' + Math.round(Math.random() * 0xffffff).toString(16).padStart(6, '0');
+            }
+
+            function makeTextColor(hexColor) {
+                const rgb = parseInt(hexColor.substring(1), 16);
+                const r = (rgb >> 16) & 0xff * 0.2126, g = (rgb >> 8) & 0xff * 0.7152, b = (rgb >> 0) & 0xff * 0.0722;
+                return r + g + b < 127.5 ? '#ffffff' : '#000000';
+            }
+
+            function makeInput(data) {
+                let resultStr = '<div class="input-group"><input type="text" class="form-control form-control-sm" value="' + data + '" disabled><div class="input-group-prepend"><button class="input-group-text" name="editBtn"><i class="bx bx-edit"></i></button></div></div>';
+                return resultStr;
+            }
+
+            function makeSwitch(type, data) {
+                let resultStr = '<div class="form-check form-switch mb-0"><input name="switch" type="checkbox" class="form-check-input" ' + (data == 'NA' || data == 'N' ? '' : 'checked') + ' data-type="' + type + '" role="button"></div>';
+                return resultStr;
+            }
+
+            function makeChart(dataSet) {
+                for (let c of chartArray) c.destroy();
+                chartArray = [];
+
+                let chartOption = {
+                    series: dataSet,
+                    fill: { opacity: 1 },
+                    legend: { show: false },
+                    sparkline: { enabled: true },
+                    stroke: { width: 0.7, colors: ['#000000'] },
+                    yaxis: { show: false, reversed: true },
+                    xaxis: { categories: [' '], labels: { show: false } },
+                    chart: { type: 'bar', height: '1500px', stacked: true, toolbar: { show: false }, events: {
+                        dataPointSelection: (event, chartContext, config) => $('#protocolTable tbody tr').each((i, e) => { if (config.w.config.series[config.seriesIndex].name == $(e).data('key')) $(e).click(); })
+                    }},
+                    dataLabels: {
+                        enabled: true, offsetY: 2,
+                        style: { fontSize: '12px', colors: ['#ffffff'] },
+                        formatter: (val, { seriesIndex, dataPointIndex, w }) => w.config.series[seriesIndex].name + ': ' + val + w.config.series[seriesIndex].add,
+                    },
+                }
+
+                let chart = new ApexCharts($('#chart3').get(0), chartOption);
+
+                chartArray.push(chart);
+
+                chart.render();
+            }
+
+            $(function () {
+                $(document).on('click', '[name="editBtn"]', function () {
+                    let st = $(this).parent().parent().find('input').attr('disabled');
+                    if (st) $(this).parent().parent().find('input').attr('disabled', false);
+                    else $(this).parent().parent().find('input').attr('disabled', true);
+                });
+
+                $(document).on('click', '[name="switch"]', function () {
+                    console.log($(this).data('type'));
+                });
+
+                $(document).on('click', '#protocolTable tbody tr', function () {
+                    if ($(this).hasClass('active')) $(this).removeClass('active');
+                    else {
+                        $('#protocolTable tbody tr').removeClass('active');
+                        $(this).addClass('active');
+                    }
+                });
+
+                let ajaxResult = syncAjax2('default', 'POST', '/setting/battery/detail/<%=batterySeq%>/format/data', { });
+
+                let dataSet = [], dataSet2 = [], index = 1;
+
+                for (let element of ajaxResult.data) {
+                    dataSet.push({
+                        idx: index++,
+                        name: element[0],
+                        byte: element[1].byte,
+                        arrayType: element[1].arrayType,
+                        returnType: element[1].returnType,
+                        calType: element[1].calType,
+                    });
+
+                    dataSet2.push({
+                        name: element[0],
+                        data: [element[1].byte],
+                        color: makeRandomHexColor(),
+                        add: element[1].arrayType == 'NA' ? '' : '(× ' + element[1].arrayTarget + ')'
+                    });
+                }
+
+                $('#protocolTable').DataTable({
+                    searching: false, paging: false, info: false, 
+                    data: dataSet,
+                    rowReorder: { dataSrc: 'idx', selector: 'td.moveable' },
+                    columns: [
+                        { data: 'idx', className: 'align-middle moveable', createdCell: (td) => $(td).attr('role', 'button') },
+                        { data: 'name', render: (data) => makeInput(data) },
+                        { data: 'byte', render: (data) => makeInput(data) },
+                        { data: 'arrayType', className: 'align-middle', render: (data) => makeSwitch('arr', data) },
+                        { data: 'returnType', className: 'align-middle', render: (data) => makeSwitch('ret', data) },
+                        { data: 'calType', className: 'align-middle', render: (data) => makeSwitch('cal', data) },
+                    ],
+                    columnDefs: [{ orderable: false, targets: '_all', bSort: false, }],
+                    createdRow: (row, data, index) => $(row).data('key', data.name),
+                }).on('row-reorder', (e, diff, edit) => {
+                    if (diff.length >= 2) {
+                        if (diff[1].newPosition - diff[1].oldPosition <= 0) spliceArray(dataSet2, diff[diff.length - 1].oldPosition, diff[diff.length - 1].newPosition);
+                        else spliceArray(dataSet2, diff[0].oldPosition, diff[0].newPosition);
+                    }
+
+                    makeChart(dataSet2);
+                });
+
+                makeChart(dataSet2);
+            });
+        </script>
+    </body>
+</html>

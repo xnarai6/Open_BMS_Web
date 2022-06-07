@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+    </head>
+
+    <body >
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+          
+
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">                      
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">모듈 수정</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <button class="btn btn-primary" type="submit"  onclick="location.href='/setting/mgtmodule'">List</button>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>                       
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div class="card-body">                                            
+                                        <form class="custom-validation">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">모듈번호</label>
+                                                        <div>
+                                                            <input type="hidden" class="form-control" placeholder="" id="mdl_seq" value="<%=mdlInfo[0].mdl_seq%>"/>
+                                                            <input type="text" class="form-control" placeholder="" id="mdl_no" maxlength="99" value="<%=mdlInfo[0].mdl_no%>"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">모듈 타입</label>
+                                                        <select class="form-control form-select" id="mdl_ty" name="mdl_ty">
+                                                            <option value="-1">선택</option>
+                                                                <%
+                                                                    for(var i in mdl_ty_list){
+                                                                        if(mdl_ty_list[i].cd == mdlInfo[0].mdl_ty){
+                                                                            %><option value="<%=mdl_ty_list[i].cd%>" selected="selected"><%=mdl_ty_list[i].cd_desc%></option><%
+                                                                            continue;
+                                                                        }
+                                                                        %><option value="<%=mdl_ty_list[i].cd%>"><%=mdl_ty_list[i].cd_desc%></option><%
+                                                                    }
+                                                                %>                                                                                                                               
+                                                        </select>        
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리 타입</label>
+                                                        <select class="form-control form-select" id="btry_ty" name="btry_ty">
+                                                            <option value="-1">선택</option>
+                                                                <%
+                                                                    for(var i in btry_ty_list){
+                                                                        if(mdlInfo[0].btry_ty == btry_ty_list[i].cd){
+                                                                            %><option value="<%=btry_ty_list[i].cd%>" selected="selected"><%=btry_ty_list[i].cd_desc%></option><%
+                                                                            continue;
+                                                                        }
+                                                                        %><option value="<%=btry_ty_list[i].cd%>"><%=btry_ty_list[i].cd_desc%></option><%
+                                                                    }
+                                                                %>                                                                                                                               
+                                                        </select>        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">정격전압</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="rated_voltage" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" value="<%=mdlInfo[0].rated_voltage%>"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">최소전압</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="mdl_min_volt" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" value="<%=mdlInfo[0].mdl_min_volt%>" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">최대전압</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="mdl_max_volt" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" value="<%=mdlInfo[0].mdl_max_volt%>" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">충전시 최소온도</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="mdl_charge_min_tp" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" value="<%=mdlInfo[0].mdl_charge_min_tp%>" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">충전시 최대전압</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="mdl_charge_max_tp" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" value="<%=mdlInfo[0].mdl_charge_max_tp%>" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">방전시 최소온도</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="mdl_decharge_min_tp" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" value="<%=mdlInfo[0].mdl_decharge_min_tp%>" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">방전시 최대온도</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="mdl_decharge_max_tp" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" value="<%=mdlInfo[0].mdl_decharge_max_tp%>" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">평상시 최소온도</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="mdl_normal_min_tp" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" value="<%=mdlInfo[0].mdl_normal_min_tp%>" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">평상시 최대온도</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="mdl_normal_max_tp" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" value="<%=mdlInfo[0].mdl_normal_max_tp%>" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">정격전력</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="mdl_wh" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" value="<%=mdlInfo[0].mdl_wh%>" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">저장전류량</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="mdl_Ah" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" value="<%=mdlInfo[0].mdl_Ah%>" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                    <label class="form-label">셀, 모듈 제조사</label>
+                                                        <select class="form-control form-select" id="mdl_mftr" name="mdl_mftr">
+                                                            <option value="-1">선택</option>
+                                                                <%
+                                                                    for(var i in btry_mdl_ty_list){
+                                                                        if(btry_mdl_ty_list[i].cd == mdlInfo[0].mdl_mftr){
+                                                                            %><option value="<%=btry_mdl_ty_list[i].cd%>" selected="selected"><%=btry_mdl_ty_list[i].cd_desc%></option><%
+                                                                            continue;
+                                                                        }
+                                                                        %><option value="<%=btry_mdl_ty_list[i].cd%>"><%=btry_mdl_ty_list[i].cd_desc%></option><%
+                                                                    }
+                                                                %>                                                                                                                               
+                                                        </select>        
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                 </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">등록자</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="ins_nm" value="<%=mdlInfo[0].ins_nm%>" readonly="readonly" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">등록일시</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="ins_dttm" value="<%=mdlInfo[0].ins_dttm%>" readonly="readonly" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">변경자</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="upd_nm" value="<%=mdlInfo[0].upd_nm%>" readonly="readonly" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">변경일시</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="upd_dttm" value="<%=mdlInfo[0].upd_dttm%>" readonly="readonly" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <div>
+                                                    <button type="button" id="mgtmoduleModBtn" class="btn btn-primary waves-effect waves-light me-1">
+                                                        Submit
+                                                    </button>
+                                                    <button type="button" class="btn btn-secondary waves-effect" onclick="location.reload();">
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </div> 
+                                        </form>                                  
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+
+        <script src="/attach/js/common.js"></script>
+
+        <script>
+
+            $("#mgtmoduleModBtn").on("click", function() {
+
+                if(!valCheck("is", $("#mdl_no").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","모듈 번호를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#mdl_ty").val()) || $("#btry_ty_cd").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","모듈 타입을 선택해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#btry_ty").val()) || $("#btry_ty").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","배터리 타입을 선택해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#rated_voltage").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","정격전압을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#mdl_min_volt").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","최소전압을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#mdl_max_volt").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","최대전압을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#mdl_charge_min_tp").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","충전시 최소온도를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#mdl_charge_max_tp").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","충전시 최대전압 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#mdl_decharge_min_tp").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","방전시 최소온도를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#mdl_decharge_max_tp").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","방전시 최대온도를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#mdl_normal_min_tp").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","평상시 최소온도를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#mdl_normal_max_tp").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","평상시 최대온도를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#mdl_wh").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","전격전력을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#mdl_Ah").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","저장전류량을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#mdl_mftr").val()) || $("#mdl_mftr").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","셀, 모듈 제조사를 선택해주십시오"));
+                    return false;
+                }
+
+
+                let postData = {
+                    mdl_seq: $("#mdl_seq").val(),
+                    mdl_no: $("#mdl_no").val(),
+                    mdl_ty: $("#mdl_ty").val(),
+                    btry_ty: $("#btry_ty").val(),
+                    rated_voltage: $("#rated_voltage").val(),
+                    mdl_min_volt: $("#mdl_min_volt").val(),
+                    mdl_max_volt: $("#mdl_max_volt").val(),
+                    mdl_charge_min_tp: $("#mdl_charge_min_tp").val(),
+                    mdl_charge_max_tp: $("#mdl_charge_max_tp").val(),
+                    mdl_decharge_min_tp: $("#mdl_decharge_min_tp").val(),
+                    mdl_decharge_max_tp: $("#mdl_decharge_max_tp").val(),
+                    mdl_normal_min_tp: $("#mdl_normal_min_tp").val(),
+                    mdl_normal_max_tp: $("#mdl_normal_max_tp").val(),
+                    mdl_wh: $("#mdl_wh").val(),
+                    mdl_Ah: $("#mdl_Ah").val(),
+                    mdl_mftr: $("#mdl_mftr").val()
+                }
+                    
+                let result = syncAjax("POST", "/setting/mgtmodule/mod/complete", postData);
+
+                if(result.status == 'FAIL') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("error",result.msg)).then((errorResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                    });
+                }else{
+                    swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                    });
+                }
+
+            });
+
+        </script>
+
+    </body>
+
+ 
+     
+</html>

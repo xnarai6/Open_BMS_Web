@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+    </head>
+
+    <body onload="init();">
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <!--dash 화면-->
+                        <%- include('../common/dash.ejs') %>
+                        <div class="row">
+                            <div class="col-xl-8">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="float-end">
+                                            <div class="dropdown">
+                                                <div>
+                                                    <button id="change-graph-btn" type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="changeGraph()">SOH 그래프</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h4 class="card-title mb-4" id="bms-graph-title"><%=BMS_LOCATION[0].loc_nm%></h4>
+
+                                        <div class="mt-1">
+                                            <ul class="list-inline main-chart mb-0">
+                                                <li class="list-inline-item chart-border-left me-0 border-0">
+                                                    <h3 class="text-primary"><span data-plugin="counterup" id="graph-header-total"></span><span id="graph-header-total-unit" class="text-muted d-inline-block font-size-15 ms-3">KWh</span></h3>
+                                                </li>
+                                                <li class="list-inline-item chart-border-left me-0 border-0">
+                                                    <h3 class="text-primary"><span data-plugin="counterup" id="graph-header-y"></span><span class="text-muted d-inline-block font-size-15 ms-3">가동</span></h3>
+                                                </li>
+                                                <li class="list-inline-item chart-border-left me-0">
+                                                    <h3><span data-plugin="counterup" id="graph-header-c"></span><span class="text-muted d-inline-block font-size-15 ms-3">충전</span>
+                                                    </h3>
+                                                </li>
+                                                <li class="list-inline-item chart-border-left me-0">
+                                                    <h3><span data-plugin="counterup" id="graph-header-n"></span><span class="text-muted d-inline-block font-size-15 ms-3">점검</span>
+                                                    </h3>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="mt-3">
+                                            <div id="dashboard-chart" class="apex-charts" dir="ltr"></div>
+                                        </div>
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div> <!-- end col-->
+
+                            <div class="col-xl-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">날씨정보</h4>
+                                        <div class="row align-items-center g-0 mt-3">
+                                            <table id="weather-table" class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>설치장소</th>
+                                                        <th>날씨</th>
+                                                        <th>온도</th>
+                                                        <th>습도</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% for(var i in WEATHER_LIST) { %>
+                                                        <tr>
+                                                            <td><%=WEATHER_LIST[i].loc_nm%></td>
+                                                            <td><%=WEATHER_LIST[i].wfKor%></td>
+                                                            <td><%=WEATHER_LIST[i].temp%>℃</td> 
+                                                            <td><%=WEATHER_LIST[i].reh%>%</td>         
+                                                        </tr>
+                                                        <%}%>
+                                                </tbody>
+                                            </table>
+                                        </div> <!-- end row-->
+        
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                    
+                                        <h4 class="card-title mb-4">BMS SOH</h4>                                       
+
+                                            <div class="row align-items-center g-0 mt-3">
+                                                <table id="loc-table" class="table table-hover">
+                                                    <% for(var i in BMS_LOCATION) { %>
+                                                    <tr>
+                                                        <td id="<%=BMS_LOCATION[i].loc_seq %>" width="30%">
+                                                            <div>
+                                                                <p class="text-truncate mt-1 mb-0"><i class="mdi mdi-circle-medium text-primary me-2"></i><%=BMS_LOCATION[i].loc_nm%></p>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div width="70%">
+                                                                <div class="progress mt-1" style="height: 6px;">
+                                                                    <div class="progress-bar progress-bar bg-primary" role="progressbar" id="progress-bar-<%=BMS_LOCATION[i].loc_seq %>" 
+                                                                        style="width: 0%" aria-valuenow="52" aria-valuemin="0"
+                                                                        aria-valuemax="52">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>               
+                                                    </tr>
+                                                    <%}%>
+                                                </table>
+                                            </div> <!-- end row-->
+                                        
+
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+
+
+
+                            </div> <!-- end Col -->
+                        </div> <!-- end row-->
+
+
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-4">BMS List(<%=lastweek%> ~ <%=today%>)</h4>
+                                        <div class="table-responsive">
+                                            <table class="table table-centered table-nowrap mb-0">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th style="width: 20px;">
+                                                            <div class="form-check font-size-16">
+                                                                <input type="checkbox" class="form-check-input" id="customCheck1">
+                                                                <label class="form-check-label" for="customCheck1">&nbsp;</label>
+                                                            </div>
+                                                        </th>
+                                                        <th>배터리명</th>
+                                                        <th>제조사</th>
+                                                        <th>정격전력</th>
+                                                        <th>상태</th>
+                                                        <th>평균충전시간</th>
+                                                        <th>평균방전시간</th>
+                                                        <th>평균대기시간</th>
+                                                        <th>SOH</th>
+                                                        <th>상세보기</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="bms-table">
+                                                    <% for (var i in BMS_LIST) { %>
+                                                    <tr>
+                                                        <td><div class="form-check font-size-16"> <input type="checkbox" class="form-check-input" id="customCheck2"> <label class="form-check-label" for="customCheck2">&nbsp;</label> </div></td>
+                                                        <td><%= BMS_LIST[i].btry_nm %></td>
+                                                        <td><%= BMS_LIST[i].btry_mfctor_nm %></td>
+                                                        <td><%= BMS_LIST[i].btry_max_pwr %></td>
+                                                        <td id="btry_stat_<%=i%>"><%= BMS_LIST[i].btry_stat %></td>
+                                                        <td><%= BMS_LIST[i].avg_chrg_time %></td>
+                                                        <td><%= BMS_LIST[i].avg_dischrg_time %></td>
+                                                        <td><%= BMS_LIST[i].avg_standby_time %></td>
+                                                        <td><%= parseFloat(BMS_LIST[i].avg_soh).toFixed(2) %></td>
+                                                        <td><button type="button" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light" onclick="location.href='/dashboard/indivbatterylog?btry_seq=<%=BMS_LIST[i].btry_seq%>' ">View Details</button></td>
+                                                    </tr>        
+                                                    <% } %>                              
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- end table-responsive -->
+                                        <!-- 페이지네이션 -->
+                                        <div class="row mt-4">
+                                            <div class="col-sm-6">
+                                                <div>
+                                                    <p class="mb-sm-0" id="bms-page-string"></p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="float-sm-end">
+                                                    <ul class="pagination pagination-rounded mb-sm-0" id="bms-pagination">
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <!-- 페이지네이션 -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+
+
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+
+        <script>
+            
+            window.onload = function() {
+                init();
+            }
+
+            //BMS SOH progress bar
+            var data =  <%-JSON.stringify(locSOH)%>;
+
+            for(var i in data){
+                document.getElementById("progress-bar-" + data[i].loc_seq).style = "width: " + data[i].soh + "%";
+            }
+
+            //bmsList 상태
+            for(var i = 0; i < "<%=parseInt(BMS_LIST.length)%>"; i++){
+                var btry_stat = document.getElementById("btry_stat_" + i).innerHTML;
+                
+                if(btry_stat == 'N'){
+                    document.getElementById("btry_stat_" + i).innerHTML = '<span class="badge rounded-pill bg-soft-danger font-size-12">STOPPED</span>';
+                } else {
+                    document.getElementById("btry_stat_" + i).innerHTML = '<span class="badge rounded-pill bg-soft-success font-size-12">NORMAL</span>';
+                }
+            }
+
+            //0이면 충전 방전 그래프, 1이면 SOC 그래프
+            var graphType = 0;
+
+            function init(){
+
+                chargingGraph(-1);
+                graphHeader(-1);
+            }
+
+
+            function changeGraph(){
+    
+                var btnString = "";
+
+                if(graphType == 0){
+                    socGraph(globalId);
+                    graphType = 1;
+                    btnString = "운영 그래프";
+                } else {
+                    chargingGraph(globalId);
+                    graphType = 0;
+                    btnString = "SOH 그래프";
+                }
+               
+                document.getElementById("change-graph-btn").innerHTML = btnString;
+                    
+            }    
+
+            function chargingGraph(loc){
+
+            
+                let postData = {
+                    loc_seq: loc
+                }
+
+                //post 통신
+                let result2 = syncAjax("POST", "/dashboard/chargegraph", postData);
+
+                var chrgData = result2.chrgData;
+                var dischrgData = result2.dischrgData;
+                var standbyData = result2.standbyData;
+                var dateData = result2.date;
+
+                // //데이터 정리
+                // for(var i = 0; i < chrgData.length; i++){
+                //     var date = new Date(chrgData[i].x);
+                //     chrgData[i].x = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                //     dischrgData[i].x = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                //     standbyData[i].x = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                // } 
+
+                globalId = result2.locSeq;
+                
+                //그래프 첫 10개 데이터
+                dashGraphInit(chrgData, dischrgData, standbyData, dateData);
+            }
+
+            function socGraph(loc){
+                let postData = {
+                    loc_seq: loc
+                }
+
+                //post 통신
+                let result2 = syncAjax("POST", "/dashboard/socgraph", postData);
+
+                var goodData = result2.goodData;
+                var normData = result2.normData;
+                var badData = result2.badData;
+                var monthData = result2.monthData;
+
+                //데이터 정리
+                // for(var i = 0; i < 10; i++){
+                //     var date = new Date(sohData[i].x);
+                //     sohData[i].x = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                // } 
+                
+                //그래프 첫 10개 데이터
+                dashGraphInit2(goodData, normData, badData, monthData);
+            }
+
+            function graphHeader(loc){
+                let postData = {
+                    loc_seq: loc
+                }
+
+                let result3 = syncAjax("POST", "/dashboard/graphheader", postData);
+
+                document.getElementById("graph-header-total").innerHTML = result3.maxPwr;
+                document.getElementById("graph-header-total-unit").innerHTML = result3.maxPwrUnit;
+                document.getElementById("graph-header-y").innerHTML = result3.countY;
+                document.getElementById("graph-header-c").innerHTML = result3.countC;
+                document.getElementById("graph-header-n").innerHTML = result3.countN;
+            }
+
+            var globalId = "";
+            var globalLocNm = "";
+    
+            //설치장소 클릭 -> BMS List 갱신
+                $('#loc-table').on("click", "tr", function(){
+    
+                    //설치장소 seq값 저장 loc_seq
+                    //var seq = $(this).find("td:eq(0)").text();
+                    
+                    var id = $(this).find("td:eq(0)").attr("id");
+                    globalId = id;
+                    var nm = $(this).find("td:eq(0)").text();
+                    globalLocNm = nm;
+    
+                    //BMS List 제목 변경
+                    $("#bms-graph-title").html(nm);
+                    
+                    getAjaxData(null);
+
+                    graphHeader(id);
+
+                    if(graphType == 0){
+                        chargingGraph(id)
+                    }else {
+                        socGraph(id) 
+                    }
+                    
+                    
+                });
+    
+                function getAjaxData(page){
+    
+                    let postData = {
+                        loc: globalId,
+                        page: page
+                    }
+    
+                    //post 통신
+                    let result = syncAjax("POST", "/dashboard/bmslist", postData);
+    
+                    var trList = "";
+                    var btryList = result.btryList;
+                    var pages = result.pages;
+                    var liRow = result.liRow;
+    
+                    $("#bms-page-string").html("Page " + pages.currentPage + " of " + pages.pageCount);
+    
+                    //데이터 테이블 형태로 넣기
+                    for(var i in btryList){
+                        var tr = '<tr> <td> <div class="form-check font-size-16"> <input type="checkbox" class="form-check-input" id="customCheck2"> <label class="form-check-label" for="customCheck2">&nbsp;</label> </div> </td>';
+                        tr += '<td><a href="javascript: void(0);" class="text-body fw-bold">' + btryList[i].btry_nm + '</a> </td>';
+                        tr += '<td> ' + btryList[i].btry_mfctor_nm + ' </td>';
+                        var operation = parseInt(btryList[i].btry_max_volt == null ? 0 : btryList[i].btry_max_volt) + parseInt(btryList[i].btry_max_curr == null ? 0 : btryList[i].btry_max_curr);
+                        tr += '<td>' + btryList[i].btry_max_pwr + '</td>';
+
+                        //배터리 상태
+                        if(btryList[i].btry_stat == 'N'){
+                            tr += '<td><span class="badge rounded-pill bg-soft-danger font-size-12">STOPPED</span></td>';
+                        } else {
+                            tr += '<td><span class="badge rounded-pill bg-soft-success font-size-12">NORMAL</span></td>';
+                        }
+                        
+                        
+                        //배터리 평균 충전/방전/대기시간/SOH
+                        tr += '<td>' + btryList[i].avg_chrg_time + '</td>';
+                        tr += '<td>' + btryList[i].avg_dischrg_time + '</td>';
+                        tr += '<td>' + btryList[i].avg_standby_time + '</td>';
+                        tr += '<td>' + parseFloat(btryList[i].avg_soh).toFixed(2) + '</td>';
+
+                        tr += '<td><button type="button" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light" onclick="location.href=\'/dashboard/indivbatterylog?btry_seq=' +btryList[i].btry_seq + '\'">View Details</button></td>';
+                        tr += '</tr>';
+    
+                        trList += tr;
+                    }
+
+    
+                    $("#bms-table").html(trList);
+    
+                    //bms 테이블 페이징
+                    var pageHtml = '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ pages.previousPage +')"><i class="mdi mdi-chevron-left"></i></a></li>';
+    
+                    for(index in liRow){
+                        if(liRow[index] == pages.currentPage){
+                            pageHtml += '<li class="page-item active"><a class="page-link">'+ liRow[index] +'</a></li>';
+                        } else {
+                            pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ liRow[index] +')">'+ liRow[index] +'</a></li>';
+                        }
+                    }
+    
+                    pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getAjaxData('+ pages.nextPage +')"><i class="mdi mdi-chevron-right"></i></a></li>';
+    
+                    $("#bms-pagination").html(pageHtml);
+                }
+        </script>
+    
+        <!-- apexcharts -->
+        <script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+    
+        <script src="/assets/js/pages/dashboard.init.js"></script>
+        <script src="/attach/js/live-graphs/dash-chart.js"></script>
+    
+        <script src="/attach/js/common.js"></script>  
+
+        
+    </body>
+</html>

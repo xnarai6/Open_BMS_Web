@@ -1,0 +1,351 @@
+/*+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+        <link href="/assets/css/app-dark.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    </head>
+
+    <body onload="init();">
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <%- include('../common/dash.ejs') %>
+                        <div class="card">
+                            <div class="card-body">
+
+                                <h4 class="card-title">BMS 선택</h4>
+                                <form>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">설치장소</label>
+                                                <select class="form-control form-select" id="select_loc">
+                                                    <option>Select</option>
+                                                    
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                            <div class="mb-3 mt-3 mt-lg-0">
+                                                <label class="form-label">BMS</label>
+                                                <select class="form-control form-select" id="select_bms">                                        
+                                                </select>                                                        
+                                            </div>
+                                        </div>
+                                        
+                                    </div>        
+                                </form>        
+                            </div>
+                        </div>
+                     
+                        <div class="row">                            
+                            <div class="col-xl-6">                               
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-4">충전시간/충전횟수</h4>
+                                        
+                                        <div id="column_chart" class="apex-charts" dir="ltr"></div>                                      
+                                    </div>
+                                </div>
+                               
+                            </div> 
+        
+                            <div class="col-xl-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-4">SOH</h4>
+
+                                        <div id="spline_area" class="apex-charts" dir="ltr"></div>                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+<!--
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="card">
+                                    <img class="card-img-top img-fluid" src="/assets/images/waveform/waveform.png" alt="Card image cap">
+                                    <div class="card-body">
+                                        <h4 class="card-title mt-0">2021.03.01</h4>
+                                        <p class="card-text">처음 설치할때 파형.</p>
+                                        <p class="card-text">
+                                            <small class="text-muted">Last updated 3 month ago</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+        
+                            <div class="col-lg-4">
+                                <div class="card">
+                                    <img class="card-img-top img-fluid" src="/assets/images/waveform/waveform.png" alt="Card image cap">
+                                    <div class="card-body">
+                                        <h4 class="card-title mt-0">2021.05.01</h4>
+                                        <p class="card-text">설치2달 경과후 파형.</p>
+                                        <p class="card-text">
+                                            <small class="text-muted">Last updated 1 month ago</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="card">
+                                    <img class="card-img-top img-fluid" src="/assets/images/waveform/waveform.png" alt="Card image cap">
+                                    <div class="card-body">
+                                        <h4 class="card-title mt-0">2021.05.01</h4>
+                                        <p class="card-text">설치2달 경과후 파형.</p>
+                                        <p class="card-text">
+                                            <small class="text-muted">Last updated 1 month ago</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+        
+                            
+        
+                        </div>
+                    -->
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                    <div class="card mb-0">
+                                        <div class="table-responsive">
+                                            <table class="table table-centered mb-0 table-nowrap">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="border-top-0" style="width: 20%;" scope="col">분석항목</th>
+                                                       
+                                                        <th class="border-top-0" scope="col"  style="width: 80%;">Description</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    
+                                                    <tr>
+                                                        <td colspan="2" >
+                                                            <h5 class="font-size-14 m-0">SOH :</h5>
+                                                        </td>
+                                                        <td id="rslt_soh">                                                            
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <h5 class="font-size-14 m-0">이상전류발생 :</h5>
+                                                        </td>
+                                                        <td id="rslt_curr">                                                           
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <h5 class="font-size-14 m-0">이상전압발생 :</h5>
+                                                        </td >
+                                                        <td id="rslt_vol">                                                           
+                                                        </td>
+                                                    </tr>
+                                                  
+                                                    <tr class="bg-light">
+                                                        <td colspan="2">
+                                                            <h5 class="font-size-14 m-0">건강상태:</h5>
+                                                        </td>
+                                                        <td  id="rslt_health">                                                            
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            
+                                        </div>
+                                    </div>                                 
+
+                              
+                            </div>
+
+                        </div>
+                        <!-- end row -->
+                        <!-- end row -->
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+
+
+
+        <script>
+
+            window.onload = function() {
+                init();
+            }
+
+            var globalLoc_Id = "1";
+            var globalBMS_Id = "1";
+          
+    
+            function init(){
+                getLOCList();
+            }
+            // 해당 로그인 ID 에 모든 장소를 조회함
+            function getLOCList(){
+                // ajax 통신
+
+                let postData = {
+                }
+
+                let data = syncAjax("POST", "/common/postIDtoLocationlist",postData);
+
+                var jsonArray 	= new Array();
+                var jsonObj		= new Object();
+
+                jsonArray = JSON.stringify(data);
+                var objPerson = JSON.parse(jsonArray);
+                jsonObj = objPerson[0];
+
+                var html = '<option value="ALL">전체</option>';
+                if(objPerson.length !=0 && objPerson != null){
+                    for (var i in objPerson) {
+                    html += "<option value=" + "'" + objPerson[i].loc_seq + "'>" + objPerson[i].loc_nm + "</option>";
+                    }
+                    globalLoc_Id = objPerson[0].loc_seq;
+                    getBatteryList();
+                }else{
+                    html += "<option value=''>설치장소 없음</option>";
+                }
+               
+                //getAjaxData(1);
+                
+                $("select[id='select_loc']").html(html);
+            }
+            //해당 설치장소의 배터리 목록조회
+            function getBatteryList(){
+                let postData = {
+                    loc_seq : globalLoc_Id
+                }
+
+                let result = syncAjax("POST", "/common/postLOCtoBtrylist", postData);
+
+                var objPerson = result.data;
+                
+                var html = '';
+                if(objPerson.length !=0 && objPerson != null){
+                html += "<option value=''>전체</option>";
+                    for (var i in objPerson) {
+                        html += "<option value=" + "'" + objPerson[i].btry_seq + "'>" + objPerson[i].btry_nm + "</option>";
+                    }
+                }else{
+                    html += "<option value=''>BMS 없음<option>";
+                }
+
+                console.log(html);
+
+                //getAjaxData(postData.loc_seq);
+                    
+                $("select[id='select_bms']").html(html);
+            }
+     /*
+            $("select[id='form-select']").on("change", function(){
+                var option = $("#form-select option:selected").val();
+                globalId = option;
+                getAjaxData(globalId);
+                    
+            })
+*/
+            $("select[id='select_loc']").on("change", function(){
+                var loc_seq = $("#select_loc option:selected").val();
+                globalLoc_Id = loc_seq;
+               // globalBMS_Id = null;
+                getBatteryList();
+                getAjaxData(1);
+            })
+
+            $("select[id='select_bms']").on("change", function(){
+                var bms_seq = $("#select_bms option:selected").val();                
+                globalBMS_Id = bms_seq;
+                if(bms_seq == null || bms_seq == '' || bms_seq == undefined){
+                    getAjaxData(1);    
+                }else{
+                    getAjaxData(2);
+                }               
+            })
+    
+           function getAjaxData(searchtype){
+                let postData = {
+                    searchtype : searchtype,
+                    loc_seq : globalLoc_Id,
+                    btry_seq : globalBMS_Id
+                }
+
+               // alert(postData.loc_seq)
+                //alert(postData.btry_seq)
+                      //post 통신
+                let result2 = syncAjax("POST", "/analytics/analyticsFirstLiveData", postData);
+                var len = result2.len;
+                var rslt_text = "";
+                if(result2.len == 0){
+                    clearlineGraphInit();
+                    clearSOHspline_areaGraphInit();
+                }else{
+                    var sttc_dt = result2.sttc_dt;
+                    var chrg_cnt = result2.chrg_cnt;
+                    var avg_chrg_time = result2.avg_chrg_time;
+                    var avg_soh = result2.avg_soh;               
+                                       
+                    //그래프 첫 10개 데이터               
+                    chargelineGraphInit(chrg_cnt, avg_chrg_time, sttc_dt);
+                    SOHspline_areaGraphInit(avg_soh, sttc_dt);
+
+                    console.log(avg_soh);
+
+                    rslt_text = "기간별 SOH 변화추이 " +  avg_soh[0] + "% 에서 "+  avg_soh[len-1] + "% 로 변화";                   
+                }            
+                $("#rslt_soh").html(rslt_text);      
+            }
+                    
+        </script>
+    
+        <!-- apexcharts -->
+
+               <!-- flot plugins -->
+               <script src="/assets/libs/flot-charts/jquery.flot.js"></script>
+               <script src="/assets/libs/flot-charts/jquery.flot.time.js"></script>
+               <script src="/assets/libs/jquery.flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+               <script src="/assets/libs/flot-charts/jquery.flot.resize.js"></script>
+               <script src="/assets/libs/flot-charts/jquery.flot.pie.js"></script>
+               <script src="/assets/libs/flot-charts/jquery.flot.selection.js"></script>
+               <script src="/assets/libs/flot-charts/jquery.flot.stack.js"></script>
+               <script src="/assets/libs/flot.curvedlines/curvedLines.js"></script>
+               <script src="/assets/libs/flot-charts/jquery.flot.crosshair.js"></script>
+
+                       <!-- apexcharts -->
+        <script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+
+        <!-- apexcharts init
+         <script src="/assets/js/pages/apexcharts.init.analytics.js"></script>
+         -->
+        <script src="/attach/js/live-graphs/charge-line-chart.js"></script>
+                     
+    </body>
+    <script src="/attach/js/common.js"></script>
+     
+</html>

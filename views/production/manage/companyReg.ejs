@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('../../layout/meta.ejs') %>
+        <%- include('../../layout/title.ejs') %>
+        <%- include('../../layout/css.ejs') %>
+    </head>
+
+    <body>
+        <div id="layout-wrapper">
+            <%- include('../../layout/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <%- include('../../layout/dashForProduction.ejs') %>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">수요업체 관리 - 등록</h4>
+
+                                    <div>
+                                        <input type="submit" class="btn btn-primary waves-effect waves-light me-1" id="regBtn" value="등록 신청">
+                                        <input type="reset" class="btn btn-secondary waves-effect" id="resetBtn" value="초기화">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form class="custom-validation">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label class="form-label">회사명</label>
+                                                    <div class="input-group">
+                                                        <input type="hidden" id="cmpy_seq">
+                                                        <input type="text" class="form-control" id="cmpy_nm" autocomplete="off">
+                                                        <div class="input-group-prepend">
+                                                            <input type="button" class="input-group-text" id="cmpyNmChk" value="중복체크">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">사업 업종</label>
+                                                        <select class="form-control form-select" id="cmpy_biz_type">
+                                                            <option value="40">원격검침</option>
+                                                            <option value="50">골프장</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">사업자 번호</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="cmpy_biz_num" maxlength="10"  onkeyup="this.value=this.value.replace(/[^0-9,-]/g,'');"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">주소</label>
+                                                        <div class="input-group" id="input-group1">
+                                                                <input type="text" class="form-control" id="cmpy_addr1" maxlength="99" readonly="readonly">
+            
+                                                                <span class="input-group-button">
+                                                                    <button type="button" id="searchAddr" class="btn btn-secondary btn-md waves-effect waves-light me-1" onclick="javascript:goPopup();">
+                                                                        주소검색
+                                                                    </button>
+                                                                </span>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">상세주소</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="cmpy_addr2" maxlength="99" readonly="readonly"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">회사 담당자명</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="cmpy_chrg_nm"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                    <div class="row">
+                                                        <div class="col-md-4 mb-3">
+                                                            <label class="form-label">이메일</label>
+                                                            <input type="text" class="form-control" id="cmpy_chrg_mail_id">
+                                                        </div>
+                                                        <div class="col-md-4 mb-3">
+                                                            <label class="form-label d-none d-md-block">&nbsp;</label>
+                                                            <select class="form-control form-select" id="cmpy_chrg_mail_select">
+                                                                <option value="input">직접입력</option>
+                                                                <option value="naver.com">naver.com</option>
+                                                                <option value="gmail.com">gmail.com</option>
+                                                                <option value="hanmail.net">hanmail.net</option>
+                                                                <option value="hotmail.com">hotmail.com</option>
+                                                                <option value="nate.com">nate.com</option>
+                                                                <option value="yahoo.co.kr">yahoo.co.kr</option>
+                                                                <option value="empas.com">empas.com</option>
+                                                                <option value="dreamwiz.com">dreamwiz.com</option>
+                                                                <option value="freechal.com">freechal.com</option>
+                                                                <option value="lycos.co.kr">lycos.co.kr</option>
+                                                                <option value="korea.com">korea.com</option>
+                                                                <option value="hanmir.com">hanmir.com</option>
+                                                                <option value="paran.com">paran.com</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-4 mb-3">
+                                                            <label class="form-label d-none d-md-block">&nbsp;</label>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend"><div class="input-group-text">@</div></div>
+                                                                <input type="text" class="form-control" id="cmpy_chrg_mail_addr" maxlength="50">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-4 mb-3">
+                                                            <label class="form-label">휴대폰번호</label>
+                                                            <select class="form-control form-select" id="cmpy_chrg_tel1">
+                                                                <option value="010">010</option>
+                                                                <option value="011">011</option>
+                                                                <option value="016">016</option>
+                                                                <option value="017">017</option>
+                                                                <option value="019">019</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-4 mb-3">
+                                                            <label class="form-label d-none d-md-block">&nbsp;</label>
+                                                            <input type="text" class="form-control" id="cmpy_chrg_tel2" maxlength="4" onkeyup="this.value=this.value.replace(/[^0-9,-]/g,'');">
+                                                        </div>
+                                                        <div class="col-md-4 mb-3">
+                                                            <label class="form-label d-none d-md-block">&nbsp;</label>
+                                                            <input type="text" class="form-control" id="cmpy_chrg_tel3" maxlength="4" onkeyup="this.value=this.value.replace(/[^0-9,-]/g,'');">
+                                                        </div>
+                                                    </div>
+                                        </form> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <%- include('../../layout/footer.ejs') %>
+            </div>
+        </div>
+
+        <%- include('../../layout/scripts.ejs') %>
+        <script>
+            let cmpyChk = false;
+
+            function goPopup(){
+                var pop = window.open("/layout/jusoPopup","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
+            }
+
+            function jusoCallBack(roadAddr1,roadAddr2,entX,entY){
+                $("#cmpy_addr1").val(roadAddr1);
+                $("#cmpy_addr2").val(roadAddr2);
+            }
+
+            // 등록
+            $('#regBtn').on('click', async function(e) {
+                e.preventDefault();
+
+                // 1. post data 생성
+                let postData = {
+                    cmpy_nm: $('#cmpy_nm').val(),
+                    cmpy_biz_type: $('#cmpy_biz_type').val(),
+                    cmpy_biz_num: $('#cmpy_biz_num').val(),
+                    cmpy_addr1: $('#cmpy_addr1').val(),
+                    cmpy_addr2: $('#cmpy_addr2').val(),
+                    cmpy_chrg_nm: $('#cmpy_chrg_nm').val(),
+                    cmpy_chrg_mail: $('#cmpy_chrg_mail_id').val() + '@' + $('#cmpy_chrg_mail_addr').val(),
+                    cmpy_chrg_tel: $('#cmpy_chrg_tel1').val() + '-' + $('#cmpy_chrg_tel2').val() + '-' + $('#cmpy_chrg_tel3').val()
+                }
+
+                // 2. 등록 요청
+                let result = await syncAjax('default', 'POST', '/production/manage/company/chk/reg', postData);
+
+                // 3. 결과 fail 체크
+                let resultChk = syncAjaxFailChk(result);
+                if (!resultChk) return false;
+
+                // 4. 결과 SUCCESS
+                swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                    var url = result.url;
+                    $(location).attr('href',result.path);
+                });
+
+            });
+
+            // 초기화
+            $('#resetBtn').on('click', function(e) {
+                e.preventDefault();
+                $('form').each(function() { this.reset(); });
+                cmpyChk = false;
+            });
+
+            // 이메일 select 변경
+            $(document).on('change', '#cmpy_chrg_mail_select', function() {
+                if($(this).val() == 'input') $('#cmpy_chrg_mail_addr').attr('disabled', false).val('');
+                else $('#cmpy_chrg_mail_addr').attr('disabled', true).val($(this).val());
+            });
+
+            // 회사명 중복 체크
+            $('#cmpyNmChk').on('click', async function(e) {
+                e.preventDefault();
+
+                // 0. 이미 체크한 경우
+                if (cmpyChk) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning",'이미 중복체크한 회사명입니다.'));
+                    return false;
+                }
+
+                // 1. post data 생성
+                let postData = { cmpy_nm: $('#cmpy_nm').val() }
+
+                // 2. 중복체크 요청
+                let result = await syncAjax('default', 'POST', '/production/manage/company/reg/dup', postData);
+
+                // 3. 결과 fail 체크
+                let resultChk = syncAjaxFailChk(result);
+                if (!resultChk) {
+                    cmpyChk = false;
+                    return false;
+                }
+
+                // 4. 결과 SUCCESS
+                cmpyChk = true;
+                swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                    var url = result.url;
+                    $(location).attr('href',result.path);
+                });
+            });
+
+            // 사용자 id 변경
+            $('#cmpy_nm').on('change', function() {
+                cmpyChk = false;
+            });
+        </script>
+    </body>
+</html>

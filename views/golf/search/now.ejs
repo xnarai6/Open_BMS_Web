@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../../layout/meta.ejs') %>
+        <%- include('../../layout/title.ejs') %>
+        <%- include('../../layout/css.ejs') %>
+    </head>
+
+    <body>
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../../layout/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <%- include('../common/topcard.ejs') %>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between"><h4 class="mb-0">실시간 조회</h4></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+        
+                                        <h4 class="card-title">배터리 선택</h4>
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-lg-3">
+                                                    <div class="mb-3 mt-3 mt-lg-0">
+                                                        <label class="form-label">배터리 종류</label>
+                                                        <select class="form-control form-select" id="search_btry_ty">
+                                                            <option>Select</option>                                                        
+                                                        </select>                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리</label>
+                                                        <select class="form-control form-select" id="search_btry_seq">
+                                                            <option>Select</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="d-flex justify-content-center align-items-center mt-4">
+                                                        <button type="button" id="searchBtn" class="btn btn-lg btn-primary waves-effect waves-light me-1" style="width:50%;">
+                                                            검색
+                                                        </button>
+                                                    </div> 
+                                                </div>
+                                            </div>        
+                                        </form>        
+                                    </div>
+                                </div>
+                                <!-- end form-select -->
+                            </div>
+                        </div>                  
+
+   
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-4">전류 & 전압</h4>
+                                        
+                                        <div id="curr_and_volt_line_chart_dashed" class="apex-charts" dir="ltr"></div>        
+                                    </div>
+                                </div><!--end card-->
+                            </div> <!-- end col -->
+                            <div class="col-xl-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-4">SOC & SOH</h4>
+                                        
+                                        <div id="soc_and_soh_spline_area" class="apex-charts" dir="ltr"></div>        
+                                    </div>
+                                </div><!--end card-->
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+                        <div class="row">
+                        </div> <!-- end row -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-4">일별 통계</h4>
+                                        <div class="table-responsive">
+                                            <table class="table table-centered table-nowrap mb-0">
+                                                <thead class="table-light">                                                
+                                                    <tr class="bg-transparent">                                               
+                                                        <th>배터리</th>
+                                                        <th>날짜</th>
+                                                        <th>충전시간</th>
+                                                        <th>방전시간</th>
+                                                        <th>대기시간</th>
+                                                        <th>비고</th>                                                             
+                                                    </tr>                                               
+                                                </thead>
+                                                <tbody id = "myTable">
+                                                 
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- 페이지네이션 -->
+                                        <div class="row mt-4">
+                                            <div class="col-sm-6">
+                                                <div>
+                                                    <p class="mb-sm-0" id="bms-page-string"></p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="float-sm-end">
+                                                    <ul class="pagination pagination-rounded mb-sm-0" id="bms-pagination">
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end table-responsive -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+
+                        <!-- end row -->
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <%- include('../../layout/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../../layout/scripts.ejs') %>
+        <!-- apexcharts -->
+        <script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+        <!-- 그래프 -->
+        <script src="/attach/js/live-graphs/curr-volt-line-chart.js"></script>
+        <script src="/attach/js/live-graphs/soc-soh-area-chart.js"></script>
+        <!-- flot plugins -->
+        <script src="/assets/libs/flot-charts/jquery.flot.js"></script>
+        <script src="/assets/libs/flot-charts/jquery.flot.time.js"></script>
+        <script src="/assets/libs/jquery.flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+        <script src="/assets/libs/flot-charts/jquery.flot.resize.js"></script>
+        <script src="/assets/libs/flot-charts/jquery.flot.pie.js"></script>
+        <script src="/assets/libs/flot-charts/jquery.flot.selection.js"></script>
+        <script src="/assets/libs/flot-charts/jquery.flot.stack.js"></script>
+        <script src="/assets/libs/flot.curvedlines/curvedLines.js"></script>
+        <script src="/assets/libs/flot-charts/jquery.flot.crosshair.js"></script>
+
+    </body>
+    <script>
+        window.onload = function() {
+            init();
+        }
+
+        var globalNowBtryType = "";
+        var globalNowBtrySeq = "";
+
+        function init(){
+            getBtryTypeList();
+            getBtrySeqList();
+            globalNowBtryType = $("#search_btry_ty option:selected").val();
+            globalNowBtrySeq = $("#search_btry_seq option:selected").val();
+            getBmsEventList();
+            getAjaxDataGraph();
+        }
+
+        $("select[id='search_btry_ty']").on("change", function(){
+            globalNowBtryType = $("#search_btry_ty option:selected").val();
+            getBtrySeqList();
+        });
+
+        $("select[id='search_btry_seq']").on("change", function(){
+            globalNowBtrySeq = $("#search_btry_seq option:selected").val();
+        });
+
+        $("#searchBtn").on("click", function(){
+            globalNowBtryType = $("#search_btry_ty option:selected").val();
+            globalNowBtrySeq = $("#search_btry_seq option:selected").val();
+            getBmsEventList();
+            getAjaxDataGraph();
+        });
+
+        function getBtryTypeList(){
+            // ajax 통신
+            let postData = {
+                //postData 없음
+            }
+            let result = syncAjax("default","POST", "/golf/search/now/postCmpyTypeList",postData);
+            var btry_ty_list = result.btry_ty_list;
+            var html = '';
+            if(btry_ty_list.length !=0 && btry_ty_list != null){
+                for (var i in btry_ty_list) {
+                html += "<option value=" + "'" + btry_ty_list[i].btry_ty_cd + "'>" + btry_ty_list[i].btry_ty_desc + "</option>";
+                }
+                globalNowBtryType = btry_ty_list[0].btry_ty_cd;
+                getBtrySeqList();
+            }else{
+                html += "<option value=''>배터리 종류 없음</option>";
+            }
+            $("select[id='search_btry_ty']").html(html);
+        }
+
+        function getBtrySeqList(){
+            let postData = {
+                btry_ty : globalNowBtryType
+            }
+            let result = syncAjax("default","POST", "/golf/search/now/postBtrySeqList", postData);
+            var btry_seq_list = result.btry_seq_list;
+            var html = '';
+            if(btry_seq_list.length !=0 && btry_seq_list != null){
+                for (var i in btry_seq_list) {
+                html += "<option value=" + "'" + btry_seq_list[i].btry_seq + "'>" + btry_seq_list[i].btry_nm + "</option>";
+                }
+                globalNowBtrySeq = btry_seq_list[0].btry_seq;
+            }else{
+                html += "<option value=''>배터리 없음</option>";
+            }
+            $("select[id='search_btry_seq']").html(html);
+        }
+
+        function getBmsEventList(pages){
+
+            if( !valCheck("is", globalNowBtryType) ||
+                !valCheck("is", globalNowBtrySeq) ) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","검색조건이 올바르지 않습니다."));
+                    return false;
+            }
+
+            postData = {
+                btry_ty : globalNowBtryType,
+                btry_seq : globalNowBtrySeq,
+                page : pages
+            }
+
+            let result = syncAjax("default","POST", "/golf/search/now/postDailyHistory", postData);
+
+            var list = result.data;
+            var pages = result.pages;
+            var liRow = result.liRow;
+
+            var html = '';
+            if(list == null || list.length == 0){
+                html += "<tr style='text-align: center;'><td colspan='6'>BMS Event가 없습니다.</td></tr>";
+            }else{
+                for (var i in list) {
+                html += "<tr><td>" + list[i].btry_nm + "</td>";
+                html += "<td>" + list[i].sttc_dt + "</td>";    
+                html += "<td>" + list[i].avg_chrg_time + "</td>";
+                html += "<td>" + list[i].avg_dischrg_time + "</td>";
+                html += "<td>" + list[i].avg_standby_time + "</td>";
+                html += "<td>" + list[i].comment + "</td></tr>";
+                
+                }
+            }     
+            $("#myTable").html(html);
+
+            //bms 테이블 페이징
+            if(pages.currentPage == null || pages.pageCount == null){
+                $("#bms-paginatio").html();
+            }else{
+                $("#bms-paginatio").html("Page " + pages.currentPage + " of " + pages.pageCount);
+            }
+
+            var pageHtml = '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getBmsEventList('+ pages.previousPage +')"><i class="mdi mdi-chevron-left"></i></a></li>';
+
+                for(index in liRow){
+                    if(liRow[index] == pages.currentPage){
+                        pageHtml += '<li class="page-item active"><a class="page-link">'+ liRow[index] +'</a></li>';
+                    } else {
+                        pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getBmsEventList('+ liRow[index] +')">'+ liRow[index] +'</a></li>';
+                    }
+                }
+
+            pageHtml += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="getBmsEventList('+ pages.nextPage +')"><i class="mdi mdi-chevron-right"></i></a></li>';
+
+            $("#bms-pagination").html(pageHtml);
+        }
+
+        function getAjaxDataGraph(){
+
+            postData = {
+                btry_ty : globalNowBtryType,
+                btry_seq : globalNowBtrySeq
+            }
+                        
+            //post 통신
+            let result2 = syncAjax("default","POST", "/golf/search/now/postFirstLiveData", postData);
+
+            var currData = result2.currData;
+            var voltData = result2.voltData;
+            var btryInfo = result2.btry_info;
+            var xData = result2.xData;
+            var socData = result2.socData;
+            var sohData = result2.sohData;
+            var lastKey = result2.lastKey;
+            var cmpySeq = result2.cmpySeq;
+
+            currAndVoltGraphInit(currData, voltData, xData, lastKey, globalBmsSeq, cmpySeq);
+            socAndSohGraphInit(socData, sohData, xData, lastKey, globalBmsSeq, cmpySeq);
+
+            setTimeout("getAjaxDataGraph()", 10000);
+        }
+
+        function convertWeek(daynum){
+            if(daynum == "1"){
+                return "MON";
+            }else  if(daynum == "2"){
+                return "TUE";
+            }else  if(daynum == "3"){
+                return "WED";
+            }else  if(daynum == "4"){
+                return "THU";
+            }else  if(daynum == "5"){
+                return "FRI";
+            }else  if(daynum == "6"){
+                return "SAT";
+            }else  if(daynum == "0" || daynum == "7"){
+                return "SUN";
+            }
+        }
+            
+    </script>
+</html>

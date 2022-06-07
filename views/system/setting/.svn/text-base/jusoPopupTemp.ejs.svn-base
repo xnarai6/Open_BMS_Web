@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="/attach/css/addrlinkSample.css" rel="stylesheet" type="text/css">
+    <%- include('../common/meta.ejs') %>
+    <%- include('../common/title.ejs') %>
+    <%- include('../common/css.ejs') %>
+<title>좌표 검색</title>
+</head>
+<body>
+    <div class="pop-address-search">
+        <div class="pop-address-search-inner">
+            <form name="formForAddr" id="formForAddr" method="post">
+                <input type="text" name="currentPage" value="1"/> <-- 요청 변수 설정 (현재 페이지. currentPage : n > 0) -->
+                <input type="text" name="countPerPage" value="10"/><!-- 요청 변수 설정 (페이지당 출력 개수. countPerPage 범위 : 0 < n <= 100) -->
+                <input type="text" name="resultType" value="json"/> <-- 요청 변수 설정 (검색결과형식 설정, json) --> 
+                <input type="text" name="confmKey" value="U01TX0FVVEgyMDIxMDUxMDEzNDQzODExMTE0MzU="/><!-- 요청 변수 설정 (승인키) -->
+                <input type="text" name="keyword" id="keyword" value="" onkeydown="enterSearch();"/><!-- 요청 변수 설정 (키워드) -->
+            </form>
+            <div class="wrap">
+                <input type="button" onClick="javascript:getAddr();" value="주소검색하기"/>
+            </div>
+            <div id="listForAddr" class="result"><!-- 검색 결과 리스트 출력 영역 -->
+            </div>
+        </div>
+    </div>
+    <div class="pop-address-search">
+        <div class="pop-address-search-inner">
+            <form name="formForCoord" id="formForCoord" method="post">
+                <input type="text" name="resultType" value="json"/> <!-- 요청 변수 설정 (검색결과형식 설정, json) --> 
+                <input type="text" name="confmKey" value="TESTJUSOGOKR"/><!-- 요청 변수 설정 (승인키) -->
+                <input type="text" id="admCd" name="admCd" value=""/> <!-- 요청 변수 설정 (행정구역코드) -->
+                <input type="text" id="rnMgtSn" name="rnMgtSn" value=""/><!-- 요청 변수 설정 (도로명코드) --> 
+                <input type="text" id="udrtYn" name="udrtYn" value=""/> <!-- 요청 변수 설정 (지하여부) -->
+                <input type="text" id="buldMnnm" name="buldMnnm" value=""/><!-- 요청 변수 설정 (건물본번) --> 
+                <input type="text" id="buldSlno" name="buldSlno" value=""/><!-- 요청 변수 설정 (건물부번) -->
+                <input type="button" onClick="getCoord();" value="좌표검색하기"/>
+            </form>
+            <div class="wrap">
+                <input type="button" onClick="getCoord();" value="좌표검색하기"/>
+            </div>
+            <div id="listForCoord" class="result"><!-- 검색 결과 리스트 출력 영역 -->
+            </div>
+        </div>
+    </div>
+    <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+
+        <script src="/attach/js/common.js"></script>
+
+        <script>
+        function getAddr(){
+            // 적용예 (api 호출 전에 검색어 체크) 	
+            if (!checkSearchedWord($("#keyword").val())) {
+                return ;
+            }
+
+            $.ajax({
+                url :"https://www.juso.go.kr/addrlink/addrLinkApiJsonp.do"  //인터넷망
+                ,type:"post"
+                ,data:$("#formForAddr").serialize()
+                ,dataType:"jsonp"
+                ,crossDomain:true
+                ,success:function(jsonStr){
+                    $("#listForAddr").html("");
+                    var errCode = jsonStr.results.common.errorCode;
+                    var errDesc = jsonStr.results.common.errorMessage;
+                    if(errCode != "0"){
+                        swalWithBootstrapButtons.fire(makeAlertObj("warning",errCode+"="+errDesc));
+                    }else{
+                        if(jsonStr != null){
+                            makeListJsonForAddr(jsonStr);
+                        }
+                    }
+                }
+                ,error: function(xhr,status, error){
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","에러발생"));
+                }
+            });
+        }
+
+        function makeListJsonForAddr(jsonStr){
+            var htmlStr = "";
+            htmlStr += "<table id='addrTable' class='table table-centered datatable dt-responsive nowrap table-card-list table-hover data-col' style='border-collapse: collapse; border-spacing: 0 12px; width: 100%;'>";
+            $(jsonStr.results.juso).each(function(){
+                htmlStr += "<tr onclick='javascript:selectAddr(this);'>";
+                htmlStr += "<td class='subj roadAddr'>"+this.roadAddr+"</td>";
+                htmlStr += "<td class='subj roadAddrPart1'>"+this.roadAddrPart1+"</td>";
+                htmlStr += "<td class='subj roadAddrPart2'>"+this.roadAddrPart2+"</td>";
+                htmlStr += "<input type='hidden' class='subj'>";
+                // htmlStr += "<td class='subj'>"+this.engAddr+"</td>";
+                // htmlStr += "<td class='subj'>"+this.zipNo+"</td>";
+                 htmlStr += "<input type='hidden' class='subj admCd' data-val='"+this.admCd+"'>";
+                 htmlStr += "<input type='hidden' class='subj rnMgtSn' data-val='"+this.rnMgtSn+"'>";
+                // htmlStr += "<td class='subj'>"+this.bdMgtSn+"</td>";
+                // htmlStr += "<td class='subj'>"+this.detBdNmList+"</td>";
+                // /** API 서비스 제공항목 확대 (2017.02) **/
+                // htmlStr += "<td> class='subj'"+this.bdNm+"</td>";
+                // htmlStr += "<td class='subj'>"+this.bdKdcd+"</td>";
+                // htmlStr += "<td class='subj'>"+this.siNm+"</td>";
+                // htmlStr += "<td class='subj'>"+this.sggNm+"</td>";
+                // htmlStr += "<td class='subj'>"+this.emdNm+"</td>";
+                // htmlStr += "<td class='subj'>"+this.liNm+"</td>";
+                // htmlStr += "<td class='subj'>"+this.rn+"</td>";
+                 htmlStr += "<input type='hidden' class='subj udrtYn' data-val='"+this.udrtYn+"'>";
+                 htmlStr += "<input type='hidden' class='subj buldMnnm' data-val='"+this.buldMnnm+"'>";
+                 htmlStr += "<input type='hidden' class='subj buldSlno' data-val='"+this.buldSlno+"'>";
+                // htmlStr += "<td class='subj'>"+this.mtYn+"</td>";
+                // htmlStr += "<td class='subj'>"+this.lnbrMnnm+"</td>";
+                // htmlStr += "<td class='subj'>"+this.lnbrSlno+"</td>";
+                // htmlStr += "<td class='subj'>"+this.emdNo+"</td>";
+                // /** API 서비스 제공항목 확대 (2020.12) **/
+                // htmlStr += "<td class='subj'>"+this.hstryYn+"</td>";
+                // htmlStr += "<td class='subj'>"+this.relJibun+"</td>";
+                // htmlStr += "<td class='subj'>"+this.hemdNm+"</td>";
+                htmlStr += "</tr>";
+            });
+            htmlStr += "</table>";
+            $("#listForAddr").html(htmlStr);
+        }
+
+        function selectAddr(trObj){
+            getCoord(trObj);
+        };
+
+        function getCoord(trObj){
+
+            $("#admCd").val($(trObj).children('.admCd:first').data('val'));
+            $("#rnMgtSn").val($(trObj).children('.rnMgtSn:first').data('val'));
+            $("#udrtYn").val($(trObj).children('.udrtYn:first').data('val'));
+            $("#buldMnnm").val($(trObj).children('.buldMnnm:first').data('val'));
+            $("#buldSlno").val($(trObj).children('.buldSlno:first').data('val'));
+
+            let postData = {
+                resultType : "json",
+                confmKey : "TESTJUSOGOKR",
+                admCd : $(trObj).children('.admCd:first').data('val'),
+                rnMgtSn : $(trObj).children('.rnMgtSn:first').data('val'),
+                udrtYn : $(trObj).children('.udrtYn:first').data('val'),
+                buldMnnm : $(trObj).children('.buldMnnm:first').data('val'),
+                buldSlno : $(trObj).children('.buldSlno:first').data('val')
+            }
+
+            $.ajax({
+                url :"https://www.juso.go.kr/addrlink/addrCoordApiJsonp.do"  //인터넷망
+                ,type:"post"
+                ,data: postData
+                ,dataType:"jsonp"
+                ,crossDomain:true
+                ,success:function(jsonStr){
+                    $("#listForCoord").html("");
+                    var errCode = jsonStr.results.common.errorCode;
+                    var errDesc = jsonStr.results.common.errorMessage;
+                    if(errCode != "0"){
+                        swalWithBootstrapButtons.fire(makeAlertObj("warning",errCode+"="+errDesc));
+                    }else{
+                        if(jsonStr != null){
+                            makeListJsonForCoord(jsonStr);
+                            opener.jusoCallBack($(trObj).children('.roadAddr:first').data('val'),jsonStr.results.juso[0].entX,jsonStr.results.juso[0].entY);
+                            //window.close();
+                        }
+                    }
+                }
+                ,error: function(xhr,status, error){
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","에러발생"));
+                }
+            });
+        }
+
+        function makeListJsonForCoord(jsonStr){
+            var htmlStr = "";
+            htmlStr += "<table class='table table-centered datatable dt-responsive nowrap table-card-list data-col' style='border-collapse: collapse; border-spacing: 0 12px; width: 100%;'>";
+            $(jsonStr.results.juso).each(function(){
+                htmlStr += "<tr>";
+                htmlStr += "<td class='subj'>"+this.admCd+"</td>";
+                htmlStr += "<td class='subj'>"+this.rnMgtSn+"</td>";
+                htmlStr += "<td class='subj'>"+this.bdMgtSn+"</td>";
+                htmlStr += "<td class='subj'>"+this.udrtYn+"</td>";
+                htmlStr += "<td class='subj'>"+this.buldMnnm+"</td>";
+                htmlStr += "<td class='subj'>"+this.buldSlno+"</td>";
+                htmlStr += "<td class='subj'>"+this.entX+"</td>";
+                htmlStr += "<td class='subj'>"+this.entY+"</td>";
+                htmlStr += "<td class='subj'>"+this.bdNm+"</td>";
+                htmlStr += "</tr>";
+            });
+            htmlStr += "</table>";
+            $("#listForCoord").html(htmlStr);
+        }
+
+        //특수문자, 특정문자열(sql예약어의 앞뒤공백포함) 제거
+        function checkSearchedWord(obj){
+            if(obj.length > 0){
+                //특수문자 제거
+                var expText = /[%=><]/ ;
+                if(expText.test(obj.value) == true){
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","특수문자를 입력 할수 없습니다."));
+                    obj.value = obj.value.split(expText).join(""); 
+                    return false;
+                }
+                
+                //특정문자열(sql예약어의 앞뒤공백포함) 제거
+                var sqlArray = new Array(
+                    //sql 예약어
+                    "OR", "SELECT", "INSERT", "DELETE", "UPDATE", "CREATE", "DROP", "EXEC",
+                            "UNION",  "FETCH", "DECLARE", "TRUNCATE" 
+                );
+                
+                var regex;
+                for(var i=0; i<sqlArray.length; i++){
+                    regex = new RegExp( sqlArray[i] ,"gi") ;
+                    
+                    if (regex.test(obj.value) ) {
+                        swalWithBootstrapButtons.fire(makeAlertObj("warning","\"" + sqlArray[i]+"\"와(과) 같은 특정문자로 검색할 수 없습니다."));
+                        obj.value =obj.value.replace(regex, "");
+                        return false;
+                    }
+                }
+            }
+            return true ;
+        }
+
+        function enterSearch() {
+            var evt_code = (window.netscape) ? ev.which : event.keyCode;
+            if (evt_code == 13) {    
+                event.keyCode = 0;  
+                getAddr(); 
+            } 
+        }
+        </script>
+</body>
+</html>

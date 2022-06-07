@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+    </head>
+
+    <body >
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+          
+
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">                      
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">알람 등록</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <button class="btn btn-primary" type="submit"  onclick="location.href='/setting/mgtalarm'">List</button>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>                       
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div class="card-body">                                            
+                                        <form class="custom-validation">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">배터리</label>
+                                                        <select class="form-control form-select" id="btry_seq" name="btry_seq">
+                                                            <option value="-1">선택</option>
+                                                                <%
+                                                                    for(var i in btry_list){
+                                                                        %><option value="<%=btry_list[i].btry_seq%>"><%=btry_list[i].btry_nm%></option><%
+                                                                    }
+                                                                %>                                                                                                                               
+                                                        </select>        
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">알람 최소 전압</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="alm_min_volt" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">알람 최대 전압</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="alm_max_volt" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">알람 최소 전류</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="alm_min_curr" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">알람 최대 전류</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="alm_max_curr" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">알람 최소 온도</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="alm_min_tp" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">알람 최대 온도</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="alm_max_tp" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">고조파왜형율</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" placeholder="" id="alm_min_harmony" onkeypress="return isNumberKey(event)" onkeyup="return delHangle(event)" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                    <label class="form-label">SMS 발송여부</label>
+                                                        <select class="form-control form-select" id="alm_sms" name="alm_sms">
+                                                            <option value="-1">선택</option>
+                                                            <option value="1">발송</option>
+                                                            <option value="0">발송안함</option>                                                                                                                            
+                                                        </select>        
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                    <label class="form-label">전원차단여부</label>
+                                                        <select class="form-control form-select" id="stop_pwr" name="stop_pwr">
+                                                            <option value="-1">선택</option>
+                                                            <option value="1">전원차단</option>
+                                                            <option value="0">전원공급</option>                                                                                                                             
+                                                        </select>        
+                                                    </div>
+                                                 </div>
+                                            </div>
+
+                                            <div>
+                                                <div>
+                                                    <button type="button" id="mgtalarmRegBtn" class="btn btn-primary waves-effect waves-light me-1">
+                                                        Submit
+                                                    </button>
+                                                    <button type="reset" class="btn btn-secondary waves-effect">
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </div> 
+                                        </form>                                  
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+
+        <script src="/attach/js/common.js"></script>
+
+        <script>
+
+            $("#mgtalarmRegBtn").on("click", function() {
+
+                if(!valCheck("is", $("#btry_seq").val()) || $("#btry_seq").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","배터리를 선택해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#alm_min_volt").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","알람 최소 전압을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#alm_max_volt").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","알람 최대 전압을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#alm_min_curr").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","알람 최소 전류을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#alm_max_curr").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","알람 최대 전류를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#alm_min_tp").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","알람 최소 온도를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#alm_max_tp").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","알람 최대 온도를 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#alm_min_harmony").val())) {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","고조파왜형율을 입력해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#alm_sms").val()) || $("#alm_sms").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","SMS발송여부를 선택해주십시오"));
+                    return false;
+                }
+                if(!valCheck("is", $("#stop_pwr").val()) || $("#stop_pwr").val() == '-1') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("warning","전원차단여부를 선택해주십시오"));
+                    return false;
+                }
+
+
+                let postData = {
+                    btry_seq: $("#btry_seq").val(),
+                    alm_min_volt: $("#alm_min_volt").val(),
+                    alm_max_volt: $("#alm_max_volt").val(),
+                    alm_min_curr: $("#alm_min_curr").val(),
+                    alm_max_curr: $("#alm_max_curr").val(),
+                    alm_min_tp: $("#alm_min_tp").val(),
+                    alm_max_tp: $("#alm_max_tp").val(),
+                    alm_min_harmony: $("#alm_min_harmony").val(),
+                    alm_sms: $("#alm_sms").val(),
+                    stop_pwr: $("#stop_pwr").val()
+                }
+                    
+                let result = syncAjax("POST", "/system/setting/mgtalarm/reg/complete", postData);
+
+                if(result.status == 'FAIL') {
+                    swalWithBootstrapButtons.fire(makeAlertObj("error",result.msg)).then((errorResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                    });
+                }else{
+                    swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                        var url = result.url;
+                        $(location).attr('href',url);
+                    });
+                }
+
+            });
+
+        </script>
+
+    </body>
+
+ 
+     
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../common/meta.ejs') %>
+        <%- include('../common/title.ejs') %>
+        <%- include('../common/css.ejs') %>
+    </head>
+
+    <body>
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <%- include('../common/topbar.ejs') %>
+            <%- include('../common/sidebar.ejs') %>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">1대1 게시판</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">게시판</a></li>
+                                            <li class="breadcrumb-item active">1대1 게시판</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">1대1 게시판</h4>
+                                        <p class="card-title-desc">궁금한 점을 문의하는 1대1 게시판입니다.</p>
+
+                                        <!-- 글 작성 버튼 -->
+                                        <div class="row my-4">
+                                            <div class="col">
+                                            </div>
+                                            <div class="col">
+                                                <div class="text-sm-end mt-2 mt-sm-0">
+                                                    <a href="/bbs/qna/reg" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#qnaRegModal">
+                                                        글쓰기&nbsp;<i class="uil uil-pen font-size-18"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="table-responsive">
+                                            <table class="table table-hover mb-0">
+        
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="1">#</th>
+                                                        <th colspan="10">제목</th>
+                                                        <th colspan="1">작성자</th>
+                                                        <th colspan="1">작성일</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <%
+                                                        if(qnaList[0]==null){
+                                                            %>
+                                                                <tr>
+                                                                    <td colspan="13" style="text-align: center;">등록된 게시글이 없습니다.</td>
+                                                                </tr>
+                                                            <%
+                                                        }else{
+                                                            for(var i in qnaList){
+                                                                    %>
+                                                                    <tr class="qnaViewTr"  style="cursor: pointer;" data-qnastat="<%=qnaList[i].qna_stat%>" data-qnaseq="<%=qnaList[i].qna_seq%>">
+                                                                        <th scope="row"><%= Number(i) + 1 %></th>
+                                                                        <%
+                                                                            if(qnaList[i].qna_stat == 'Y'){
+                                                                                if(qnaList[i].QorA == 'Q'){
+                                                                                    %><td colspan="10"><%=qnaList[i].qna_title%></td><%
+                                                                                }else{
+                                                                                    %><td colspan="10">&#10149; <%=qnaList[i].qna_title%></td><%
+                                                                                }
+                                                                            }else{
+                                                                                if(qnaList[i].QorA == 'Q'){
+                                                                                    %><td colspan="10">
+                                                                                    <%=qnaList[i].qna_title%></td><%
+                                                                                }else{
+                                                                                    %><td colspan="10">
+                                                                                    &#10149;<%=qnaList[i].qna_title%></td><%
+                                                                                }
+                                                                            }
+                                                                        %>
+                                                                        <td><%=qnaList[i].ins_nm%></td>
+                                                                        <td><%=qnaList[i].ins_dttm%></td>
+                                                                    </tr>
+                                                                    <%
+                                                            }
+                                                        }
+                                                    %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                            <!-- 페이지네이션 -->
+                                                <div class="row mt-4">
+                                                    <div class="col-sm-6">
+                                                        <div>
+                                                            <p class="mb-sm-0">Page <%=pages.currentPage%> of <%=pages.pageCount%></p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="float-sm-end">
+                                                            <ul class="pagination pagination-rounded mb-sm-0">
+                                                                <!-- 이전페이지 -->
+                                                                <li class="page-item">
+                                                                    <a class="page-link" href="/bbs/qna?page=<%=pages.previousPage%>">
+                                                                        <i class="mdi mdi-chevron-left"></i>
+                                                                    </a>
+                                                                </li>
+
+                                                                <% for(index in liRow) { %>
+                                                                    <% if(liRow[index] == pages.currentPage) { %>
+                                                                        <li class="page-item active"><a class="page-link"><%= liRow[index] %></a></li>
+                                                                    <% } else { %>
+                                                                        <li class="page-item"><a class="page-link" href="/bbs/qna?page=<%=liRow[index]%>"><%= liRow[index] %></a></li>
+                                                                    <% } %>
+                                                                <% } %>
+
+                                                                <!-- 다음페이지 -->
+                                                                <li class="page-item">
+                                                                    <a class="page-link" href="/bbs/qna?page=<%=pages.nextPage%>">
+                                                                        <i class="mdi mdi-chevron-right"></i>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <!-- 페이지네이션 -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- end row -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <%- include('../common/footer.ejs') %>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <%- include('./qnaRegModal.ejs') %>
+
+        <%- include('../common/sidebarRight.ejs') %>
+
+        <%- include('../common/scripts.ejs') %>
+
+        <script src="/attach/js/common.js"></script>
+
+        <script>
+
+        $(document).ready(function(){
+
+        });
+
+        $(".qnaViewTr").on('click', function() {
+
+            if(("<%=locals.userInfo.acnt_role%>" == "DC" || "<%=locals.userInfo.acnt_role%>" == "MC") && $(this).data("qnastat") == 'N'){
+                swalWithBootstrapButtons.fire(makeAlertObj("warning","비공개 게시물에 접근권한이 없습니다.")).then((warningResult) => {
+                    return false;
+                });
+            }else{
+                location.href="/bbs/qna/view?qna_seq=" + $(this).data("qnaseq");
+            }
+            
+        });
+
+        $("#qna_stat").on('change', function() {
+            if ($(this).is(':checked')) {
+                $(this).attr('value', 'Y');
+            }
+            else {
+            $(this).attr('value', 'N');
+        }});
+    
+        $("#submitBtn").on("click", function() {
+
+            if(!valCheck("is", $("#qna_title").val())) {
+                swalWithBootstrapButtons.fire(makeAlertObj("warning","제목을 입력해주십시오")).then((warningResult) => {
+                    return false;
+                });
+            }
+            if(!valCheck("is", $("#qna_content").val())) {
+                swalWithBootstrapButtons.fire(makeAlertObj("warning","내용을 입력해주십시오")).then((warningResult) => {
+                    return false;
+                });
+            }
+
+            let postData = {
+                qna_title: $("#qna_title").val(),
+                qna_content: $("#qna_content").val(),
+                qna_stat: $("#qna_stat").val()
+            }
+                
+            let result = syncAjax("POST", "/bbs/qna/reg/complete", postData);
+
+            if(result.status == 'FAIL') {
+                swalWithBootstrapButtons.fire(makeAlertObj("error",result.msg)).then((errorResult) => {
+                    var url = result.url;
+                    $(location).attr('href',url);
+                });
+            }else{
+                swalWithBootstrapButtons.fire(makeAlertObj("success",result.msg)).then((successResult) => {
+                    var url = result.url;
+                    $(location).attr('href',url);
+                });
+            }
+
+        });
+    </script>
+                     
+    </body>
+</html>
