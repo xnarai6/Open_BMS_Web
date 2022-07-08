@@ -7,16 +7,16 @@ const https = require('https');
 const fs = require("fs");
 const path = require('path');
 
-const port = 8105;
+const port = 8104;
 if (fs.existsSync(path.join(__dirname, 'env'))) port = require(path.join(__dirname, 'env')).port;
 
 app.set('port', port);
 
-const server = http.createServer(app);
-//const server = https.createServer({
-//   pfx: fs.readFileSync(__dirname + '/openbms.co.kr_20210713GTSG.pfx'),
-//	passphrase: '9h1j49'
-//}, app);
+//const server = http.createServer(app);
+const server = https.createServer({
+   pfx: fs.readFileSync(__dirname + '/techcode.co.kr_20230807.pfx'),
+	passphrase: '1234'
+}, app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
