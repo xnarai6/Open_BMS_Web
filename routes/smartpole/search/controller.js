@@ -568,8 +568,8 @@ exports.postFirstLiveData = async(req, res, next) => {
         query1 += '    FROM ( ' ;
         query1 += '    SELECT TPBD2.biz_key ' ;
         query1 += '    FROM OPENBMS.TBL_PTC_BIZ_DATA TPBD2 ' ;
-        query1 += '    WHERE TPBD2.cmpy_seq = 2 ' ;
-        query1 += '    AND TPBD2.btry_seq = 2 ' ;
+        query1 += '    WHERE TPBD2.cmpy_seq = ' + cmpy_seq + ' ' ;
+        query1 += '    AND TPBD2.btry_seq = ' + btry_seq + ' ' ;
         query1 += '    GROUP BY TPBD2.biz_key ' ;
         query1 += '    ORDER BY TPBD2.biz_key DESC ' ;
         query1 += '    LIMIT 10 ' ;
